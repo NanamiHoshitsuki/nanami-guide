@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>四柱推命 用語ガイド | nanami-astro</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=Noto+Serif+JP:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #fafaf8; --surface: #ffffff; --border: #e8e4dc;
+    --text: #2c2a27; --text-sub: #7a7670;
+    --accent: #7a5c3a; --accent-light: #f0ece8; --accent-dark: #5a3e22;
+    --gold: #c9a84c; --gold-light: #f5edd6; --gold-dark: #9a7830;
+    --radius: 12px; --shadow: 0 2px 16px rgba(0,0,0,0.06);
+  }
+  body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: var(--text); line-height: 1.8; font-weight: 300; }
+
+  header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 16px 24px; display: flex; align-items: center; gap: 16px; }
+  .back-link { font-size: 13px; color: var(--accent); text-decoration: none; white-space: nowrap; }
+  .back-link:hover { text-decoration: underline; }
+  header .header-right { flex: 1; text-align: center; }
+  header .logo { font-family: 'Noto Serif JP', serif; font-size: 12px; letter-spacing: 0.2em; color: var(--gold-dark); }
+  header h1 { font-size: 17px; font-weight: 400; }
+
+  .container { max-width: 720px; margin: 0 auto; padding: 40px 20px 80px; }
+  .section { margin-bottom: 52px; }
+  .section-label { font-size: 11px; letter-spacing: 0.2em; color: var(--accent-dark); text-transform: uppercase; margin-bottom: 8px; font-weight: 500; }
+  .section-title { font-size: 20px; font-weight: 500; margin-bottom: 6px; }
+  .section-desc { font-size: 13px; color: var(--text-sub); margin-bottom: 20px; line-height: 1.7; }
+
+  .term-cards { display: flex; flex-direction: column; gap: 10px; }
+  .term-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow); }
+  .term-header { display: flex; align-items: baseline; gap: 10px; margin-bottom: 8px; flex-wrap: wrap; }
+  .term-icon { font-size: 20px; }
+  .term-name { font-size: 16px; font-weight: 500; }
+  .term-tag { font-size: 11px; background: var(--accent-light); color: var(--accent-dark); padding: 2px 8px; border-radius: 20px; font-weight: 500; white-space: nowrap; }
+  .term-short { font-size: 13px; color: var(--accent-dark); font-weight: 500; margin-bottom: 8px; }
+  .term-desc { font-size: 13px; color: var(--text-sub); line-height: 1.8; margin-bottom: 12px; }
+  .term-prompt { background: var(--bg); border-left: 3px solid var(--gold); border-radius: 0 8px 8px 0; padding: 8px 12px; font-size: 12px; color: var(--text); display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+  .term-prompt-text { flex: 1; }
+  .term-prompt::before { content: '💬'; margin-right: 6px; flex-shrink: 0; }
+  .copy-btn { background: var(--gold); color: white; border: none; border-radius: 4px; padding: 3px 10px; font-size: 11px; cursor: pointer; font-family: inherit; white-space: nowrap; flex-shrink: 0; }
+  .copy-btn.copied { background: #5a9a6a; }
+
+  /* 十神グリッド */
+  .jinshin-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  @media (max-width: 500px) { .jinshin-grid { grid-template-columns: 1fr; } }
+  .jinshin-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 14px; box-shadow: var(--shadow); }
+  .jinshin-name { font-size: 14px; font-weight: 500; margin-bottom: 4px; }
+  .jinshin-short { font-size: 11px; color: var(--accent-dark); font-weight: 500; margin-bottom: 6px; }
+  .jinshin-desc { font-size: 12px; color: var(--text-sub); line-height: 1.6; }
+
+  /* 五行 */
+  .gogyo-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
+  @media (max-width: 500px) { .gogyo-grid { grid-template-columns: 1fr 1fr; } }
+  .gogyo-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 12px 10px; text-align: center; box-shadow: var(--shadow); }
+  .gogyo-icon { font-size: 22px; margin-bottom: 4px; }
+  .gogyo-name { font-size: 14px; font-weight: 500; margin-bottom: 4px; }
+  .gogyo-desc { font-size: 11px; color: var(--text-sub); line-height: 1.5; }
+
+  .toc { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 20px; margin-bottom: 40px; box-shadow: var(--shadow); }
+  .toc p { font-size: 12px; color: var(--text-sub); margin-bottom: 10px; }
+  .toc-links { display: flex; flex-wrap: wrap; gap: 8px; }
+  .toc-link { font-size: 12px; color: var(--accent-dark); text-decoration: none; background: var(--accent-light); padding: 3px 12px; border-radius: 20px; }
+  .toc-link:hover { text-decoration: underline; }
+
+  .divider { border: none; border-top: 1px solid var(--border); margin: 48px 0; }
+  .note { background: #f7f4ee; border-radius: var(--radius); padding: 16px 20px; font-size: 12px; color: var(--text-sub); line-height: 1.8; }
+  footer { text-align: center; padding: 32px; font-size: 12px; color: var(--text-sub); border-top: 1px solid var(--border); }
+</style>
+</head>
+<body>
+
+<header>
+  <a href="shichu.html" class="back-link">← 戻る</a>
+  <div class="header-right">
+    <div class="logo">nanami-astro</div>
+    <h1>四柱推命 用語ガイド</h1>
+  </div>
+  <div style="width:48px;"></div>
+</header>
+
+<div class="container">
+
+  <div class="toc">
+    <p>気になる項目へジャンプ</p>
+    <div class="toc-links">
+      <a href="#shichu" class="toc-link">四柱とは</a>
+      <a href="#gogyo" class="toc-link">五行</a>
+      <a href="#jinshin" class="toc-link">十神</a>
+      <a href="#daiun" class="toc-link">大運・流年</a>
+      <a href="#interactions" class="toc-link">刑冲合害</a>
+    </div>
+  </div>
+
+  <!-- 四柱とは -->
+  <div class="section" id="shichu">
+    <div class="section-label">Four Pillars</div>
+    <div class="section-title">四柱とは</div>
+    <div class="section-desc">生まれた年・月・日・時刻から導かれる4つの柱のことです。それぞれに「干（天干）」と「支（地支）」があり、合わせて8文字になります。この8文字を読み解くのが四柱推命の基本です。</div>
+    <div class="term-cards">
+      <div class="term-card">
+        <div class="term-header"><span class="term-icon">📅</span><span class="term-name">年柱</span><span class="term-tag">生まれた年</span></div>
+        <div class="term-short">社会的な背景・祖父母・若い頃の環境</div>
+        <div class="term-desc">生まれた年から導かれる柱です。社会的な立ち位置や、10代頃の環境・育ちに関係します。また外から見えやすい「社会的な顔」とも関連します。</div>
+        <div class="term-prompt"><span class="term-prompt-text">年柱から、私の社会的な背景や外から見えやすい特徴を教えてください</span><button class="copy-btn" onclick="copyTerm(this)">コピー</button></div>
+      </div>
+      <div class="term-card">
+        <div class="term-header"><span class="term-icon">🌿</span><span class="term-name">月柱</span><span class="term-tag">生まれた月・節入り基準</span></div>
+        <div class="term-short">仕事・才能・20〜30代の傾向</div>
+        <div class="term-desc">四柱の中で最も重要とされる柱のひとつです。仕事や社会活動、20〜30代の流れに関係します。月令（月支が日干を助けるか）は身強身弱の判定にも大きく影響します。</div>
+        <div class="term-prompt"><span class="term-prompt-text">月柱から、私の仕事や才能の傾向を教えてください</span><button class="copy-btn" onclick="copyTerm(this)">コピー</button></div>
+      </div>
+      <div class="term-card">
+        <div class="term-header"><span class="term-icon">⭐</span><span class="term-name">日柱・日干</span><span class="term-tag">最重要</span></div>
+        <div class="term-short">あなた自身・本質・中心にある力</div>
+        <div class="term-desc">日柱の天干（日干）が「あなた自身」を表します。四柱推命はすべてこの日干を中心に読みます。他の星との関係もすべて「日干から見てどうか」で判断されます。</div>
+        <div class="term-prompt"><span class="term-prompt-text">日干から見た、私の本質と強みを教えてください</span><button class="copy-btn" onclick="copyTerm(this)">コピー</button></div>
+      </div>
+      <div class="term-card">
+        <div class="term-header"><span class="term-icon">🕯️</span><span class="term-name">時柱</span><span class="term-tag">生まれた時刻</span></div>
+        <div class="term-short">晩年・子ども・内なる願い</div>
+        <div class="term-desc">生まれた時刻から導かれる柱です。晩年の傾向、子どもや後継者との関係、内側に持っている願いに関係します。出生時刻が正確であるほど精度が上がります。</div>
+        <div class="term-prompt"><span class="term-prompt-text">時柱から、私の晩年や内なる願いのテーマを教えてください</span><button class="copy-btn" onclick="copyTerm(this)">コピー</button></div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- 五行 -->
+  <div class="section" id="gogyo">
+    <div class="section-label">Five Elements</div>
+    <div class="section-title">五行</div>
+    <div class="section-desc">木・火・土・金・水の5つのエネルギーです。命式にどの五行がどれだけあるかのバランスが、性格や才能の傾向に関係します。多すぎても少なすぎても偏りが出ます。</div>
+    <div class="gogyo-grid">
+      <div class="gogyo-card">
+        <div class="gogyo-icon">🌳</div>
+        <div class="gogyo-name">木</div>
+        <div class="gogyo-desc">成長・伸びる力・柔軟性・理想</div>
+      </div>
+      <div class="gogyo-card">
+        <div class="gogyo-icon">🔥</div>
+        <div class="gogyo-name">火</div>
+        <div class="gogyo-desc">情熱・表現・輝き・直感</div>
+      </div>
+      <div class="gogyo-card">
+        <div class="gogyo-icon">🏔️</div>
+        <div class="gogyo-name">土</div>
+        <div class="gogyo-desc">安定・信頼・地に足のついた力</div>
+      </div>
+      <div class="gogyo-card">
+        <div class="gogyo-icon">⚔️</div>
+        <div class="gogyo-name">金</div>
+        <div class="gogyo-desc">決断・精度・こだわり・完成</div>
+      </div>
+      <div class="gogyo-card">
+        <div class="gogyo-icon">💧</div>
+        <div class="gogyo-name">水</div>
+        <div class="gogyo-desc">知性・柔軟・流れ・深み</div>
+      </div>
+    </div>
+    <div style="margin-top:12px;">
+      <div class="term-card">
+        <div class="term-prompt"><span class="term-prompt-text">五行バランスから、私の得意なことと補いたいエネルギーを教えてください</span><button class="copy-btn" onclick="copyTerm(this)">コピー</button></div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- 十神 -->
+  <div class="section" id="jinshin">
+    <div class="section-label">Ten Gods</div>
+    <div class="section-title">十神</div>
+    <div class="section-desc">日干（あなた自身）から見た、他の天干との関係性を10種類に分類したものです。どの十神が命式に多いかで、才能・強み・課題のパターンが読めます。</div>
+    <div class="jinshin-grid">
+      <div class="jinshin-card">
+        <div class="jinshin-name">比肩・劫財</div>
+        <div class="jinshin-short">自分と同じ力・自立心</div>
+        <div class="jinshin-desc">独立心・自分軸の強さ。多いと自分のやり方にこだわりやすい。</div>
+      </div>
+      <div class="jinshin-card">
+        <div class="jinshin-name">食神・傷官</div>
+        <div class="jinshin-short">表現・創造・アウトプット</div>
+        <div class="jinshin-desc">作る・伝える・表現する才能。多いと発信力や創造力が高い。</div>
+      </div>
+      <div class="jinshin-card">
+        <div class="jinshin-name">偏財・正財</div>
+        <div class="jinshin-short">財・現実的な成果</div>
+        <div class="jinshin-desc">お金・物質・人脈に関係。偏財は動きやすい財、正財は安定した財。</div>
+      </div>
+      <div class="jinshin-card">
+        <div class="jinshin-name">偏官・正官</div>
+        <div class="jinshin-short">規律・責任・社会的役割</div>
+        <div class="jinshin-desc">仕事・組織・責任感に関係。偏官は行動力、正官は安定と信頼。</div>
+      </div>
+      <div class="jinshin-card">
+        <div class="jinshin-name">偏印・印綬</div>
+        <div class="jinshin-short">学び・直感・守られる力</div>
+        <div class="jinshin-desc">知識・精神性・直感力に関係。偏印は独自の発想、印綬は深い学び。</div>
+      </div>
+    </div>
+    <div style="margin-top:12px;">
+      <div class="term-card">
+        <div class="term-prompt"><span class="term-prompt-text">命式の十神の構成から、私の才能と課題のパターンを教えてください</span><button class="copy-btn" onclick="copyTerm(this)">コピー</button></div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- 大運・流年 -->
+  <div class="section" id="daiun">
+    <div class="section-label">Luck Cycles</div>
+    <div class="section-title">大運・流年</div>
+    <div class="section-desc">命式が「あなたの性質」を示すとしたら、大運・流年は「今どんな時期を生きているか」を示します。</div>
+    <div class="term-cards">
+      <div class="term-card">
+        <div class="term-header"><span class="term-icon">🌊</span><span class="term-name">大運</span><span class="term-tag">10年ごとの大きな流れ</span></div>
+        <div class="term-short">10年単位の人生の季節</div>
+        <div class="term-desc">10年ごとに変わる大きな運気の流れです。「この10年はこういう時期」という大枠を示します。今の大運が何かによって、同じ行動でも出やすい結果が変わります。「今の大運」を把握しておくと、判断の軸になります。</div>
+        <div class="term-prompt"><span class="term-prompt-text">今の大運の時期はどんな流れですか？何を意識すると良いですか？</span><button class="copy-btn" onclick="copyTerm(this)">コピー</button></div>
+      </div>
+      <div class="term-card">
+        <div class="term-header"><span class="term-icon">📆</span><span class="term-name">流年</span><span class="term-tag">その年のテーマ</span></div>
+        <div class="term-short">1年単位の運気・今年のテーマ</div>
+        <div class="term-desc">その年の運気の流れです。大運の枠の中で、今年はどんな1年かを示します。「今年は動く年か、守る年か」「何にエネルギーを向けると流れに乗れるか」を読むのに使います。</div>
+        <div class="term-prompt"><span class="term-prompt-text">今年の流年から、今年のテーマと意識すると良いことを教えてください</span><button class="copy-btn" onclick="copyTerm(this)">コピー</button></div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- 刑冲合害 -->
+  <div class="section" id="interactions">
+    <div class="section-label">Interactions</div>
+    <div class="section-title">刑冲合害</div>
+    <div class="section-desc">四柱の中の地支どうし（年・月・日・時の下の文字）の関係性です。良い影響・悪い影響の両方があります。難しい用語ですが、AIに「この刑冲合害はどういう意味ですか」と聞くのが一番わかりやすいです。</div>
+    <div class="term-cards">
+      <div class="term-card">
+        <div class="term-header"><span class="term-icon">🤝</span><span class="term-name">合（ごう）</span></div>
+        <div class="term-short">引き合う・融合する関係</div>
+        <div class="term-desc">地支どうしが引き合い、別のエネルギーに変化することがあります。良い方向にも悪い方向にも働きます。「なぜかこの分野だけ流れが変わる」という感覚に関係することがあります。</div>
+      </div>
+      <div class="term-card">
+        <div class="term-header"><span class="term-icon">⚡</span><span class="term-name">冲（ちゅう）</span></div>
+        <div class="term-short">ぶつかり合う・揺さぶる関係</div>
+        <div class="term-desc">正反対の地支がぶつかる関係です。変化・変動・移動を引き起こしやすく、良くも悪くも「動かされる」感覚になります。年柱と時柱の冲は内面の葛藤と関係することも。</div>
+      </div>
+      <div class="term-card">
+        <div class="term-header"><span class="term-icon">⚠️</span><span class="term-name">刑（けい）</span></div>
+        <div class="term-short">摩擦・こだわりすぎるパターン</div>
+        <div class="term-desc">緊張や摩擦を生みやすい関係です。特に自刑（同じ地支が重なる）は、自分で自分を追い込みやすい傾向と関係します。</div>
+      </div>
+      <div class="term-card">
+        <div class="term-header"><span class="term-icon">🌀</span><span class="term-name">害（がい）</span></div>
+        <div class="term-short">じわじわ影響する障害</div>
+        <div class="term-desc">直接的なぶつかりではなく、じわじわと影響するマイナスの関係です。「なぜかここだけうまくいかない」という感覚に関係することがあります。</div>
+      </div>
+    </div>
+    <div style="margin-top:12px;">
+      <div class="term-card">
+        <div class="term-prompt"><span class="term-prompt-text">私の命式にある刑冲合害から、気をつけたいパターンと活かし方を教えてください</span><button class="copy-btn" onclick="copyTerm(this)">コピー</button></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="note">
+    用語の説明は流派によって異なります。ここでは一般的な読み方をまとめています。気になる用語はAIにそのまま質問してみてください。
+  </div>
+
+</div>
+
+<footer>© nanami-astro</footer>
+
+<script>
+  function copyTerm(btn) {
+    const promptDiv = btn.closest('.term-prompt');
+    const textEl = promptDiv.querySelector('.term-prompt-text');
+    const text = textEl ? textEl.textContent.trim() : '';
+    navigator.clipboard.writeText(text).then(() => {
+      btn.textContent = '✓';
+      btn.classList.add('copied');
+      setTimeout(() => { btn.textContent = 'コピー'; btn.classList.remove('copied'); }, 1500);
+    });
+  }
+</script>
+</body>
+</html>

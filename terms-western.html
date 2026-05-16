@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>西洋占星術 用語ガイド | nanami-astro</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=Noto+Serif+JP:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #fafaf8; --surface: #ffffff; --border: #e8e4dc;
+    --text: #2c2a27; --text-sub: #7a7670;
+    --accent: #c9a84c; --accent-light: #f5edd6; --accent-dark: #9a7830;
+    --radius: 12px; --shadow: 0 2px 16px rgba(0,0,0,0.06);
+  }
+  body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: var(--text); line-height: 1.8; font-weight: 300; }
+
+  header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 16px 24px; display: flex; align-items: center; gap: 16px; }
+  .back-link { font-size: 13px; color: var(--accent-dark); text-decoration: none; white-space: nowrap; }
+  .back-link:hover { text-decoration: underline; }
+  header .header-right { flex: 1; text-align: center; }
+  header .logo { font-family: 'Noto Serif JP', serif; font-size: 12px; letter-spacing: 0.2em; color: var(--accent-dark); }
+  header h1 { font-size: 17px; font-weight: 400; }
+
+  .container { max-width: 720px; margin: 0 auto; padding: 40px 20px 80px; }
+  .section { margin-bottom: 52px; }
+  .section-label { font-size: 11px; letter-spacing: 0.2em; color: var(--accent-dark); text-transform: uppercase; margin-bottom: 8px; font-weight: 500; }
+  .section-title { font-size: 20px; font-weight: 500; margin-bottom: 6px; }
+  .section-desc { font-size: 13px; color: var(--text-sub); margin-bottom: 20px; line-height: 1.7; }
+
+  /* 用語カード */
+  .term-cards { display: flex; flex-direction: column; gap: 10px; }
+  .term-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow); }
+  .term-header { display: flex; align-items: baseline; gap: 10px; margin-bottom: 8px; }
+  .term-icon { font-size: 20px; }
+  .term-name { font-size: 16px; font-weight: 500; }
+  .term-tag { font-size: 11px; background: var(--accent-light); color: var(--accent-dark); padding: 2px 8px; border-radius: 20px; font-weight: 500; white-space: nowrap; }
+  .term-short { font-size: 13px; color: var(--accent-dark); font-weight: 500; margin-bottom: 8px; }
+  .term-desc { font-size: 13px; color: var(--text-sub); line-height: 1.8; margin-bottom: 12px; }
+  .term-prompt { background: var(--bg); border-left: 3px solid var(--accent); border-radius: 0 8px 8px 0; padding: 8px 12px; font-size: 12px; color: var(--text); display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+  .term-prompt-text { flex: 1; }
+  .term-prompt::before { content: '💬'; margin-right: 6px; flex-shrink: 0; }
+  .copy-btn { background: var(--accent); color: white; border: none; border-radius: 4px; padding: 3px 10px; font-size: 11px; cursor: pointer; font-family: inherit; white-space: nowrap; flex-shrink: 0; }
+  .copy-btn.copied { background: #5a9a6a; }
+
+  /* グリッド（天体） */
+  .term-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  @media (max-width: 500px) { .term-grid { grid-template-columns: 1fr; } }
+
+  .term-card-sm { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; box-shadow: var(--shadow); }
+  .term-card-sm .term-header { margin-bottom: 6px; }
+  .term-card-sm .term-desc { margin-bottom: 8px; }
+
+  /* アスペクト */
+  .aspect-list { display: flex; flex-direction: column; gap: 8px; }
+  .aspect-item { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; box-shadow: var(--shadow); display: flex; gap: 12px; align-items: flex-start; }
+  .aspect-symbol { font-size: 18px; width: 28px; text-align: center; flex-shrink: 0; }
+  .aspect-body h4 { font-size: 13px; font-weight: 500; margin-bottom: 4px; }
+  .aspect-body p { font-size: 12px; color: var(--text-sub); line-height: 1.6; }
+
+  .divider { border: none; border-top: 1px solid var(--border); margin: 48px 0; }
+  .full-badge { display: inline-flex; align-items: center; gap: 6px; background: #e8f0ff; color: #2a4080; font-size: 11px; padding: 3px 10px; border-radius: 20px; margin-bottom: 12px; font-weight: 500; }
+  .note { background: #f7f4ee; border-radius: var(--radius); padding: 16px 20px; font-size: 12px; color: var(--text-sub); line-height: 1.8; }
+  footer { text-align: center; padding: 32px; font-size: 12px; color: var(--text-sub); border-top: 1px solid var(--border); }
+
+  /* TOC */
+  .toc { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 20px; margin-bottom: 40px; box-shadow: var(--shadow); }
+  .toc p { font-size: 12px; color: var(--text-sub); margin-bottom: 10px; }
+  .toc-links { display: flex; flex-wrap: wrap; gap: 8px; }
+  .toc-link { font-size: 12px; color: var(--accent-dark); text-decoration: none; background: var(--accent-light); padding: 3px 12px; border-radius: 20px; }
+  .toc-link:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+
+<header>
+  <a href="index.html" class="back-link">← 戻る</a>
+  <div class="header-right">
+    <div class="logo">nanami-astro</div>
+    <h1>西洋占星術 用語ガイド</h1>
+  </div>
+  <div style="width:48px;"></div>
+</header>
+
+<div class="container">
+
+  <div class="toc">
+    <p>気になる項目へジャンプ</p>
+    <div class="toc-links">
+      <a href="#planets" class="toc-link">天体</a>
+      <a href="#houses" class="toc-link">ハウス</a>
+      <a href="#aspects" class="toc-link">アスペクト</a>
+      <a href="#asteroids" class="toc-link">小惑星</a>
+      <a href="#transit" class="toc-link">トランジット</a>
+    </div>
+  </div>
+
+  <!-- 天体 -->
+  <div class="section" id="planets">
+    <div class="section-label">Planets</div>
+    <div class="section-title">天体</div>
+    <div class="section-desc">ホロスコープに登場する主な天体です。それぞれが「あなたの中にある働き」を表しています。</div>
+
+    <div class="term-cards">
+
+      <div class="term-card">
+        <div class="term-header">
+          <span class="term-icon">☀️</span>
+          <span class="term-name">太陽</span>
+          <span class="term-tag">最重要</span>
+        </div>
+        <div class="term-short">あなたの本質・人生のテーマ・進む方向</div>
+        <div class="term-desc">「自分らしく生きる」とはどういうことか、を示す天体です。太陽のサインは、意識して育てていく方向性でもあります。「このサインらしく生きると充実する」と読むと使いやすいです。</div>
+        <div class="term-prompt"><span class="term-prompt-text">太陽のサインについて、日常でどう活かせるか教えてください</span><button class="copy-btn" onclick="copyTerm(this)">コピー</button></div>
+      </div>
+
+      <div class="term-card">
+        <div class="term-header">
+          <span class="term-icon">🌙</span>
+          <span class="term-name">月</span>
+          <span class="term-tag">感情・本能</span>
+        </div>
+        <div class="term-short">感情のクセ・安心できる場所・本能的な反応</div>
+        <div class="term-desc">意識しなくても出てしまう感情のパターンや、心が落ち着く環境を示します。ストレスのかかる場面で特に強く出やすく、「なぜかこういう時に不安になる」「この環境だと落ち着く」という感覚に関係しています。</div>
+        <div class="term-prompt"><span class="term-prompt-text">月のサインから、私が安心できる環境や感情パターンを教えてください</span><button class="copy-btn" onclick="copyTerm(this)">コピー</button></div>
+      </div>
+
+      <div class="term-card">
+        <div class="term-header">
+          <span class="term-icon">☿</span>
+          <span class="term-name">水星</span>
+          <span class="term-tag">思考・言葉</span>
+        </div>
+        <div class="term-short">考え方のクセ・伝え方・情報処理のスタイル</div>
+        <div class="term-desc">どう考え、どう伝えるかのスタイルを示します。会話・文章・学び方・情報収集の仕方にも関係しています。「なぜかこういう説明の仕方が得意」「この方法で学ぶと入ってくる」という感覚に近い天体です。</div>
+        <div class="term-prompt"><span class="term-prompt-text">水星のサインから、私に合った情報収集や伝え方のスタイルを教えてください</span><button class="copy-btn" onclick="copyTerm(this)">コピー</button></div>
+      </div>
+
+      <div class="term-card">
+        <div class="term-header">
+          <span class="term-icon">♀️</span>
+          <span class="term-name">金星</span>
+          <span class="term-tag">好み・愛情</span>
+        </div>
+        <div class="term-short">好きなもの・美意識・愛情表現のスタイル</div>
+        <div class="term-desc">何に美しさを感じるか、どう愛情を表現するか、何を心地よいと感じるかを示します。恋愛の傾向だけでなく、仕事や生活の中で「これが好き」「これは合わない」という感覚にも関係しています。</div>
+        <div class="term-prompt"><span class="term-prompt-text">金星のサインから、私の愛情表現や好みの傾向を教えてください</span><button class="copy-btn" onclick="copyTerm(this)">コピー</button></div>
+      </div>
+
+      <div class="term-card">
+        <div class="term-header">
+          <span class="term-icon">♂️</span>
+          <span class="term-name">火星</span>
+          <span class="term-tag">行動・エネルギー</span>
+        </div>
+        <div class="term-short">行動力の出し方・やる気の源・ぶつかり方</div>
+        <div class="term-desc">どう動き出すか、エネルギーをどう使うかを示します。やる気が出る場面・出にくい場面、怒りや競争心の出方にも関係しています。「なぜかこういう時にスイッチが入る」という感覚に近い天体です。</div>
+        <div class="term-prompt"><span class="term-prompt-text">火星のサインから、私のやる気の出し方や行動パターンを教えてください</span><button class="copy-btn" onclick="copyTerm(this)">コピー</button></div>
+      </div>
+
+      <div class="term-grid">
+        <div class="term-card-sm">
+          <div class="term-header">
+            <span class="term-icon">♃</span>
+            <span class="term-name">木星</span>
+          </div>
+          <div class="term-short">拡大・幸運・成長の方向</div>
+          <div class="term-desc" style="font-size:12px;">自然に広がりやすい分野、成長しやすいテーマを示します。「ここに力を使うと伸びやすい」という方向です。</div>
+          <div class="term-prompt" style="font-size:11px;"><span class="term-prompt-text">木星から見た、私の成長しやすい分野を教えてください</span><button class="copy-btn" onclick="copyTerm(this)">コピー</button></div>
+        </div>
+        <div class="term-card-sm">
+          <div class="term-header">
+            <span class="term-icon">♄</span>
+            <span class="term-name">土星</span>
+          </div>
+          <div class="term-short">課題・責任・時間をかけて育てるもの</div>
+          <div class="term-desc" style="font-size:12px;">繰り返し向き合うことになるテーマです。「苦手だけどなぜか避けられない」という分野に関係しています。</div>
+          <div class="term-prompt" style="font-size:11px;"><span class="term-prompt-text">土星のサインから、私が向き合い続けるテーマを教えてください</span><button class="copy-btn" onclick="copyTerm(this)">コピー</button></div>
+        </div>
+        <div class="term-card-sm">
+          <div class="term-header">
+            <span class="term-icon">♅</span>
+            <span class="term-name">天王星</span>
+          </div>
+          <div class="term-short">変革・自由・突破口</div>
+          <div class="term-desc" style="font-size:12px;">既存の枠を壊して変わる力を示します。世代共通のテーマでもあり、個人差はハウスで読みます。</div>
+          <div class="term-prompt" style="font-size:11px;"><span class="term-prompt-text">天王星のハウスから、私の変革や自由のテーマを教えてください</span><button class="copy-btn" onclick="copyTerm(this)">コピー</button></div>
+        </div>
+        <div class="term-card-sm">
+          <div class="term-header">
+            <span class="term-icon">♆</span>
+            <span class="term-name">海王星</span>
+          </div>
+          <div class="term-short">夢・直感・溶け合うもの</div>
+          <div class="term-desc" style="font-size:12px;">感性・霊感・理想・幻想に関係します。世代共通のテーマでもあり、個人差はハウスで読みます。</div>
+          <div class="term-prompt" style="font-size:11px;"><span class="term-prompt-text">海王星のハウスから、私の感性や理想のテーマを教えてください</span><button class="copy-btn" onclick="copyTerm(this)">コピー</button></div>
+        </div>
+        <div class="term-card-sm">
+          <div class="term-header">
+            <span class="term-icon">♇</span>
+            <span class="term-name">冥王星</span>
+          </div>
+          <div class="term-short">変容・再生・深い力</div>
+          <div class="term-desc" style="font-size:12px;">一度壊れて生まれ変わるような深い変化に関係します。世代共通のテーマでもあり、個人差はハウスで読みます。</div>
+          <div class="term-prompt" style="font-size:11px;"><span class="term-prompt-text">冥王星のハウスから、私の変容や再生のテーマを教えてください</span><button class="copy-btn" onclick="copyTerm(this)">コピー</button></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ハウス -->
+  <div class="section" id="houses">
+    <div class="section-label">Houses</div>
+    <div class="section-title">ハウス（室）</div>
+    <div class="section-desc">ホロスコープを12に分けたエリアです。「どの天体が」「人生のどの場面で」働くかを示します。同じ太陽でも、どのハウスにあるかで表れ方が変わります。</div>
+
+    <div class="term-cards">
+      <div class="term-card">
+        <div class="term-header"><span class="term-icon">🪞</span><span class="term-name">1ハウス</span><span class="term-tag">自分・外見・第一印象</span></div>
+        <div class="term-desc">あなたが世界に向けて出している顔、外から見えるキャラクターです。ASC（アセンダント）があるハウスで、「この人、○○な人だな」と周囲が感じる印象に関係します。</div>
+        <div class="term-prompt"><span class="term-prompt-text">1ハウスの天体から、私が周囲に与える印象を教えてください</span><button class="copy-btn" onclick="copyTerm(this)">コピー</button></div>
+      </div>
+      <div class="term-card">
+        <div class="term-header"><span class="term-icon">💰</span><span class="term-name">2ハウス</span><span class="term-tag">お金・所有・価値観</span></div>
+        <div class="term-desc">お金との関係、何に価値を感じるか、自分の資産をどう扱うかです。稼ぎ方のスタイルや、「これは大事にしたい」という感覚にも関係します。</div>
+        <div class="term-prompt"><span class="term-prompt-text">2ハウスから、私のお金の使い方や価値観の傾向を教えてください</span><button class="copy-btn" onclick="copyTerm(this)">コピー</button></div>
+      </div>
+      <div class="term-card">
+        <div class="term-header"><span class="term-icon">💬</span><span class="term-name">3ハウス</span><span class="term-tag">コミュニケーション・学び</span></div>
+        <div class="term-desc">日常の会話、短い移動、兄弟姉妹、学び方のスタイルに関係します。「こういう話し方が得意」「この方法だと頭に入る」という感覚です。</div>
+        <div class="term-prompt"><span class="term-prompt-text">3ハウスから、私に合ったコミュニケーションスタイルを教えてください</span><button class="copy-btn" onclick="copyTerm(this)">コピー</button></div>
+      </div>
+      <div class="term-card">
+        <div class="term-header"><span class="term-icon">🏠</span><span class="term-name">4ハウス</span><span class="term-tag">家・家族・心のベース</span></div>
+        <div class="term-desc">家族・出身環境・心の拠り所に関係します。「落ち着ける場所」「帰りたいと思う感覚」の根っこです。家族との関係性も読めます。</div>
+        <div class="term-prompt"><span class="term-prompt-text">4ハウスから、私の心の拠り所や家族との関係を教えてください</span><button class="copy-btn" onclick="copyTerm(this)">コピー</button></div>
+      </div>
+      <div class="term-card">
+        <div class="term-header"><span class="term-icon">🎨</span><span class="term-name">5ハウス</span><span class="term-tag">創造・恋愛・表現</span></div>
+        <div class="term-desc">楽しむこと、創ること、恋愛、子どもに関係します。「これをやっていると生き生きする」という感覚や、恋愛での自己表現スタイルが読めます。</div>
+        <div class="term-prompt"><span class="term-prompt-text">5ハウスから、私の創造性や恋愛での表現スタイルを教えてください</span><button class="copy-btn" onclick="copyTerm(this)">コピー</button></div>
+      </div>
+      <div class="term-card">
+        <div class="term-header"><span class="term-icon">⚙️</span><span class="term-name">6ハウス</span><span class="term-tag">仕事・健康・日常ルーティン</span></div>
+        <div class="term-desc">日々の仕事のやり方、体の使い方、ルーティンに関係します。「こういう環境だと調子がいい」「このやり方だと続く」という感覚です。</div>
+        <div class="term-prompt"><span class="term-prompt-text">6ハウスから、私に合った仕事環境や体の整え方を教えてください</span><button class="copy-btn" onclick="copyTerm(this)">コピー</button></div>
+      </div>
+      <div class="term-card">
+        <div class="term-header"><span class="term-icon">🤝</span><span class="term-name">7ハウス</span><span class="term-tag">パートナーシップ・対人関係</span></div>
+        <div class="term-desc">一対一の関係（恋人・配偶者・ビジネスパートナー）に関係します。引き寄せやすい相手のタイプや、対人関係での自分の傾向が読めます。</div>
+        <div class="term-prompt"><span class="term-prompt-text">7ハウスから、私が引き寄せやすい相手のタイプと対人関係の傾向を教えてください</span><button class="copy-btn" onclick="copyTerm(this)">コピー</button></div>
+      </div>
+      <div class="term-card">
+        <div class="term-header"><span class="term-icon">🔮</span><span class="term-name">8ハウス</span><span class="term-tag">変容・共有・深いつながり</span></div>
+        <div class="term-desc">他者と深くつながること、共有する資源（遺産・投資）、心の深い変化に関係します。「表には出さないが、内側で起きていること」にも関係します。</div>
+        <div class="term-prompt"><span class="term-prompt-text">8ハウスから、私の深いつながりや変容のテーマを教えてください</span><button class="copy-btn" onclick="copyTerm(this)">コピー</button></div>
+      </div>
+      <div class="term-card">
+        <div class="term-header"><span class="term-icon">🌍</span><span class="term-name">9ハウス</span><span class="term-tag">哲学・海外・高い学び</span></div>
+        <div class="term-desc">人生観・信念・海外・高等教育・旅に関係します。「こういう考え方で生きたい」という方向性や、遠くへ向かう衝動に関係します。</div>
+        <div class="term-prompt"><span class="term-prompt-text">9ハウスから、私の人生観や広がりのテーマを教えてください</span><button class="copy-btn" onclick="copyTerm(this)">コピー</button></div>
+      </div>
+      <div class="term-card">
+        <div class="term-header"><span class="term-icon">🏆</span><span class="term-name">10ハウス</span><span class="term-tag">社会的役割・キャリア・MC</span></div>
+        <div class="term-desc">社会の中でどんな役割を担うか、どう評価されたいかです。MC（ミッドヘブン）があるハウスで、キャリアや社会的な方向性が読めます。</div>
+        <div class="term-prompt"><span class="term-prompt-text">10ハウスから、私の社会的な役割やキャリアの方向性を教えてください</span><button class="copy-btn" onclick="copyTerm(this)">コピー</button></div>
+      </div>
+      <div class="term-card">
+        <div class="term-header"><span class="term-icon">👥</span><span class="term-name">11ハウス</span><span class="term-tag">仲間・コミュニティ・未来</span></div>
+        <div class="term-desc">友人・グループ・理想の未来像に関係します。「こういう仲間と一緒にいると力が出る」「こういう社会を目指したい」という感覚です。</div>
+        <div class="term-prompt"><span class="term-prompt-text">11ハウスから、私に合う仲間やコミュニティの形を教えてください</span><button class="copy-btn" onclick="copyTerm(this)">コピー</button></div>
+      </div>
+      <div class="term-card">
+        <div class="term-header"><span class="term-icon">🌊</span><span class="term-name">12ハウス</span><span class="term-tag">無意識・隠れた才能・孤独</span></div>
+        <div class="term-desc">意識しにくい部分、一人で向き合うテーマ、隠れた才能や課題に関係します。「なぜかここだけうまくいかない」「一人でいる時に出てくる自分」に関係します。</div>
+        <div class="term-prompt"><span class="term-prompt-text">12ハウスから、私の無意識のテーマや隠れた才能を教えてください</span><button class="copy-btn" onclick="copyTerm(this)">コピー</button></div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- アスペクト -->
+  <div class="section" id="aspects">
+    <div class="section-label">Aspects</div>
+    <div class="section-title">アスペクト</div>
+    <div class="section-desc">天体どうしの角度関係です。「この2つの力がどう働き合っているか」を示します。難しく考えず、AIに「このアスペクトはどういう意味ですか」と聞くのが一番早いです。</div>
+    <div class="aspect-list">
+      <div class="aspect-item"><div class="aspect-symbol">☌</div><div class="aspect-body"><h4>合（コンジャンクション）0度</h4><p>2つの天体が同じ場所にある。エネルギーが混ざり合い、強く融合した状態。良くも悪くも強調されます。</p></div></div>
+      <div class="aspect-item"><div class="aspect-symbol">△</div><div class="aspect-body"><h4>トライン 120度</h4><p>流れがよく、自然に力が発揮される関係。意識しなくても出てくる才能や、スムーズにいきやすい組み合わせです。</p></div></div>
+      <div class="aspect-item"><div class="aspect-symbol">✶</div><div class="aspect-body"><h4>セクスタイル 60度</h4><p>うまく活用できる関係。少し意識すると力を引き出しやすいアスペクトです。</p></div></div>
+      <div class="aspect-item"><div class="aspect-symbol">□</div><div class="aspect-body"><h4>スクエア 90度</h4><p>緊張・葛藤の関係。ぶつかりやすいが、乗り越えると大きな力になります。「なぜかここだけうまくいかない」の原因になることも。</p></div></div>
+      <div class="aspect-item"><div class="aspect-symbol">☍</div><div class="aspect-body"><h4>オポジション 180度</h4><p>正反対に引っ張り合う関係。バランスを取るのが課題で、対人関係で特に出やすいアスペクトです。</p></div></div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- 小惑星 -->
+  <div class="section" id="asteroids">
+    <div class="section-label">Asteroids</div>
+    <div class="section-title">小惑星 <span class="full-badge">🌍 FULL版</span></div>
+    <div class="section-desc">主要天体では読みきれない、より細かい個性・傷・使命を読み解きます。</div>
+    <div class="term-cards">
+      <div class="term-card">
+        <div class="term-header"><span class="term-icon">🌾</span><span class="term-name">ケレス</span></div>
+        <div class="term-short">育てる・育てられる・ケアのスタイル</div>
+        <div class="term-desc">どう人を育て、どう育てられたかのパターンを示します。「こうされると安心する」「自分はこうやって人を大切にする」という感覚に関係しています。母性・養育・食のテーマとも繋がります。</div>
+        <div class="term-prompt"><span class="term-prompt-text">ケレスから、私の育てる・ケアするスタイルを教えてください</span><button class="copy-btn" onclick="copyTerm(this)">コピー</button></div>
+      </div>
+      <div class="term-card">
+        <div class="term-header"><span class="term-icon">🩹</span><span class="term-name">カイロン</span></div>
+        <div class="term-short">癒えない傷・そこから生まれる強み</div>
+        <div class="term-desc">繰り返し傷つく場所でありながら、他者を助ける力の源にもなるテーマを示します。「なぜかここだけ自信が持てない」という感覚と繋がることが多く、同時にその部分が人への共感力になっていることもあります。</div>
+        <div class="term-prompt"><span class="term-prompt-text">カイロンから、私の傷のテーマと、そこから生まれる強みを教えてください</span><button class="copy-btn" onclick="copyTerm(this)">コピー</button></div>
+      </div>
+      <div class="term-card">
+        <div class="term-header"><span class="term-icon">🔥</span><span class="term-name">ベスタ</span></div>
+        <div class="term-short">集中・献身・守りたいもの</div>
+        <div class="term-desc">何に対して純粋に集中できるか、何を守りたいかを示します。「これだけは妥協できない」という信念や、一人でコツコツ積み上げる力に関係しています。</div>
+        <div class="term-prompt"><span class="term-prompt-text">ベスタから、私が集中できる分野や守りたいものを教えてください</span><button class="copy-btn" onclick="copyTerm(this)">コピー</button></div>
+      </div>
+      <div class="term-card">
+        <div class="term-header"><span class="term-icon">⚖️</span><span class="term-name">パラス</span></div>
+        <div class="term-short">知恵・戦略・パターン認識</div>
+        <div class="term-desc">物事の構造を見抜く力、戦略的に動く知性を示します。「なぜかこういうパターンが見える」「ここは勘が働く」という感覚に関係しています。</div>
+        <div class="term-prompt"><span class="term-prompt-text">パラスから、私の戦略的な強みやパターン認識の傾向を教えてください</span><button class="copy-btn" onclick="copyTerm(this)">コピー</button></div>
+      </div>
+      <div class="term-card">
+        <div class="term-header"><span class="term-icon">💍</span><span class="term-name">ジュノー</span></div>
+        <div class="term-short">対等なパートナーシップ・結婚</div>
+        <div class="term-desc">結婚・長期的なパートナーシップで求めるもの、理想の関係性を示します。「こういう関係でいたい」という感覚や、関係の中で繰り返すパターンが読めます。</div>
+        <div class="term-prompt"><span class="term-prompt-text">ジュノーから、私が求めるパートナーシップの形を教えてください</span><button class="copy-btn" onclick="copyTerm(this)">コピー</button></div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- トランジット -->
+  <div class="section" id="transit">
+    <div class="section-label">Transit</div>
+    <div class="section-title">トランジット <span class="full-badge">🌍 FULL版</span></div>
+    <div class="section-desc">今この瞬間の空の天体が、あなたの出生図とどう関わっているかを示します。「今どんな時期にいるか」「この先どんな流れが来るか」を読むために使います。</div>
+    <div class="term-cards">
+      <div class="term-card">
+        <div class="term-header"><span class="term-icon">📅</span><span class="term-name">トランジットの基本的な読み方</span></div>
+        <div class="term-desc">出生図は「あなたの性質」を示す地図です。トランジットは「今、その地図のどこに光が当たっているか」を示します。たとえば出生図の太陽に木星がトランジットすると、「本質的な部分が広がりやすい時期」などと読みます。AIに渡すと、今後の動きやすい日・注意したい日を具体的に読んでもらえます。</div>
+        <div class="term-prompt"><span class="term-prompt-text">今後1ヶ月のトランジットで、特に注目すべき時期と、その過ごし方を教えてください</span><button class="copy-btn" onclick="copyTerm(this)">コピー</button></div>
+      </div>
+      <div class="term-card">
+        <div class="term-header"><span class="term-icon">🌙</span><span class="term-name">月のトランジット（朝・昼・夜）</span></div>
+        <div class="term-desc">月は約2〜3日で星座を移動する、最も速い天体です。FULL版には朝・昼・夜の月の位置が入っており、その日の感情や体のリズム、向いている行動のヒントが読めます。「今日の午後は感情が揺れやすい」「この時間帯は集中しやすい」という細かい使い方ができます。</div>
+        <div class="term-prompt"><span class="term-prompt-text">今日の月の動きから、朝・昼・夜の過ごし方のヒントを教えてください</span><button class="copy-btn" onclick="copyTerm(this)">コピー</button></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="note">
+    用語の説明は流派や解釈によって異なります。ここでは一般的な読み方をまとめています。気になる用語はAIにそのまま質問してみてください。
+  </div>
+
+</div>
+
+<footer>© nanami-astro</footer>
+
+<script>
+  function copyTerm(btn) {
+    const promptDiv = btn.closest('.term-prompt');
+    const textEl = promptDiv.querySelector('.term-prompt-text');
+    const text = textEl ? textEl.textContent.trim() : '';
+    navigator.clipboard.writeText(text).then(() => {
+      btn.textContent = '✓';
+      btn.classList.add('copied');
+      setTimeout(() => { btn.textContent = 'コピー'; btn.classList.remove('copied'); }, 1500);
+    });
+  }
+</script>
+</body>
+</html>
