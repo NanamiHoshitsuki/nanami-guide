@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>timeleszホロスコープ | nanami-astro</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=Noto+Serif+JP:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #fafaf8;
+    --surface: #ffffff;
+    --border: #e8e4dc;
+    --text: #2c2a27;
+    --text-sub: #7a7670;
+    --accent: #c9a84c;
+    --accent-light: #f5edd6;
+    --accent-dark: #9a7830;
+    --radius: 14px;
+    --shadow: 0 2px 16px rgba(0,0,0,0.06);
+  }
+
+  body {
+    font-family: 'Noto Sans JP', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.8;
+    font-weight: 300;
+  }
+
+  header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 20px 24px;
+    text-align: center;
+  }
+  header .logo {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 12px;
+    letter-spacing: 0.25em;
+    color: var(--accent-dark);
+  }
+  header h1 {
+    font-size: 22px;
+    font-weight: 400;
+    margin-top: 6px;
+    color: var(--text);
+    letter-spacing: 0.05em;
+  }
+  header .sub {
+    font-size: 12px;
+    color: var(--text-sub);
+    margin-top: 4px;
+    letter-spacing: 0.05em;
+  }
+
+  .container {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 40px 20px 80px;
+  }
+
+  .intro {
+    text-align: center;
+    font-size: 13px;
+    color: var(--text-sub);
+    margin-bottom: 36px;
+    line-height: 1.9;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+
+  @media (max-width: 520px) {
+    .grid { grid-template-columns: 1fr; }
+  }
+
+  .member-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 22px 20px;
+    box-shadow: var(--shadow);
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    transition: box-shadow 0.2s, border-color 0.2s, transform 0.15s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .member-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent), #e8c96a);
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  .member-card:hover {
+    box-shadow: 0 6px 24px rgba(0,0,0,0.1);
+    border-color: var(--accent);
+    transform: translateY(-2px);
+  }
+
+  .member-card:hover::before {
+    opacity: 1;
+  }
+
+  .member-num {
+    font-size: 10px;
+    color: var(--accent-dark);
+    letter-spacing: 0.15em;
+    font-weight: 500;
+  }
+
+  .member-name {
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--text);
+    font-family: 'Noto Serif JP', serif;
+  }
+
+  .member-name-en {
+    font-size: 11px;
+    color: var(--text-sub);
+    letter-spacing: 0.1em;
+    margin-top: -4px;
+  }
+
+  .member-link {
+    font-size: 12px;
+    color: var(--accent-dark);
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 4px;
+  }
+
+  .member-link::after {
+    content: '→';
+    font-size: 11px;
+  }
+
+  .divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 40px 0;
+  }
+
+  .note {
+    background: var(--accent-light);
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    font-size: 12px;
+    color: var(--accent-dark);
+    line-height: 1.8;
+    text-align: center;
+  }
+
+  footer {
+    text-align: center;
+    padding: 32px;
+    font-size: 12px;
+    color: var(--text-sub);
+    border-top: 1px solid var(--border);
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">nanami-astro</div>
+  <h1>timeleszホロスコープ</h1>
+  <div class="sub">ホロスコープ・鑑定データ</div>
+</header>
+
+<div class="container">
+
+  <p class="intro">
+    各メンバーのホロスコープ鑑定データページです。<br>
+    名前をタップして、データページを開いてください。
+  </p>
+
+  <div class="grid">
+
+    <a href="https://chart.nanami-astro.com/chart/8bWMRGu783b3EqvEGAr2jkfe" class="member-card" target="_blank" rel="noopener">
+      <div class="member-num">MEMBER 01</div>
+      <div class="member-name">菊池 風磨</div>
+      <div class="member-name-en">Fuma Kikuchi</div>
+      <div class="member-link">鑑定データを見る</div>
+    </a>
+
+    <a href="https://chart.nanami-astro.com/chart/lJVlCyYYO9aBX8rF9KzEv_98" class="member-card" target="_blank" rel="noopener">
+      <div class="member-num">MEMBER 02</div>
+      <div class="member-name">佐藤 勝利</div>
+      <div class="member-name-en">Shori Sato</div>
+      <div class="member-link">鑑定データを見る</div>
+    </a>
+
+    <a href="https://chart.nanami-astro.com/chart/ufsI-BeN9GSjD87tFjBaG14u" class="member-card" target="_blank" rel="noopener">
+      <div class="member-num">MEMBER 03</div>
+      <div class="member-name">松島 聡</div>
+      <div class="member-name-en">Sato Matsushima</div>
+      <div class="member-link">鑑定データを見る</div>
+    </a>
+
+    <a href="https://chart.nanami-astro.com/chart/bGAqv0oos3mhONCrvybMYfTL" class="member-card" target="_blank" rel="noopener">
+      <div class="member-num">MEMBER 04</div>
+      <div class="member-name">寺西 拓人</div>
+      <div class="member-name-en">Takuto Teranishi</div>
+      <div class="member-link">鑑定データを見る</div>
+    </a>
+
+    <a href="https://chart.nanami-astro.com/chart/M24wkb3wbVQpaukYN0bHEmva" class="member-card" target="_blank" rel="noopener">
+      <div class="member-num">MEMBER 05</div>
+      <div class="member-name">原 喜孝</div>
+      <div class="member-name-en">Yoshitaka Hara</div>
+      <div class="member-link">鑑定データを見る</div>
+    </a>
+
+    <a href="https://chart.nanami-astro.com/chart/EWMP00IFmEEfm3hTYbtfItBl" class="member-card" target="_blank" rel="noopener">
+      <div class="member-num">MEMBER 06</div>
+      <div class="member-name">橋本 将生</div>
+      <div class="member-name-en">Masao Hashimoto</div>
+      <div class="member-link">鑑定データを見る</div>
+    </a>
+
+    <a href="https://chart.nanami-astro.com/chart/Pyx_JDZ36sQbZxrKKP01_Mdk" class="member-card" target="_blank" rel="noopener">
+      <div class="member-num">MEMBER 07</div>
+      <div class="member-name">猪俣 周杜</div>
+      <div class="member-name-en">Shuto Inomata</div>
+      <div class="member-link">鑑定データを見る</div>
+    </a>
+
+    <a href="https://chart.nanami-astro.com/chart/cH4pQ2TVL50zEHWFVYWSxvhv" class="member-card" target="_blank" rel="noopener">
+      <div class="member-num">MEMBER 08</div>
+      <div class="member-name">篠塚 大輝</div>
+      <div class="member-name-en">Daiki Shinotsuka</div>
+      <div class="member-link">鑑定データを見る</div>
+    </a>
+
+  </div>
+
+  <hr class="divider">
+
+  <div class="note">
+    鑑定データページは有効期限内のみ開けます。<br>
+    データの二次利用・転載はご遠慮ください。
+  </div>
+
+</div>
+
+<footer>© nanami-astro</footer>
+
+</body>
+</html>
