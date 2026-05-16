@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>使い方ガイド | nanami-astro</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=Noto+Serif+JP:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #fafaf8; --surface: #ffffff; --border: #e8e4dc;
+    --text: #2c2a27; --text-sub: #7a7670;
+    --accent: #c9a84c; --accent-light: #f5edd6; --accent-dark: #9a7830;
+    --radius: 12px; --shadow: 0 2px 16px rgba(0,0,0,0.06);
+  }
+  body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: var(--text); line-height: 1.8; font-weight: 300; }
+
+  header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 20px 24px; text-align: center; }
+  header .logo { font-family: 'Noto Serif JP', serif; font-size: 13px; letter-spacing: 0.2em; color: var(--accent-dark); }
+  header h1 { font-size: 20px; font-weight: 400; margin-top: 6px; }
+
+  .container { max-width: 720px; margin: 0 auto; padding: 40px 20px 80px; }
+
+  .section { margin-bottom: 48px; }
+  .section-label { font-size: 11px; letter-spacing: 0.2em; color: var(--accent-dark); text-transform: uppercase; margin-bottom: 8px; font-weight: 500; }
+  .section-title { font-size: 20px; font-weight: 500; margin-bottom: 20px; }
+
+  /* ステップ */
+  .steps { display: flex; flex-direction: column; gap: 12px; }
+  .step { display: flex; gap: 16px; align-items: flex-start; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow); }
+  .step-num { width: 32px; height: 32px; border-radius: 50%; background: var(--accent); color: white; font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
+  .step-body h3 { font-size: 15px; font-weight: 500; margin-bottom: 6px; }
+  .step-body p { font-size: 13px; color: var(--text-sub); line-height: 1.7; }
+  .tip { margin-top: 10px; background: var(--accent-light); border-left: 3px solid var(--accent); padding: 8px 12px; font-size: 12px; color: var(--accent-dark); border-radius: 0 6px 6px 0; }
+
+  /* プランカード */
+  .plan-cards { display: flex; flex-direction: column; gap: 14px; }
+  .plan-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; box-shadow: var(--shadow); display: flex; flex-direction: column; gap: 12px; text-decoration: none; color: inherit; transition: box-shadow 0.2s, border-color 0.2s; }
+  .plan-card:hover { box-shadow: 0 4px 24px rgba(0,0,0,0.1); border-color: var(--accent); }
+  .plan-card-header { display: flex; align-items: center; justify-content: space-between; }
+  .plan-badge { font-size: 11px; background: var(--accent-light); color: var(--accent-dark); padding: 3px 10px; border-radius: 20px; font-weight: 500; }
+  .plan-badge.full { background: #e8f0ff; color: #3a5ca8; }
+  .plan-badge.shichu { background: #f0ece8; color: #7a5c3a; }
+  .plan-icon { font-size: 28px; }
+  .plan-card h3 { font-size: 17px; font-weight: 500; }
+  .plan-card p { font-size: 13px; color: var(--text-sub); line-height: 1.7; }
+  .plan-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .plan-tag { font-size: 11px; background: var(--bg); border: 1px solid var(--border); border-radius: 20px; padding: 2px 10px; color: var(--text-sub); }
+  .plan-link { font-size: 12px; color: var(--accent-dark); font-weight: 500; display: flex; align-items: center; gap: 4px; }
+  .plan-link::after { content: '→'; }
+
+  .divider { border: none; border-top: 1px solid var(--border); margin: 48px 0; }
+  .note { background: #f7f4ee; border-radius: var(--radius); padding: 16px 20px; font-size: 12px; color: var(--text-sub); line-height: 1.8; }
+  footer { text-align: center; padding: 32px; font-size: 12px; color: var(--text-sub); border-top: 1px solid var(--border); }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">nanami-astro</div>
+  <h1>AI鑑定データの使い方ガイド</h1>
+</header>
+
+<div class="container">
+
+  <div class="section">
+    <div class="section-label">How to use</div>
+    <div class="section-title">基本の使い方（全プラン共通）</div>
+    <div class="steps">
+
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <h3>鑑定データページを開く</h3>
+          <p>購入後に表示された鑑定データページがそのまま使えます。ページをブックマークしておくと便利です。</p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <h3>「AIに送る」を押す（または「コピーして使う」）</h3>
+          <p>ページ上部のボタンを押してデータをコピーします。迷ったら「AI貼り付け版」でOKです。</p>
+          <div class="tip">📋 コピーできたら次のステップへ</div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <h3>AIに貼り付けて送信する</h3>
+          <p>ChatGPT / Claude / Gemini など好きなAIのチャット欄にそのまま貼り付けて送信します。AIが鑑定文を返してくれます。</p>
+          <div class="tip">✨ そのまま続けて質問できます。会話を終了しなければ文脈が引き継がれます。</div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <h3>うまくいかない場合</h3>
+          <p>アプリによってはファイル共有ができない場合があります。「コピー」または「TXT保存」を使い、ファイルを手動でアップロードしてください。</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <div class="section">
+    <div class="section-label">Plans</div>
+    <div class="section-title">ご購入のプランを選んでください</div>
+    <div class="plan-cards">
+
+      <a href="basic.html" class="plan-card">
+        <div class="plan-card-header">
+          <span class="plan-badge">基本版</span>
+          <span class="plan-icon">⭐</span>
+        </div>
+        <h3>西洋占星術・基本版</h3>
+        <p>出生図をもとに、性格・才能・人生のテーマを読みます。はじめてAI鑑定を試す方におすすめです。小惑星・トランジットはあとから追加購入できます。</p>
+        <div class="plan-tags">
+          <span class="plan-tag">出生図</span>
+          <span class="plan-tag">性格・才能</span>
+          <span class="plan-tag">人生のテーマ</span>
+          <span class="plan-tag">オプション追加可</span>
+        </div>
+        <span class="plan-link">詳しい使い方を見る</span>
+      </a>
+
+      <a href="full.html" class="plan-card">
+        <div class="plan-card-header">
+          <span class="plan-badge full">FULL版</span>
+          <span class="plan-icon">🌍</span>
+        </div>
+        <h3>西洋占星術・FULL版</h3>
+        <p>出生図に加えて、小惑星・31日分のトランジット・月の日内の動きまで含んだ完全版です。今後1ヶ月の流れや注意日まで読めます。</p>
+        <div class="plan-tags">
+          <span class="plan-tag">出生図</span>
+          <span class="plan-tag">小惑星</span>
+          <span class="plan-tag">トランジット31日</span>
+          <span class="plan-tag">月の動き</span>
+        </div>
+        <span class="plan-link">詳しい使い方を見る</span>
+      </a>
+
+      <a href="shichu.html" class="plan-card">
+        <div class="plan-card-header">
+          <span class="plan-badge shichu">四柱推命版</span>
+          <span class="plan-icon">🀄</span>
+        </div>
+        <h3>四柱推命版</h3>
+        <p>四柱・五行・十神・大運・流年をもとに、性格の傾向・才能・人生の流れを読みます。東洋占術ならではの視点で、仕事・人間関係・今後の運気の波を把握できます。</p>
+        <div class="plan-tags">
+          <span class="plan-tag">四柱命式</span>
+          <span class="plan-tag">五行バランス</span>
+          <span class="plan-tag">大運・流年</span>
+          <span class="plan-tag">1回限り</span>
+        </div>
+        <span class="plan-link">詳しい使い方を見る</span>
+      </a>
+
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <div class="note">
+    ・データは発行から90日間有効です。期限内に保存・活用してください。<br>
+    ・AIの種類や設定によって、鑑定文の表現や深さは変わります。<br>
+    ・本データは個人利用向けです。再配布・転載・商用利用は禁止しています。
+  </div>
+
+</div>
+
+<footer>© nanami-astro</footer>
+</body>
+</html>

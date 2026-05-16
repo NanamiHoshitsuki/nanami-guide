@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>基本版の使い方 | nanami-astro</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=Noto+Serif+JP:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #fafaf8; --surface: #ffffff; --border: #e8e4dc;
+    --text: #2c2a27; --text-sub: #7a7670;
+    --accent: #c9a84c; --accent-light: #f5edd6; --accent-dark: #9a7830;
+    --radius: 12px; --shadow: 0 2px 16px rgba(0,0,0,0.06);
+  }
+  body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: var(--text); line-height: 1.8; font-weight: 300; }
+
+  header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 16px 24px; display: flex; align-items: center; gap: 16px; }
+  .back-link { font-size: 13px; color: var(--accent-dark); text-decoration: none; }
+  .back-link:hover { text-decoration: underline; }
+  header .header-right { flex: 1; text-align: center; }
+  header .logo { font-family: 'Noto Serif JP', serif; font-size: 12px; letter-spacing: 0.2em; color: var(--accent-dark); }
+  header h1 { font-size: 17px; font-weight: 400; }
+
+  .container { max-width: 720px; margin: 0 auto; padding: 40px 20px 80px; }
+  .section { margin-bottom: 48px; }
+  .section-label { font-size: 11px; letter-spacing: 0.2em; color: var(--accent-dark); text-transform: uppercase; margin-bottom: 8px; font-weight: 500; }
+  .section-title { font-size: 20px; font-weight: 500; margin-bottom: 20px; }
+
+  .hero-badge { display: inline-block; background: var(--accent-light); color: var(--accent-dark); font-size: 12px; padding: 4px 14px; border-radius: 20px; margin-bottom: 16px; font-weight: 500; }
+
+  .feature-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  @media (max-width: 480px) { .feature-grid { grid-template-columns: 1fr; } }
+  .feature-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; box-shadow: var(--shadow); }
+  .feature-icon { font-size: 22px; margin-bottom: 8px; }
+  .feature-card h4 { font-size: 13px; font-weight: 500; margin-bottom: 6px; }
+  .feature-card p { font-size: 12px; color: var(--text-sub); line-height: 1.6; }
+
+  .option-box { background: var(--surface); border: 1px solid var(--accent); border-radius: var(--radius); padding: 20px 24px; box-shadow: var(--shadow); }
+  .option-box h3 { font-size: 15px; font-weight: 500; margin-bottom: 8px; color: var(--accent-dark); }
+  .option-box p { font-size: 13px; color: var(--text-sub); line-height: 1.7; }
+  .option-items { display: flex; flex-direction: column; gap: 8px; margin-top: 14px; }
+  .option-item { display: flex; align-items: flex-start; gap: 10px; font-size: 13px; }
+  .option-item::before { content: '＋'; color: var(--accent); font-weight: 700; flex-shrink: 0; }
+
+  .prompt-cards { display: flex; flex-direction: column; gap: 10px; }
+  .prompt-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 20px; box-shadow: var(--shadow); }
+  .prompt-card .category { font-size: 11px; color: var(--accent-dark); font-weight: 500; letter-spacing: 0.1em; margin-bottom: 10px; }
+  .prompt-examples { display: flex; flex-direction: column; gap: 6px; }
+  .prompt-example { background: #f7f4ee; border-radius: 8px; padding: 10px 14px; font-size: 13px; cursor: pointer; transition: background 0.15s; position: relative; padding-right: 64px; }
+  .prompt-example:hover { background: var(--accent-light); }
+  .prompt-example::before { content: '💬'; margin-right: 8px; font-size: 12px; }
+  .copy-btn { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: var(--accent); color: white; border: none; border-radius: 4px; padding: 3px 8px; font-size: 10px; cursor: pointer; font-family: inherit; }
+  .copy-btn.copied { background: #5a9a6a; }
+
+  .divider { border: none; border-top: 1px solid var(--border); margin: 48px 0; }
+  .note { background: #f7f4ee; border-radius: var(--radius); padding: 16px 20px; font-size: 12px; color: var(--text-sub); line-height: 1.8; }
+  footer { text-align: center; padding: 32px; font-size: 12px; color: var(--text-sub); border-top: 1px solid var(--border); }
+</style>
+</head>
+<body>
+
+<header>
+  <a href="index.html" class="back-link">← 戻る</a>
+  <div class="header-right">
+    <div class="logo">nanami-astro</div>
+    <h1>基本版の使い方</h1>
+  </div>
+  <div style="width:48px;"></div>
+</header>
+
+<div class="container">
+
+  <div class="section">
+    <span class="hero-badge">⭐ 基本版</span>
+    <div class="section-label">What you can read</div>
+    <div class="section-title">基本版でわかること</div>
+    <div class="feature-grid">
+      <div class="feature-card">
+        <div class="feature-icon">🌅</div>
+        <h4>出生図（ネイタルチャート）</h4>
+        <p>生まれた瞬間の天体配置から、あなたの性格・才能・人生のテーマを読みます。</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">💡</div>
+        <h4>才能・強み</h4>
+        <p>得意なこと、自然に力が発揮できる領域がわかります。</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🔁</div>
+        <h4>つまずきやすいパターン</h4>
+        <p>繰り返しやすい課題や、意識すると楽になるポイントを読み解きます。</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🤝</div>
+        <h4>人間関係の傾向</h4>
+        <p>相性のいいタイプ、ぶつかりやすいパターンなどの傾向がわかります。</p>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <div class="section">
+    <div class="section-label">Options</div>
+    <div class="section-title">あとから追加できるオプション</div>
+    <div class="option-box">
+      <h3>基本版は、あとからオプションを追加購入できます</h3>
+      <p>最初は基本版で試してみて、もっと深く読みたいと思ったらオプションを追加する流れがおすすめです。</p>
+      <div class="option-items">
+        <div class="option-item">
+          <div><strong>小惑星オプション</strong>　ケレス・カイロン・ベスタなど、より細かな個性・傷・使命を読み解きます。</div>
+        </div>
+        <div class="option-item">
+          <div><strong>トランジットオプション</strong>　今後31日分の天体の動きと出生図の関係。動きやすい日・注意日がわかります。</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <div class="section">
+    <div class="section-label">Prompts</div>
+    <div class="section-title">鑑定のあとに聞けること</div>
+    <p style="font-size:13px; color:var(--text-sub); margin-bottom:20px;">AIに鑑定してもらったあと、そのまま続けて質問できます。例文をコピーしてそのまま使ってください。</p>
+    <div class="prompt-cards">
+
+      <div class="prompt-card">
+        <div class="category">💼 仕事・活動</div>
+        <div class="prompt-examples">
+          <div class="prompt-example">仕事の流れについて、もう少し詳しく教えてください。<button class="copy-btn" onclick="copyPrompt(this)">コピー</button></div>
+          <div class="prompt-example">得意なことを活かせる仕事や活動の向きを教えてください。<button class="copy-btn" onclick="copyPrompt(this)">コピー</button></div>
+          <div class="prompt-example">新しいことを始めるのに向いている時期はいつ頃ですか？<button class="copy-btn" onclick="copyPrompt(this)">コピー</button></div>
+        </div>
+      </div>
+
+      <div class="prompt-card">
+        <div class="category">💕 人間関係・恋愛</div>
+        <div class="prompt-examples">
+          <div class="prompt-example">人間関係で気をつけたほうがいいパターンを教えてください。<button class="copy-btn" onclick="copyPrompt(this)">コピー</button></div>
+          <div class="prompt-example">恋愛面をもう少し掘り下げてほしいです。<button class="copy-btn" onclick="copyPrompt(this)">コピー</button></div>
+          <div class="prompt-example">自分に合う人間関係の距離感はどんなイメージですか？<button class="copy-btn" onclick="copyPrompt(this)">コピー</button></div>
+        </div>
+      </div>
+
+      <div class="prompt-card">
+        <div class="category">🌱 自己理解</div>
+        <div class="prompt-examples">
+          <div class="prompt-example">つまずきやすいパターンをもう少し具体的に教えてください。<button class="copy-btn" onclick="copyPrompt(this)">コピー</button></div>
+          <div class="prompt-example">自分の強みを日常でどう活かせますか？<button class="copy-btn" onclick="copyPrompt(this)">コピー</button></div>
+        </div>
+      </div>
+
+      <div class="prompt-card">
+        <div class="category">👫 2人の相性を読む</div>
+        <div class="prompt-examples">
+          <div class="prompt-example">2人分のホロスコープデータを渡しました。それぞれの特徴と、2人の関係性の構造を読んでください。相性の良い点と、ぶつかりやすいパターンも教えてください。<button class="copy-btn" onclick="copyPrompt(this)">コピー</button></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <div class="section">
+    <div class="section-label">Compatibility</div>
+    <div class="section-title">2人分のデータを使った相性の読み方</div>
+    <div style="background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:24px; box-shadow:var(--shadow);">
+      <div style="display:flex; align-items:center; justify-content:center; gap:16px; margin-bottom:20px;">
+        <div style="text-align:center; background:#f7f4ee; border-radius:10px; padding:12px 20px; font-size:13px; color:var(--text-sub);">
+          <strong style="display:block; color:var(--text); margin-bottom:4px;">自分のデータ</strong>AI貼り付け版
+        </div>
+        <div style="font-size:24px; color:var(--accent);">＋</div>
+        <div style="text-align:center; background:#f7f4ee; border-radius:10px; padding:12px 20px; font-size:13px; color:var(--text-sub);">
+          <strong style="display:block; color:var(--text); margin-bottom:4px;">相手のデータ</strong>AI貼り付け版
+        </div>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:8px;">
+        <div style="display:flex; gap:12px; align-items:flex-start; font-size:13px;">
+          <div style="width:20px; height:20px; border-radius:50%; background:var(--accent-light); color:var(--accent-dark); font-size:11px; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:2px;">1</div>
+          <div>自分のデータページで「AIに送る」を押す（または「コピーして使う」）</div>
+        </div>
+        <div style="display:flex; gap:12px; align-items:flex-start; font-size:13px;">
+          <div style="width:20px; height:20px; border-radius:50%; background:var(--accent-light); color:var(--accent-dark); font-size:11px; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:2px;">2</div>
+          <div>AIのチャット欄に貼り付ける（まだ送信しない）</div>
+        </div>
+        <div style="display:flex; gap:12px; align-items:flex-start; font-size:13px;">
+          <div style="width:20px; height:20px; border-radius:50%; background:var(--accent-light); color:var(--accent-dark); font-size:11px; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:2px;">3</div>
+          <div>相手のデータページで同じようにコピーして、続けて貼り付ける</div>
+        </div>
+        <div style="display:flex; gap:12px; align-items:flex-start; font-size:13px;">
+          <div style="width:20px; height:20px; border-radius:50%; background:var(--accent-light); color:var(--accent-dark); font-size:11px; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:2px;">4</div>
+          <div>上の「2人の相性を読む」プロンプトを貼り付けて送信する</div>
+        </div>
+      </div>
+      <p style="font-size:12px; color:var(--text-sub); margin-top:16px;">※ 相手の方も鑑定データが必要です。</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Terms</div>
+    <div class="section-title">用語がわからないときは</div>
+    <a href="terms-western.html" style="display:flex; align-items:center; justify-content:space-between; background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:20px; text-decoration:none; color:inherit; box-shadow:var(--shadow);">
+      <div>
+        <div style="font-size:13px; font-weight:500; margin-bottom:4px;">西洋占星術 用語ガイド</div>
+        <div style="font-size:12px; color:var(--text-sub);">天体・ハウス・アスペクトの意味とAIへの聞き方</div>
+      </div>
+      <div style="font-size:13px; color:var(--accent-dark);">→</div>
+    </a>
+  </div>
+
+  <div class="note">
+    ・データは発行から90日間有効です。<br>
+    ・AIの種類や設定によって、鑑定文の表現や深さは変わります。<br>
+    ・本データは個人利用向けです。再配布・転載・商用利用は禁止しています。
+  </div>
+
+</div>
+
+<footer>© nanami-astro</footer>
+
+<script>
+  function copyPrompt(btn) {
+    const text = btn.parentElement.textContent.replace('コピー','').trim();
+    navigator.clipboard.writeText(text).then(() => {
+      btn.textContent = '✓';
+      btn.classList.add('copied');
+      setTimeout(() => { btn.textContent = 'コピー'; btn.classList.remove('copied'); }, 1500);
+    });
+  }
+</script>
+</body>
+</html>
