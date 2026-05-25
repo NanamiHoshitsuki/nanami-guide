@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>World Icons · Chart Data | nanami-astro</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Noto+Serif+JP:wght@300;400;500&family=Cinzel:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:#faf8f4; --bg2:#f3ede4; --card:#ffffff; --card-hover:#fdf9f3;
+      --border:rgba(160,120,70,0.18); --border-hover:rgba(160,120,70,0.5);
+      --gold:#a07840; --gold-dark:#7a5c2a; --gold-soft:#c9a96e; --gold-pale:#e8d5b0;
+      --text:#2a1f10; --text-sub:#8a7860;
+      --shadow:0 2px 16px rgba(100,70,30,0.10);
+      --shadow-hover:0 6px 28px rgba(100,70,30,0.16);
+    }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Noto Serif JP',serif; background:var(--bg); color:var(--text); min-height:100vh; }
+
+    .lang-bar {
+      position:fixed; top:0; right:0; left:0; z-index:100;
+      display:flex; justify-content:flex-end; padding:10px 24px;
+      background:rgba(250,248,244,0.92); backdrop-filter:blur(8px);
+      border-bottom:1px solid var(--border);
+    }
+    .lang-btn {
+      font-family:'Cinzel',serif; font-size:10px; letter-spacing:2px;
+      border:1px solid var(--border); background:transparent; color:var(--text-sub);
+      border-radius:999px; padding:4px 14px; cursor:pointer; transition:all 0.2s;
+    }
+    .lang-btn.active { background:var(--gold); border-color:var(--gold); color:#fff; }
+    .lang-btn+.lang-btn { margin-left:6px; }
+
+    .container { max-width:900px; margin:0 auto; padding:88px 24px 80px; }
+
+    .breadcrumb { font-family:'Cinzel',serif; font-size:10px; letter-spacing:3px; color:var(--text-sub); margin-bottom:36px; }
+    .breadcrumb a { color:var(--gold); text-decoration:none; } .breadcrumb a:hover { color:var(--gold-dark); }
+    .breadcrumb span { margin:0 8px; opacity:0.4; }
+
+    .page-eyebrow { font-family:'Cinzel',serif; font-size:9px; letter-spacing:5px; color:var(--gold-soft); margin-bottom:14px; }
+    .page-title { font-family:'Cormorant Garamond',serif; font-size:clamp(30px,6vw,50px); font-weight:300; color:var(--text); line-height:1.15; margin-bottom:8px; letter-spacing:0.03em; }
+    .page-title em { font-style:italic; color:var(--gold); }
+    .gold-rule { width:48px; height:1px; background:linear-gradient(90deg,var(--gold),transparent); margin:18px 0 16px; }
+    .page-sub { font-size:12px; color:var(--text-sub); line-height:2; max-width:540px; }
+
+    /* Tesla featured card */
+    .featured {
+      margin-top:44px;
+      background:var(--card);
+      border:1px solid var(--border-hover);
+      border-radius:16px;
+      padding:32px 28px;
+      box-shadow:var(--shadow-hover);
+      display:grid;
+      grid-template-columns:1fr auto;
+      gap:24px;
+      align-items:start;
+    }
+    .feat-eyebrow { font-family:'Cinzel',serif; font-size:9px; letter-spacing:4px; color:var(--gold-soft); margin-bottom:12px; }
+    .feat-name { font-family:'Cormorant Garamond',serif; font-size:clamp(32px,5vw,48px); font-weight:300; color:var(--text); letter-spacing:0.04em; line-height:1.1; }
+    .feat-name-sub { font-family:'Cormorant Garamond',serif; font-size:13px; font-style:italic; color:var(--text-sub); margin-top:4px; }
+    .feat-birth { font-size:12px; color:var(--text-sub); margin-top:14px; line-height:1.9; }
+    .feat-signs { display:flex; flex-wrap:wrap; gap:6px; margin-top:12px; }
+    .sign-badge { font-size:10px; color:var(--gold-dark); border:1px solid rgba(160,120,70,0.3); border-radius:999px; padding:3px 10px; }
+    .feat-desc { font-size:13px; color:var(--text-sub); line-height:2; margin-top:16px; max-width:480px; }
+    .feat-link {
+      display:inline-block; margin-top:20px;
+      font-family:'Cinzel',serif; font-size:10px; letter-spacing:2px;
+      color:#fff; background:var(--gold); border-radius:999px; padding:9px 22px;
+      text-decoration:none; transition:background 0.2s;
+    }
+    .feat-link:hover { background:var(--gold-dark); }
+    .feat-badge {
+      font-family:'Cinzel',serif; font-size:9px; letter-spacing:3px;
+      color:var(--gold); border:1px solid rgba(160,120,70,0.35);
+      border-radius:999px; padding:5px 14px; white-space:nowrap;
+    }
+
+    /* more grid */
+    .sub-section { margin-top:52px; }
+    .sub-header { display:flex; align-items:center; gap:14px; margin-bottom:20px; }
+    .sub-label { font-family:'Cinzel',serif; font-size:9px; letter-spacing:4px; color:var(--gold-soft); }
+    .sub-title { font-family:'Cormorant Garamond',serif; font-size:20px; font-weight:400; color:var(--text); }
+    .sub-line { flex:1; height:1px; background:var(--border); }
+
+    .member-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:14px; }
+    .member-card {
+      background:var(--card); border:1px solid var(--border); border-radius:14px;
+      padding:22px 20px; text-decoration:none; color:inherit;
+      display:flex; flex-direction:column; gap:8px;
+      box-shadow:var(--shadow); transition:all 0.22s;
+    }
+    .member-card:hover { border-color:var(--border-hover); box-shadow:var(--shadow-hover); transform:translateY(-2px); }
+    .member-card.coming { opacity:0.42; pointer-events:none; box-shadow:none; }
+    .member-num { font-family:'Cinzel',serif; font-size:9px; letter-spacing:3px; color:var(--gold-soft); }
+    .member-name { font-family:'Cormorant Garamond',serif; font-size:24px; font-weight:400; color:var(--text); line-height:1.2; }
+    .member-name-sub { font-family:'Cormorant Garamond',serif; font-size:11px; font-style:italic; color:var(--text-sub); }
+    .member-birth { font-size:11px; color:var(--text-sub); margin-top:2px; }
+    .member-link { font-family:'Cinzel',serif; font-size:10px; letter-spacing:2px; color:var(--gold); margin-top:auto; padding-top:10px; }
+    .member-link::after { content:' →'; }
+    .coming-badge { font-family:'Cinzel',serif; font-size:9px; letter-spacing:3px; color:var(--text-sub); border:1px solid var(--border); border-radius:999px; padding:3px 12px; display:inline-block; margin-top:auto; }
+
+    .data-note { margin-top:14px; padding:12px 16px; border-left:2px solid rgba(160,120,70,0.3); font-size:11px; color:var(--text-sub); line-height:1.9; }
+
+    hr.divider { border:none; border-top:1px solid var(--border); margin:48px 0; }
+    .footer-note { text-align:center; }
+    .footer-note p { font-size:11px; color:var(--text-sub); line-height:2.2; }
+    .footer-note a { color:var(--gold); text-decoration:none; }
+    .footer-note a:hover { color:var(--gold-dark); }
+    footer { text-align:center; padding:28px 20px; font-family:'Cinzel',serif; font-size:9px; letter-spacing:4px; color:var(--text-sub); border-top:1px solid var(--border); margin-top:20px; }
+
+    @media (max-width:700px) {
+      .featured { grid-template-columns:1fr; }
+      .feat-badge { display:none; }
+      .container{padding:80px 16px 60px;}
+      .member-grid{grid-template-columns:1fr 1fr;}
+    }
+    @media (max-width:380px) { .member-grid{grid-template-columns:1fr;} }
+  </style>
+</head>
+<body>
+
+<div class="lang-bar">
+  <button class="lang-btn" onclick="setLang('ja')" id="btn-ja">JA</button>
+  <button class="lang-btn active" onclick="setLang('en')" id="btn-en">EN</button>
+</div>
+
+<div class="container">
+
+  <nav class="breadcrumb">
+    <a href="samples.html" data-ja="サンプル一覧" data-en="Samples">Samples</a>
+    <span>›</span>
+    <span data-ja="世界の偉人" data-en="World Icons">World Icons</span>
+  </nav>
+
+  <div class="page-eyebrow" data-ja="世界の偉人" data-en="WORLD ICONS">WORLD ICONS</div>
+  <h1 class="page-title">
+    <span data-ja="世界の偉人" data-en="Pioneers &amp; Visionaries">Pioneers &amp; Visionaries</span><br>
+    <em data-ja="星図データ" data-en="Chart Archive">Chart Archive</em>
+  </h1>
+  <div class="gold-rule"></div>
+  <p class="page-sub"
+     data-ja="世界的に著名な人物の星図データです。Swiss Ephemeris 精度の計算結果をご覧いただけます。"
+     data-en="Swiss Ephemeris-precision natal chart data for historically significant figures worldwide. See exactly what kind of data nanami-astro generates — and how it compares to AI-hallucinated outputs.">
+    Swiss Ephemeris-precision natal chart data for historically significant figures worldwide. See exactly what kind of data nanami-astro generates — and how it compares to AI-hallucinated outputs.
+  </p>
+
+  <!-- All figures grid -->
+  <section class="sub-section" style="margin-top:40px;">
+    <div class="sub-header">
+      <span class="sub-label">FIGURES</span>
+      <h2 class="sub-title" data-ja="公開中のサンプル" data-en="Live Samples">Live Samples</h2>
+      <div class="sub-line"></div>
+    </div>
+    <div class="member-grid">
+
+      <a href="https://chart.nanami-astro.com/chart/OEqUE23-Z5gGXIfnPbjyCvmk?lang=en" class="member-card" target="_blank" rel="noopener">
+        <div class="member-num">FIGURE 01</div>
+        <div class="member-name">Nikola Tesla</div>
+        <div class="member-name-sub" data-ja="ニコラ・テスラ" data-en="ニコラ・テスラ">ニコラ・テスラ</div>
+        <div class="member-birth" data-ja="1856-07-10 · スミリャン、セルビア" data-en="10 Jul 1856 · Smiljan, Serbia">10 Jul 1856 · Smiljan, Serbia</div>
+        <div class="member-signs">
+          <span class="sign-badge">♋ Cancer ☉</span>
+          <span class="sign-badge">♊ Gemini ☽</span>
+        </div>
+        <div class="member-link" data-ja="鑑定データを見る" data-en="View Chart Data">View Chart Data</div>
+      </a>
+
+      <a href="https://chart.nanami-astro.com/chart/6Qa_XONMoygrctm6E9K2wPxu" class="member-card" target="_blank" rel="noopener">
+        <div class="member-num">FIGURE 02</div>
+        <div class="member-name">Leonardo da Vinci</div>
+        <div class="member-name-sub" data-ja="レオナルド・ダ・ヴィンチ" data-en="レオナルド・ダ・ヴィンチ">レオナルド・ダ・ヴィンチ</div>
+        <div class="member-birth" data-ja="1452-04-15 · ヴィンチ、イタリア" data-en="15 Apr 1452 · Vinci, Italy">15 Apr 1452 · Vinci, Italy</div>
+        <div class="member-signs">
+          <span class="sign-badge">♈ Aries ☉</span>
+        </div>
+        <div class="member-link" data-ja="鑑定データを見る" data-en="View Chart Data">View Chart Data</div>
+      </a>
+
+      <a href="https://chart.nanami-astro.com/chart/q1hoLz2MWI__32-VxWuqj_XO" class="member-card" target="_blank" rel="noopener">
+        <div class="member-num">FIGURE 03</div>
+        <div class="member-name">Napoleon Bonaparte</div>
+        <div class="member-name-sub" data-ja="ナポレオン・ボナパルト" data-en="ナポレオン・ボナパルト">ナポレオン・ボナパルト</div>
+        <div class="member-birth" data-ja="1769-08-15 · アジャクシオ、コルシカ島" data-en="15 Aug 1769 · Ajaccio, Corsica">15 Aug 1769 · Ajaccio, Corsica</div>
+        <div class="member-signs">
+          <span class="sign-badge">♌ Leo ☉</span>
+        </div>
+        <div class="member-link" data-ja="鑑定データを見る" data-en="View Chart Data">View Chart Data</div>
+      </a>
+
+      <a href="https://chart.nanami-astro.com/chart/eRU6XFQIGWv_HqEuBcKvGOhL" class="member-card" target="_blank" rel="noopener">
+        <div class="member-num">FIGURE 04</div>
+        <div class="member-name">Marie Curie</div>
+        <div class="member-name-sub" data-ja="マリー・キュリー" data-en="マリー・キュリー">マリー・キュリー</div>
+        <div class="member-birth" data-ja="1867-11-07 · ワルシャワ、ポーランド" data-en="7 Nov 1867 · Warsaw, Poland">7 Nov 1867 · Warsaw, Poland</div>
+        <div class="member-signs">
+          <span class="sign-badge">♏ Scorpio ☉</span>
+        </div>
+        <div class="member-link" data-ja="鑑定データを見る" data-en="View Chart Data">View Chart Data</div>
+      </a>
+
+      <a href="https://chart.nanami-astro.com/chart/N4-7IHYYI6dmNyG0vJLnEbyi" class="member-card" target="_blank" rel="noopener">
+        <div class="member-num">FIGURE 05</div>
+        <div class="member-name">Albert Einstein</div>
+        <div class="member-name-sub" data-ja="アルベルト・アインシュタイン" data-en="アルベルト・アインシュタイン">アルベルト・アインシュタイン</div>
+        <div class="member-birth" data-ja="1879-03-14 11:30 · ウルム、ドイツ" data-en="14 Mar 1879, 11:30 · Ulm, Germany">14 Mar 1879, 11:30 · Ulm, Germany</div>
+        <div class="member-signs">
+          <span class="sign-badge">♓ Pisces ☉</span>
+          <span class="sign-badge">♐ Sagittarius ☽</span>
+          <span class="sign-badge">♑ Capricorn ASC</span>
+        </div>
+        <div class="member-link" data-ja="鑑定データを見る" data-en="View Chart Data">View Chart Data</div>
+      </a>
+
+      <a href="https://chart.nanami-astro.com/chart/VJ7cGtsqxFzoLTUzlUWRsVFx" class="member-card" target="_blank" rel="noopener">
+        <div class="member-num">FIGURE 06</div>
+        <div class="member-name">C. G. Jung</div>
+        <div class="member-name-sub" data-ja="カール・グスタフ・ユング" data-en="Carl Gustav Jung">Carl Gustav Jung</div>
+        <div class="member-birth" data-ja="1875-07-26 · ケスヴィル、スイス" data-en="26 Jul 1875 · Kesswil, Switzerland">26 Jul 1875 · Kesswil, Switzerland</div>
+        <div class="member-signs">
+          <span class="sign-badge">♌ Leo ☉</span>
+          <span class="sign-badge">♉ Taurus ☽</span>
+        </div>
+        <div class="member-link" data-ja="鑑定データを見る" data-en="View Chart Data">View Chart Data</div>
+      </a>
+    <div class="data-note"
+         data-ja="⚠️ 時刻不明の人物は正午（12:00 LMT）で計算しています。ASC・MC・ハウスは参考値です。<br>近代的なタイムゾーンが整備される以前に生まれた人物については、歴史的タイムゾーンデータベースの違いにより、ASC・ハウスに若干の誤差が生じる場合があります。"
+         data-en="⚠️ Figures with no recorded birth time use 12:00 LMT. ASC, MC, and house positions are indicative only.<br>Historical figures born before standardized modern time zones may contain small ASC/house differences depending on historical timezone databases.">
+      ⚠️ Figures with no recorded birth time use 12:00 LMT. ASC, MC, and house positions are indicative only.<br>Historical figures born before standardized modern time zones may contain small ASC/house differences depending on historical timezone databases.
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <div class="footer-note">
+    <p>
+      <span data-ja="データの二次利用・転載はご遠慮ください。" data-en="Please do not redistribute or repost the chart data.">Please do not redistribute or repost the chart data.</span><br>
+      <a href="samples.html" data-ja="← サンプル一覧に戻る" data-en="← Back to Sample Archive">← Back to Sample Archive</a>
+      &nbsp;／&nbsp;
+      <a href="https://nanami-astro.stores.jp/" target="_blank" rel="noopener"
+         data-ja="あなた自身のデータを注文する →" data-en="Order your own chart data →">Order your own chart data →</a>
+    </p>
+  </div>
+</div>
+
+<footer>© nanami-astro</footer>
+
+<script>
+function setLang(lang) {
+  document.documentElement.lang = lang==='en'?'en':'ja';
+  document.querySelectorAll('[data-ja]').forEach(el => {
+    el.innerHTML = lang==='en' ? el.dataset.en : el.dataset.ja;
+  });
+  document.getElementById('btn-ja').classList.toggle('active', lang==='ja');
+  document.getElementById('btn-en').classList.toggle('active', lang==='en');
+  localStorage.setItem('na-lang', lang);
+}
+(function(){
+  const s = localStorage.getItem('na-lang');
+  // global.html は英語デフォルト
+  if (s === 'ja') { setLang('ja'); } else { setLang('en'); }
+})();
+</script>
+</body>
+</html>

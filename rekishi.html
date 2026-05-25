@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Historical Figures · Chart Data | nanami-astro</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Noto+Serif+JP:wght@300;400;500&family=Cinzel:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:#faf8f4; --bg2:#f3ede4; --card:#ffffff; --card-hover:#fdf9f3;
+      --border:rgba(160,120,70,0.18); --border-hover:rgba(160,120,70,0.5);
+      --gold:#a07840; --gold-dark:#7a5c2a; --gold-soft:#c9a96e; --gold-pale:#e8d5b0;
+      --text:#2a1f10; --text-sub:#8a7860;
+      --shadow:0 2px 16px rgba(100,70,30,0.10);
+      --shadow-hover:0 6px 28px rgba(100,70,30,0.16);
+    }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Noto Serif JP',serif; background:var(--bg); color:var(--text); min-height:100vh; }
+
+    .lang-bar {
+      position:fixed; top:0; right:0; left:0; z-index:100;
+      display:flex; justify-content:flex-end; padding:10px 24px;
+      background:rgba(250,248,244,0.92); backdrop-filter:blur(8px);
+      border-bottom:1px solid var(--border);
+    }
+    .lang-btn {
+      font-family:'Cinzel',serif; font-size:10px; letter-spacing:2px;
+      border:1px solid var(--border); background:transparent; color:var(--text-sub);
+      border-radius:999px; padding:4px 14px; cursor:pointer; transition:all 0.2s;
+    }
+    .lang-btn.active { background:var(--gold); border-color:var(--gold); color:#fff; }
+    .lang-btn+.lang-btn { margin-left:6px; }
+
+    .container { max-width:900px; margin:0 auto; padding:88px 24px 80px; }
+
+    .breadcrumb { font-family:'Cinzel',serif; font-size:10px; letter-spacing:3px; color:var(--text-sub); margin-bottom:36px; }
+    .breadcrumb a { color:var(--gold); text-decoration:none; } .breadcrumb a:hover { color:var(--gold-dark); }
+    .breadcrumb span { margin:0 8px; opacity:0.4; }
+
+    .page-eyebrow { font-family:'Cinzel',serif; font-size:9px; letter-spacing:5px; color:var(--gold-soft); margin-bottom:14px; }
+    .page-title { font-family:'Cormorant Garamond',serif; font-size:clamp(30px,6vw,50px); font-weight:300; color:var(--text); line-height:1.15; margin-bottom:8px; letter-spacing:0.03em; }
+    .page-title em { font-style:italic; color:var(--gold); }
+    .gold-rule { width:48px; height:1px; background:linear-gradient(90deg,var(--gold),transparent); margin:18px 0 16px; }
+    .page-sub { font-size:12px; color:var(--text-sub); line-height:2; max-width:520px; }
+
+    .notice { background:rgba(160,120,70,0.07); border:1px solid rgba(160,120,70,0.2); border-radius:10px; padding:14px 16px; margin:28px 0; font-size:12px; color:var(--text-sub); line-height:1.9; }
+
+    .sub-section { margin-top:52px; }
+    .sub-header { display:flex; align-items:center; gap:14px; margin-bottom:20px; }
+    .sub-label { font-family:'Cinzel',serif; font-size:9px; letter-spacing:4px; color:var(--gold-soft); }
+    .sub-title { font-family:'Cormorant Garamond',serif; font-size:20px; font-weight:400; color:var(--text); letter-spacing:0.04em; }
+    .sub-line { flex:1; height:1px; background:var(--border); }
+
+    .member-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:14px; }
+
+    .member-card {
+      background:var(--card); border:1px solid var(--border); border-radius:14px;
+      padding:22px 20px; text-decoration:none; color:inherit;
+      display:flex; flex-direction:column; gap:8px;
+      box-shadow:var(--shadow); transition:all 0.22s;
+    }
+    .member-card:hover { border-color:var(--border-hover); box-shadow:var(--shadow-hover); transform:translateY(-2px); background:var(--card-hover); }
+    .member-card.coming { opacity:0.42; pointer-events:none; box-shadow:none; }
+
+    .member-num { font-family:'Cinzel',serif; font-size:9px; letter-spacing:3px; color:var(--gold-soft); }
+    .member-name { font-family:'Cormorant Garamond',serif; font-size:26px; font-weight:400; letter-spacing:0.04em; color:var(--text); line-height:1.15; }
+    .member-name-en { font-family:'Cormorant Garamond',serif; font-size:11px; font-style:italic; color:var(--text-sub); }
+    .member-birth { font-size:11px; color:var(--text-sub); margin-top:2px; }
+    .member-signs { display:flex; flex-wrap:wrap; gap:5px; margin-top:4px; }
+    .sign-badge { font-size:10px; color:var(--gold-dark); border:1px solid rgba(160,120,70,0.3); border-radius:999px; padding:2px 9px; }
+    .member-link { font-family:'Cinzel',serif; font-size:10px; letter-spacing:2px; color:var(--gold); margin-top:auto; padding-top:10px; }
+    .member-link::after { content:' →'; }
+    .coming-badge { font-family:'Cinzel',serif; font-size:9px; letter-spacing:3px; color:var(--text-sub); border:1px solid var(--border); border-radius:999px; padding:3px 12px; display:inline-block; margin-top:auto; }
+
+    .data-note { margin-top:14px; padding:12px 16px; border-left:2px solid rgba(160,120,70,0.3); font-size:11px; color:var(--text-sub); line-height:1.9; }
+
+    hr.divider { border:none; border-top:1px solid var(--border); margin:48px 0; }
+
+    .footer-note { text-align:center; }
+    .footer-note p { font-size:11px; color:var(--text-sub); line-height:2.2; }
+    .footer-note a { color:var(--gold); text-decoration:none; }
+    .footer-note a:hover { color:var(--gold-dark); }
+    footer { text-align:center; padding:28px 20px; font-family:'Cinzel',serif; font-size:9px; letter-spacing:4px; color:var(--text-sub); border-top:1px solid var(--border); margin-top:20px; }
+
+    @media (max-width:600px) { .container{padding:80px 16px 60px;} .member-grid{grid-template-columns:1fr 1fr;} }
+    @media (max-width:380px) { .member-grid{grid-template-columns:1fr;} }
+  </style>
+</head>
+<body>
+
+<div class="lang-bar">
+  <button class="lang-btn active" onclick="setLang('ja')" id="btn-ja">JA</button>
+  <button class="lang-btn" onclick="setLang('en')" id="btn-en">EN</button>
+</div>
+
+<div class="container">
+
+  <nav class="breadcrumb">
+    <a href="samples.html" data-ja="サンプル一覧" data-en="Samples">サンプル一覧</a>
+    <span>›</span>
+    <span data-ja="歴史上の人物" data-en="Historical Figures">歴史上の人物</span>
+  </nav>
+
+  <div class="page-eyebrow" data-ja="歴史上の人物" data-en="HISTORICAL FIGURES">歴史上の人物</div>
+  <h1 class="page-title">
+    <span data-ja="歴史人物" data-en="Historical Figures">歴史人物</span><br>
+    <em data-ja="星図データ" data-en="Chart Archive">星図データ</em>
+  </h1>
+  <div class="gold-rule"></div>
+  <p class="page-sub"
+     data-ja="出生記録が残る歴史上の人物の星図データです。旧暦の生年月日をグレゴリオ暦に換算し、Swiss Ephemeris で計算しています。時刻不明の場合は正午（12:00 LMT）で代用しており、ASC・MC は参考値です。"
+     data-en="Natal chart data for historical figures with documented birth records. Julian/Old Calendar dates are converted to the Gregorian calendar and calculated via Swiss Ephemeris. Unknown birth times use 12:00 LMT — ASC and MC are indicative only.">
+    出生記録が残る歴史上の人物の星図データです。旧暦の生年月日をグレゴリオ暦に換算し、Swiss Ephemeris で計算しています。時刻不明の場合は正午（12:00 LMT）で代用しており、ASC・MC は参考値です。
+  </p>
+
+  <!-- 戦国時代 -->
+  <section class="sub-section">
+    <div class="sub-header">
+      <span class="sub-label">ERA 01</span>
+      <h2 class="sub-title" data-ja="戦国時代" data-en="Sengoku Period">戦国時代</h2>
+      <div class="sub-line"></div>
+    </div>
+    <div class="member-grid">
+
+      <a href="https://chart.nanami-astro.com/chart/oda-nobunaga" class="member-card" target="_blank" rel="noopener">
+        <div class="member-num">FIGURE 01</div>
+        <div class="member-name" data-ja="織田 信長" data-en="Oda Nobunaga">織田 信長</div>
+        <div class="member-name-en" data-ja="Oda Nobunaga" data-en="織田 信長">Oda Nobunaga</div>
+        <div class="member-birth" data-ja="1534-06-23 · 尾張国（愛知県）" data-en="23 Jun 1534 · Owari Province, Japan">1534-06-23 · 尾張国（愛知県）</div>
+        <div class="member-signs">
+          <span class="sign-badge">♊ Gemini ☉</span>
+          <span class="sign-badge">♑ Capricorn ☽</span>
+          <span class="sign-badge" data-ja="時刻不明" data-en="Time unknown">時刻不明</span>
+        </div>
+        <div class="member-link" data-ja="鑑定データを見る" data-en="View Chart Data">鑑定データを見る</div>
+      </a>
+
+      <div class="member-card coming">
+        <div class="member-num">FIGURE 02</div>
+        <div class="member-name" style="font-size:22px;" data-ja="豊臣 秀吉" data-en="Toyotomi Hideyoshi">豊臣 秀吉</div>
+        <div class="member-name-en" data-ja="Toyotomi Hideyoshi" data-en="豊臣 秀吉">Toyotomi Hideyoshi</div>
+        <div class="member-birth" data-ja="1537-03-17 · 尾張国" data-en="17 Mar 1537 · Owari Province">1537-03-17 · 尾張国</div>
+        <div class="coming-badge">COMING SOON</div>
+      </div>
+
+      <div class="member-card coming">
+        <div class="member-num">FIGURE 03</div>
+        <div class="member-name" style="font-size:22px;" data-ja="徳川 家康" data-en="Tokugawa Ieyasu">徳川 家康</div>
+        <div class="member-name-en" data-ja="Tokugawa Ieyasu" data-en="徳川 家康">Tokugawa Ieyasu</div>
+        <div class="member-birth" data-ja="1543-01-31 · 三河国" data-en="31 Jan 1543 · Mikawa Province">1543-01-31 · 三河国</div>
+        <div class="coming-badge">COMING SOON</div>
+      </div>
+
+      <a href="https://chart.nanami-astro.com/chart/8wvXS0OMXl9nzpP2sJgd2ba_" class="member-card" target="_blank" rel="noopener">
+        <div class="member-num">FIGURE 04</div>
+        <div class="member-name" data-ja="上杉 謙信" data-en="Uesugi Kenshin">上杉 謙信</div>
+        <div class="member-name-en" data-ja="Uesugi Kenshin" data-en="上杉 謙信">Uesugi Kenshin</div>
+        <div class="member-birth" data-ja="1530-02-18 · 越後国" data-en="18 Feb 1530 · Echigo Province">1530-02-18 · 越後国</div>
+        <div class="member-signs">
+          <span class="sign-badge">♒ Aquarius ☉</span>
+        </div>
+        <div class="member-link" data-ja="鑑定データを見る" data-en="View Chart Data">鑑定データを見る</div>
+      </a>
+
+      <a href="https://chart.nanami-astro.com/chart/a7QQoqvrAehd0W7kJLUUS3A9" class="member-card" target="_blank" rel="noopener">
+        <div class="member-num">FIGURE 05</div>
+        <div class="member-name" data-ja="武田 信玄" data-en="Takeda Shingen">武田 信玄</div>
+        <div class="member-name-en" data-ja="Takeda Shingen" data-en="武田 信玄">Takeda Shingen</div>
+        <div class="member-birth" data-ja="1521-12-01 · 甲斐国（山梨県）" data-en="1 Dec 1521 · Kai Province, Japan">1521-12-01 · 甲斐国（山梨県）</div>
+        <div class="member-signs">
+          <span class="sign-badge">♐ Sagittarius ☉</span>
+        </div>
+        <div class="member-link" data-ja="鑑定データを見る" data-en="View Chart Data">鑑定データを見る</div>
+      </a>
+
+    </div>
+    <div class="data-note"
+         data-ja="⚠️ 旧暦の生年月日をグレゴリオ暦に換算して計算しています。出生時刻の記録がない人物は正午（12:00 LMT）を使用しており、ASC・MC・ハウスは参考値です。<br>近代的なタイムゾーンが整備される以前に生まれた人物については、歴史的タイムゾーンデータベースの違いにより、ASC・ハウスに若干の誤差が生じる場合があります。"
+         data-en="⚠️ Old Calendar (Julian/lunar) dates converted to the Gregorian calendar. Figures with no recorded birth time use 12:00 LMT — ASC, MC, and house positions are indicative only.<br>Historical figures born before standardized modern time zones may contain small ASC/house differences depending on historical timezone databases.">
+      ⚠️ 旧暦の生年月日をグレゴリオ暦に換算して計算しています。出生時刻の記録がない人物は正午（12:00 LMT）を使用しており、ASC・MC・ハウスは参考値です。<br>近代的なタイムゾーンが整備される以前に生まれた人物については、歴史的タイムゾーンデータベースの違いにより、ASC・ハウスに若干の誤差が生じる場合があります。
+    </div>
+  </section>
+
+  <!-- 幕末 -->
+  <section class="sub-section">
+    <div class="sub-header">
+      <span class="sub-label">ERA 02</span>
+      <h2 class="sub-title" data-ja="幕末" data-en="Bakumatsu Era">幕末</h2>
+      <div class="sub-line"></div>
+    </div>
+    <div class="member-grid">
+      <div class="member-card coming">
+        <div class="member-num">FIGURE 01</div>
+        <div class="member-name" style="font-size:22px;" data-ja="坂本 龍馬" data-en="Sakamoto Ryōma">坂本 龍馬</div>
+        <div class="member-name-en" data-ja="Sakamoto Ryōma" data-en="坂本 龍馬">Sakamoto Ryōma</div>
+        <div class="member-birth" data-ja="1836-01-03 · 土佐国" data-en="3 Jan 1836 · Tosa Province">1836-01-03 · 土佐国</div>
+        <div class="coming-badge">COMING SOON</div>
+      </div>
+      <div class="member-card coming">
+        <div class="member-num">FIGURE 02</div>
+        <div class="member-name" style="font-size:22px;" data-ja="西郷 隆盛" data-en="Saigō Takamori">西郷 隆盛</div>
+        <div class="member-name-en" data-ja="Saigō Takamori" data-en="西郷 隆盛">Saigō Takamori</div>
+        <div class="member-birth" data-ja="1828-01-23 · 薩摩国" data-en="23 Jan 1828 · Satsuma Province">1828-01-23 · 薩摩国</div>
+        <div class="coming-badge">COMING SOON</div>
+      </div>
+      <div class="member-card coming">
+        <div class="member-num">FIGURE 03</div>
+        <div class="member-name" style="font-size:22px;" data-ja="土方 歳三" data-en="Hijikata Toshizō">土方 歳三</div>
+        <div class="member-name-en" data-ja="Hijikata Toshizō" data-en="土方 歳三">Hijikata Toshizō</div>
+        <div class="member-birth" data-ja="1835-05-31 · 武蔵国" data-en="31 May 1835 · Musashi Province">1835-05-31 · 武蔵国</div>
+        <div class="coming-badge">COMING SOON</div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <div class="footer-note">
+    <p>
+      <span data-ja="鑑定データページは有効期限内のみ開けます。データの二次利用・転載はご遠慮ください。" data-en="Chart data pages are accessible during the validity period only. Please do not redistribute or repost the data.">鑑定データページは有効期限内のみ開けます。データの二次利用・転載はご遠慮ください。</span><br>
+      <a href="samples.html" data-ja="← サンプル一覧に戻る" data-en="← Back to Sample Archive">← サンプル一覧に戻る</a>
+      &nbsp;／&nbsp;
+      <a href="https://nanami-astro.stores.jp/" target="_blank" rel="noopener" data-ja="あなた自身のデータを注文する →" data-en="Order your own chart data →">あなた自身のデータを注文する →</a>
+    </p>
+  </div>
+</div>
+
+<footer>© nanami-astro</footer>
+
+<script>
+function setLang(lang) {
+  document.documentElement.lang = lang==='en'?'en':'ja';
+  document.querySelectorAll('[data-ja]').forEach(el => {
+    el.innerHTML = lang==='en' ? el.dataset.en : el.dataset.ja;
+  });
+  document.getElementById('btn-ja').classList.toggle('active', lang==='ja');
+  document.getElementById('btn-en').classList.toggle('active', lang==='en');
+  localStorage.setItem('na-lang', lang);
+}
+(function(){ const s=localStorage.getItem('na-lang'); if(s==='en') setLang('en'); })();
+</script>
+</body>
+</html>
