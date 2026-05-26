@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kis-My-Ft2 · 星図データサンプル | nanami-astro</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Noto+Serif+JP:wght@300;400;500&family=Cinzel:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:#faf8f4; --bg2:#f3ede4; --card:#ffffff; --card-hover:#fdf9f3;
+      --border:rgba(160,120,70,0.18); --border-hover:rgba(160,120,70,0.5);
+      --gold:#a07840; --gold-dark:#7a5c2a; --gold-soft:#c9a96e; --gold-pale:#e8d5b0;
+      --text:#2a1f10; --text-sub:#8a7860;
+      --shadow:0 2px 16px rgba(100,70,30,0.10);
+      --shadow-hover:0 6px 28px rgba(100,70,30,0.16);
+      --muted-card:#f5f2ee;
+    }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Noto Serif JP',serif; background:var(--bg); color:var(--text); min-height:100vh; }
+
+    .lang-bar {
+      position:fixed; top:0; right:0; left:0; z-index:100;
+      display:flex; justify-content:flex-end; padding:10px 24px;
+      background:rgba(250,248,244,0.92); backdrop-filter:blur(8px);
+      border-bottom:1px solid var(--border);
+    }
+    .lang-btn {
+      font-family:'Cinzel',serif; font-size:10px; letter-spacing:2px;
+      border:1px solid var(--border); background:transparent; color:var(--text-sub);
+      border-radius:999px; padding:4px 14px; cursor:pointer; transition:all 0.2s;
+    }
+    .lang-btn.active { background:var(--gold); border-color:var(--gold); color:#fff; }
+    .lang-btn+.lang-btn { margin-left:6px; }
+
+    .container { max-width:960px; margin:0 auto; padding:88px 24px 80px; }
+
+    .breadcrumb { font-family:'Cinzel',serif; font-size:10px; letter-spacing:3px; color:var(--text-sub); margin-bottom:36px; }
+    .breadcrumb a { color:var(--gold); text-decoration:none; }
+    .breadcrumb a:hover { color:var(--gold-dark); }
+    .breadcrumb span { margin:0 8px; opacity:0.4; }
+
+    .page-eyebrow { font-family:'Cinzel',serif; font-size:9px; letter-spacing:5px; color:var(--gold-soft); margin-bottom:14px; }
+    .page-title { font-family:'Cormorant Garamond',serif; font-size:clamp(30px,6vw,52px); font-weight:300; color:var(--text); line-height:1.15; margin-bottom:8px; letter-spacing:0.03em; }
+    .page-title em { font-style:italic; color:var(--gold); }
+    .gold-rule { width:48px; height:1px; background:linear-gradient(90deg,var(--gold),transparent); margin:18px 0 16px; }
+    .page-sub { font-size:12px; color:var(--text-sub); line-height:2; max-width:520px; }
+
+    .section-header { display:flex; align-items:center; gap:14px; margin:48px 0 22px; }
+    .section-label { font-family:'Cinzel',serif; font-size:9px; letter-spacing:4px; color:var(--gold-soft); }
+    .section-title { font-family:'Cormorant Garamond',serif; font-size:20px; font-weight:400; color:var(--text); letter-spacing:0.04em; }
+    .section-line { flex:1; height:1px; background:var(--border); }
+
+    .member-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:14px; }
+
+    .member-card {
+      background:var(--card); border:1px solid var(--border); border-radius:14px;
+      padding:22px 20px; text-decoration:none; color:inherit;
+      display:flex; flex-direction:column; gap:8px;
+      box-shadow:var(--shadow); transition:all 0.22s;
+    }
+    .member-card:hover { border-color:var(--border-hover); box-shadow:var(--shadow-hover); transform:translateY(-2px); background:var(--card-hover); }
+
+    /* 元メンバー */
+    .member-card.former {
+      background:var(--muted-card);
+      border-style: dashed;
+    }
+    .member-card.former:hover { border-color:var(--border-hover); box-shadow:var(--shadow-hover); transform:translateY(-2px); }
+
+    .member-num { font-family:'Cinzel',serif; font-size:9px; letter-spacing:3px; color:var(--gold-soft); }
+    .member-name { font-family:'Cormorant Garamond',serif; font-size:26px; font-weight:400; letter-spacing:0.04em; color:var(--text); line-height:1.15; }
+    .member-name-en { font-family:'Cormorant Garamond',serif; font-size:11px; font-style:italic; color:var(--text-sub); }
+    .member-birth { font-size:11px; color:var(--text-sub); margin-top:2px; }
+    .member-signs { display:flex; flex-wrap:wrap; gap:5px; margin-top:4px; }
+    .sign-badge { font-size:10px; color:var(--gold-dark); border:1px solid rgba(160,120,70,0.3); border-radius:999px; padding:2px 9px; }
+    .former-badge {
+      font-family:'Cinzel',serif; font-size:9px; letter-spacing:2px;
+      color:var(--text-sub); border:1px solid var(--border);
+      border-radius:999px; padding:2px 10px; display:inline-block;
+    }
+    .member-link { font-family:'Cinzel',serif; font-size:10px; letter-spacing:2px; color:var(--gold); margin-top:auto; padding-top:10px; }
+    .member-link::after { content:' →'; }
+
+    .data-note { margin-top:14px; padding:12px 16px; border-left:2px solid rgba(160,120,70,0.3); font-size:11px; color:var(--text-sub); line-height:1.9; }
+
+    hr.divider { border:none; border-top:1px solid var(--border); margin:48px 0; }
+
+    .footer-note { text-align:center; }
+    .footer-note p { font-size:11px; color:var(--text-sub); line-height:2.2; }
+    .footer-note a { color:var(--gold); text-decoration:none; }
+    .footer-note a:hover { color:var(--gold-dark); }
+    footer { text-align:center; padding:28px 20px; font-family:'Cinzel',serif; font-size:9px; letter-spacing:4px; color:var(--text-sub); border-top:1px solid var(--border); margin-top:20px; }
+
+    @media (max-width:600px) {
+      .container { padding:80px 16px 60px; }
+      .member-grid { grid-template-columns:1fr 1fr; }
+    }
+    @media (max-width:380px) { .member-grid { grid-template-columns:1fr; } }
+  </style>
+</head>
+<body>
+
+<div class="lang-bar">
+  <button class="lang-btn active" onclick="setLang('ja')" id="btn-ja">JA</button>
+  <button class="lang-btn" onclick="setLang('en')" id="btn-en">EN</button>
+</div>
+
+<div class="container">
+
+  <nav class="breadcrumb">
+    <a href="samples.html" data-ja="サンプル一覧" data-en="Samples">サンプル一覧</a>
+    <span>›</span>
+    <span data-ja="アーティスト・芸能人" data-en="Artists &amp; Entertainers">アーティスト・芸能人</span>
+    <span>›</span>
+    <span>Kis-My-Ft2</span>
+  </nav>
+
+  <div class="page-eyebrow" data-ja="アーティスト · グループ" data-en="ARTISTS · GROUP">アーティスト · グループ</div>
+  <h1 class="page-title">
+    Kis-My-Ft2<br>
+    <em data-ja="星図データ" data-en="Chart Archive">星図データ</em>
+  </h1>
+  <div class="gold-rule"></div>
+  <p class="page-sub"
+     data-ja="Kis-My-Ft2 全メンバーの Swiss Ephemeris 精度の星図データです。出生時刻不明のメンバーは正午（12:00）で計算しており、ASC・MC は参考値です。"
+     data-en="Swiss Ephemeris-precision natal chart data for all Kis-My-Ft2 members. Members with unknown birth times use 12:00 LMT — ASC and MC are indicative only.">
+    Kis-My-Ft2 全メンバーの Swiss Ephemeris 精度の星図データです。出生時刻不明のメンバーは正午（12:00）で計算しており、ASC・MC は参考値です。
+  </p>
+
+  <!-- 現役メンバー -->
+  <div class="section-header">
+    <span class="section-label">ACTIVE</span>
+    <h2 class="section-title" data-ja="現役メンバー · 6名" data-en="Active Members · 6">現役メンバー · 6名</h2>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="member-grid">
+
+    <a href="https://chart.nanami-astro.com/chart/bTDYUU0Wld2uKIuYMNeulUgI" class="member-card" target="_blank" rel="noopener">
+      <div class="member-num">MEMBER 01</div>
+      <div class="member-name" data-ja="横尾 渉" data-en="Yokoo Wataru">横尾 渉</div>
+      <div class="member-name-en" data-ja="Yokoo Wataru" data-en="横尾 渉">Yokoo Wataru</div>
+      <div class="member-birth" data-ja="1986-05-16 · 神奈川県" data-en="16 May 1986 · Kanagawa">1986-05-16 · 神奈川県</div>
+      <div class="member-signs">
+        <span class="sign-badge">♉ Taurus ☉</span>
+      </div>
+      <div class="member-link" data-ja="鑑定データを見る" data-en="View Chart Data">鑑定データを見る</div>
+    </a>
+
+    <a href="https://chart.nanami-astro.com/chart/5uh9FLGm_BOQeEJ2IG9VRBvj" class="member-card" target="_blank" rel="noopener">
+      <div class="member-num">MEMBER 02</div>
+      <div class="member-name" data-ja="藤ヶ谷 太輔" data-en="Fujigaya Taisuke">藤ヶ谷 太輔</div>
+      <div class="member-name-en" data-ja="Fujigaya Taisuke" data-en="藤ヶ谷 太輔">Fujigaya Taisuke</div>
+      <div class="member-birth" data-ja="1987-06-25 · 神奈川県" data-en="25 Jun 1987 · Kanagawa">1987-06-25 · 神奈川県</div>
+      <div class="member-signs">
+        <span class="sign-badge">♋ Cancer ☉</span>
+      </div>
+      <div class="member-link" data-ja="鑑定データを見る" data-en="View Chart Data">鑑定データを見る</div>
+    </a>
+
+    <a href="https://chart.nanami-astro.com/chart/FBtej516xnfvLex4uUAask6E" class="member-card" target="_blank" rel="noopener">
+      <div class="member-num">MEMBER 03</div>
+      <div class="member-name" data-ja="宮田 俊哉" data-en="Miyata Toshiya">宮田 俊哉</div>
+      <div class="member-name-en" data-ja="Miyata Toshiya" data-en="宮田 俊哉">Miyata Toshiya</div>
+      <div class="member-birth" data-ja="1988-09-14 · 神奈川県" data-en="14 Sep 1988 · Kanagawa">1988-09-14 · 神奈川県</div>
+      <div class="member-signs">
+        <span class="sign-badge">♍ Virgo ☉</span>
+      </div>
+      <div class="member-link" data-ja="鑑定データを見る" data-en="View Chart Data">鑑定データを見る</div>
+    </a>
+
+    <a href="https://chart.nanami-astro.com/chart/2SGQwoMY12xq2-FYPt2pytCE" class="member-card" target="_blank" rel="noopener">
+      <div class="member-num">MEMBER 04</div>
+      <div class="member-name" data-ja="玉森 裕太" data-en="Tamamori Yuta">玉森 裕太</div>
+      <div class="member-name-en" data-ja="Tamamori Yuta" data-en="玉森 裕太">Tamamori Yuta</div>
+      <div class="member-birth" data-ja="1990-03-17 · 東京都" data-en="17 Mar 1990 · Tokyo">1990-03-17 · 東京都</div>
+      <div class="member-signs">
+        <span class="sign-badge">♓ Pisces ☉</span>
+      </div>
+      <div class="member-link" data-ja="鑑定データを見る" data-en="View Chart Data">鑑定データを見る</div>
+    </a>
+
+    <a href="https://chart.nanami-astro.com/chart/QA4dAOemWRI-p2lO0Y9eV2IY" class="member-card" target="_blank" rel="noopener">
+      <div class="member-num">MEMBER 05</div>
+      <div class="member-name" data-ja="二階堂 高嗣" data-en="Nikaido Takashi">二階堂 高嗣</div>
+      <div class="member-name-en" data-ja="Nikaido Takashi" data-en="二階堂 高嗣">Nikaido Takashi</div>
+      <div class="member-birth" data-ja="1990-08-06 · 東京都" data-en="6 Aug 1990 · Tokyo">1990-08-06 · 東京都</div>
+      <div class="member-signs">
+        <span class="sign-badge">♌ Leo ☉</span>
+      </div>
+      <div class="member-link" data-ja="鑑定データを見る" data-en="View Chart Data">鑑定データを見る</div>
+    </a>
+
+    <a href="https://chart.nanami-astro.com/chart/t-lYVrJ0eC_IsRHWzoChzFX-" class="member-card" target="_blank" rel="noopener">
+      <div class="member-num">MEMBER 06</div>
+      <div class="member-name" data-ja="千賀 健永" data-en="Senga Kento">千賀 健永</div>
+      <div class="member-name-en" data-ja="Senga Kento" data-en="千賀 健永">Senga Kento</div>
+      <div class="member-birth" data-ja="1991-03-23 · 愛知県" data-en="23 Mar 1991 · Aichi">1991-03-23 · 愛知県</div>
+      <div class="member-signs">
+        <span class="sign-badge">♈ Aries ☉</span>
+      </div>
+      <div class="member-link" data-ja="鑑定データを見る" data-en="View Chart Data">鑑定データを見る</div>
+    </a>
+
+  </div>
+
+  <!-- 元メンバー -->
+  <div class="section-header">
+    <span class="section-label">FORMER</span>
+    <h2 class="section-title" data-ja="元メンバー · 1名" data-en="Former Member · 1">元メンバー · 1名</h2>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="member-grid">
+
+    <a href="https://chart.nanami-astro.com/chart/gEPx1kgLCAP4czSMGJr5Fjl1" class="member-card former" target="_blank" rel="noopener">
+      <div class="member-num">FORMER MEMBER</div>
+      <div class="member-name" data-ja="北山 宏光" data-en="Kitayama Hiromitsu">北山 宏光</div>
+      <div class="member-name-en" data-ja="Kitayama Hiromitsu" data-en="北山 宏光">Kitayama Hiromitsu</div>
+      <div class="member-birth" data-ja="1985-09-17 · 神奈川県" data-en="17 Sep 1985 · Kanagawa">1985-09-17 · 神奈川県</div>
+      <div class="member-signs">
+        <span class="sign-badge">♍ Virgo ☉</span>
+      </div>
+      <div class="former-badge" data-ja="元メンバー" data-en="Former Member">元メンバー</div>
+      <div class="member-link" data-ja="鑑定データを見る" data-en="View Chart Data">鑑定データを見る</div>
+    </a>
+
+  </div>
+
+  <div class="data-note"
+       data-ja="⚠️ 出生時刻の記録がないメンバーは正午（12:00 LMT）で計算しています。ASC・MC・ハウスは参考値です。"
+       data-en="⚠️ Members with no recorded birth time use 12:00 LMT. ASC, MC, and house positions are indicative only.">
+    ⚠️ 出生時刻の記録がないメンバーは正午（12:00 LMT）で計算しています。ASC・MC・ハウスは参考値です。
+  </div>
+
+  <hr class="divider">
+
+  <div class="footer-note">
+    <p>
+      <span data-ja="鑑定データページは有効期限内のみ開けます。データの二次利用・転載はご遠慮ください。" data-en="Chart data pages are accessible during the validity period only. Please do not redistribute or repost the data.">鑑定データページは有効期限内のみ開けます。データの二次利用・転載はご遠慮ください。</span><br>
+      <a href="samples.html" data-ja="← サンプル一覧に戻る" data-en="← Back to Sample Archive">← サンプル一覧に戻る</a>
+      &nbsp;／&nbsp;
+      <a href="https://nanami-astro.stores.jp/" target="_blank" rel="noopener"
+         data-ja="あなた自身のデータを注文する →" data-en="Order your own chart data →">あなた自身のデータを注文する →</a>
+    </p>
+  </div>
+
+</div>
+
+<footer>© nanami-astro</footer>
+
+<script>
+function setLang(lang) {
+  document.documentElement.lang = lang==='en'?'en':'ja';
+  document.querySelectorAll('[data-ja]').forEach(el => {
+    el.innerHTML = lang==='en' ? el.dataset.en : el.dataset.ja;
+  });
+  document.getElementById('btn-ja').classList.toggle('active', lang==='ja');
+  document.getElementById('btn-en').classList.toggle('active', lang==='en');
+  localStorage.setItem('na-lang', lang);
+}
+(function(){ const s=localStorage.getItem('na-lang'); if(s==='en') setLang('en'); })();
+</script>
+</body>
+</html>
