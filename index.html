@@ -52,6 +52,10 @@
   .divider { border: none; border-top: 1px solid var(--border); margin: 48px 0; }
   .note { background: #f7f4ee; border-radius: var(--radius); padding: 16px 20px; font-size: 12px; color: var(--text-sub); line-height: 1.8; }
   footer { text-align: center; padding: 32px; font-size: 12px; color: var(--text-sub); border-top: 1px solid var(--border); }
+
+  details summary { user-select: none; }
+  details summary::-webkit-details-marker { display: none; }
+  details[open] summary span:last-child { transform: rotate(45deg); display: inline-block; }
 </style>
 </head>
 <body>
@@ -66,52 +70,145 @@
   <div class="section">
     <div class="section-label">How to use</div>
     <div class="section-title">基本の使い方（全プラン共通）</div>
-    <div class="steps">
 
-      <div class="step">
-        <div class="step-num">1</div>
-        <div class="step-body">
-          <h3>鑑定データページを開く</h3>
-          <p>購入後に表示された鑑定データページがそのまま使えます。ページをブックマークしておくと便利です。</p>
-        </div>
-      </div>
-
-      <div class="step">
-        <div class="step-num">2</div>
-        <div class="step-body">
-          <h3>「AIに送る」を押す（または「コピーして使う」）</h3>
-          <p>ページ上部のボタンを押してデータをコピーします。迷ったら「AI貼り付け版」でOKです。</p>
-          <div class="tip">📋 コピーできたら次のステップへ</div>
-        </div>
-      </div>
-
-      <div class="step">
-        <div class="step-num">3</div>
-        <div class="step-body">
-          <h3>AIに貼り付けて送信する</h3>
-          <p>ChatGPT / Claude / Gemini など好きなAIのチャット欄にそのまま貼り付けて送信します。AIが鑑定文を返してくれます。</p>
-          <div class="tip">✨ そのまま続けて質問できます。会話を終了しなければ文脈が引き継がれます。</div>
-        </div>
-      </div>
-
-      <div class="step">
-        <div class="step-num">4</div>
-        <div class="step-body">
-          <h3>うまくいかない場合</h3>
-          <p>アプリによってはファイル共有ができない場合があります。「コピー」または「TXT保存」を使い、ファイルを手動でアップロードしてください。</p>
-        </div>
-      </div>
-
+    <!-- メインアクション -->
+    <div style="background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:24px; box-shadow:var(--shadow); margin-bottom:12px;">
+      <div style="font-size:22px; margin-bottom:10px;">📲</div>
+      <h3 style="font-size:16px; font-weight:500; margin-bottom:8px;">鑑定データページで「AIに送る」を押すだけ</h3>
+      <p style="font-size:13px; color:var(--text-sub); line-height:1.8;">ページ上部の大きなボタンを押すと、AIアプリが開いてデータが自動で渡されます。あとはAIが鑑定を始めてくれます。ChatGPT / Claude / Gemini など主要AIに対応しています。</p>
+      <div class="tip" style="margin-top:14px;">🔖 ページはブックマークしておくと毎回すぐ使えて便利です。有効期限は発行から90日間です。</div>
     </div>
+
+    <!-- うまくいかない場合（アコーディオン） -->
+    <details style="background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; margin-bottom:12px;">
+      <summary style="padding:16px 20px; font-size:13px; font-weight:500; cursor:pointer; list-style:none; display:flex; align-items:center; justify-content:space-between;">
+        うまくいかない場合
+        <span style="color:var(--accent-dark); font-size:18px; line-height:1;">＋</span>
+      </summary>
+      <div style="padding:0 20px 20px; border-top:1px solid var(--border);">
+        <p style="font-size:13px; color:var(--text-sub); line-height:1.8; margin-top:14px;">AIアプリへの自動共有に対応していない場合は、「コピーして使う」または「TXTで保存」を使ってください。</p>
+        <div style="display:flex; flex-direction:column; gap:8px; margin-top:14px;">
+          <div style="display:flex; gap:10px; align-items:flex-start; font-size:13px;">
+            <span style="color:var(--accent); font-weight:700; flex-shrink:0;">①</span>
+            <div>「コピーして使う」を押してデータをコピーする</div>
+          </div>
+          <div style="display:flex; gap:10px; align-items:flex-start; font-size:13px;">
+            <span style="color:var(--accent); font-weight:700; flex-shrink:0;">②</span>
+            <div>AIのチャット欄に貼り付けて送信する</div>
+          </div>
+          <div style="display:flex; gap:10px; align-items:flex-start; font-size:13px;">
+            <span style="color:var(--accent); font-weight:700; flex-shrink:0;">③</span>
+            <div>スマホアプリで貼り付けられない場合は「TXTで保存」してファイルをアップロードする</div>
+          </div>
+        </div>
+      </div>
+    </details>
+
+    <!-- FULL版向け（アコーディオン） -->
+    <details style="background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; margin-bottom:12px;">
+      <summary style="padding:16px 20px; font-size:13px; font-weight:500; cursor:pointer; list-style:none; display:flex; align-items:center; justify-content:space-between;">
+        FULL版：小惑星・詳細データを使いたい場合
+        <span style="color:var(--accent-dark); font-size:18px; line-height:1;">＋</span>
+      </summary>
+      <div style="padding:0 20px 20px; border-top:1px solid var(--border);">
+        <p style="font-size:13px; color:var(--text-sub); line-height:1.8; margin-top:14px;">通常の「AIに送る」は基本データが渡されます。小惑星・トランジットも含めてさらに深く読みたいときは、鑑定データページ内の「詳細データ（FULL版）を使う」を開いてください。</p>
+        <div style="margin-top:14px; display:flex; flex-direction:column; gap:8px;">
+          <div style="background:#f7f4ee; border-radius:10px; padding:14px 16px;">
+            <div style="font-size:12px; font-weight:500; color:#3a5ca8; margin-bottom:4px;">🔮 小惑星つき版（おすすめ）</div>
+            <div style="font-size:12px; color:var(--text-sub); line-height:1.7;">小惑星＋31日トランジットを含む、より詳しいデータです。深く読みたいときはこちら。</div>
+          </div>
+          <div style="background:#f7f4ee; border-radius:10px; padding:14px 16px;">
+            <div style="font-size:12px; font-weight:500; color:var(--accent-dark); margin-bottom:4px;">📦 完全版</div>
+            <div style="font-size:12px; color:var(--text-sub); line-height:1.7;">小惑星・31日全詳細データを含む完全版。YAML全体を渡したいときに。</div>
+          </div>
+        </div>
+        <div class="tip" style="margin-top:14px;">💡 選んだあと「選んだ版をAIに送る」または「選んだ版をコピー」で送信できます。</div>
+      </div>
+    </details>
+
+    <!-- ホロスコープ図（アコーディオン） -->
+    <details style="background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; margin-bottom:12px;">
+      <summary style="padding:16px 20px; font-size:13px; font-weight:500; cursor:pointer; list-style:none; display:flex; align-items:center; justify-content:space-between;">
+        ホロスコープ図を見る・保存する（西洋占星術版）
+        <span style="color:var(--accent-dark); font-size:18px; line-height:1;">＋</span>
+      </summary>
+      <div style="padding:0 20px 20px; border-top:1px solid var(--border);">
+        <p style="font-size:13px; color:var(--text-sub); line-height:1.8; margin-top:14px;">鑑定データページ内の「ホロスコープ図を見る」を開くと、あなたの出生図がビジュアルで確認できます。</p>
+        <div style="display:flex; flex-direction:column; gap:8px; margin-top:14px; margin-bottom:14px;">
+          <div style="display:flex; gap:10px; align-items:flex-start; font-size:13px;">
+            <span style="color:var(--accent); font-weight:700; flex-shrink:0;">📊</span>
+            <div>ホロスコープ図（天体の配置が円形で表示される）が見られます</div>
+          </div>
+          <div style="display:flex; gap:10px; align-items:flex-start; font-size:13px;">
+            <span style="color:var(--accent); font-weight:700; flex-shrink:0;">🔮</span>
+            <div>FULL版は「補助天体を表示」で小惑星の位置も重ねて確認できます</div>
+          </div>
+          <div style="display:flex; gap:10px; align-items:flex-start; font-size:13px;">
+            <span style="color:var(--accent); font-weight:700; flex-shrink:0;">💾</span>
+            <div>「SVGを保存」でホロスコープ図を画像ファイルとして手元に保存できます</div>
+          </div>
+        </div>
+        <div class="tip">🖼️ 図はAIへの鑑定には不要ですが、記念に保存しておくのもおすすめです。</div>
+      </div>
+    </details>
+
+    <!-- データ保存（アコーディオン） -->
+    <details style="background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; margin-bottom:12px;">
+      <summary style="padding:16px 20px; font-size:13px; font-weight:500; cursor:pointer; list-style:none; display:flex; align-items:center; justify-content:space-between;">
+        データを保存しておく（重要）
+        <span style="color:var(--accent-dark); font-size:18px; line-height:1;">＋</span>
+      </summary>
+      <div style="padding:0 20px 20px; border-top:1px solid var(--border);">
+        <p style="font-size:13px; color:var(--text-sub); line-height:1.8; margin-top:14px;">鑑定データページのURLは<strong style="color:var(--text);">発行から90日間</strong>有効です。期限後はページにアクセスできなくなりますが、<strong style="color:var(--text);">データ自体は手元に保存しておけばずっと使えます。</strong></p>
+        <div style="background:#fff8ee; border:1px solid #e8c97a; border-radius:10px; padding:14px 16px; margin-top:14px; margin-bottom:14px;">
+          <div style="font-size:12px; font-weight:500; color:#7a5a10; margin-bottom:6px;">⚠️ 本体データは特に大切に保存してください</div>
+          <div style="font-size:12px; color:var(--text-sub); line-height:1.8;">出生図の本体データは、トランジットAddonなど追加商品のベースになります。90日後にページが切れても、本体データがあれば新しいトランジットを生成できます。</div>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:8px; margin-bottom:14px;">
+          <div style="display:flex; gap:10px; align-items:flex-start; font-size:13px;">
+            <span style="color:var(--accent); font-weight:700; flex-shrink:0;">①</span>
+            <div>「データを保存したい方へ」を開き、<strong>URLをコピー</strong>してブックマーク or メモ帳に保存</div>
+          </div>
+          <div style="display:flex; gap:10px; align-items:flex-start; font-size:13px;">
+            <span style="color:var(--accent); font-weight:700; flex-shrink:0;">②</span>
+            <div>「ZIPを保存する」でYAMLデータ・ホロスコープ図などをまとめてダウンロード</div>
+          </div>
+          <div style="display:flex; gap:10px; align-items:flex-start; font-size:13px;">
+            <span style="color:var(--accent); font-weight:700; flex-shrink:0;">③</span>
+            <div>90日以内に済ませておくと安心です</div>
+          </div>
+        </div>
+        <div class="tip">💡 ZIPの中に入っているYAMLファイルは、期限後もAIに直接アップロードして使えます。</div>
+      </div>
+    </details>
+
+    <!-- 次のトランジットを作りたい場合（アコーディオン） -->
+    <details style="background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); overflow:hidden;">
+      <summary style="padding:16px 20px; font-size:13px; font-weight:500; cursor:pointer; list-style:none; display:flex; align-items:center; justify-content:space-between;">
+        次のトランジットを作りたい場合（FULL版）
+        <span style="color:var(--accent-dark); font-size:18px; line-height:1;">＋</span>
+      </summary>
+      <div style="padding:0 20px 20px; border-top:1px solid var(--border);">
+        <p style="font-size:13px; color:var(--text-sub); line-height:1.8; margin-top:14px;">FULL版のトランジットデータは31日分です。翌月以降も使いたいときは、鑑定データページ内の「次のトランジットを作成」から新しいトランジットデータを生成できます。</p>
+        <div style="display:flex; flex-direction:column; gap:8px; margin-top:14px;">
+          <div style="display:flex; gap:10px; align-items:flex-start; font-size:13px;">
+            <span style="color:var(--accent); font-weight:700; flex-shrink:0;">①</span>
+            <div>鑑定データページ下部の「次のトランジットを作成」を開く</div>
+          </div>
+          <div style="display:flex; gap:10px; align-items:flex-start; font-size:13px;">
+            <span style="color:var(--accent); font-weight:700; flex-shrink:0;">②</span>
+            <div>開始日を選んで新しいトランジットデータを生成する</div>
+          </div>
+          <div style="display:flex; gap:10px; align-items:flex-start; font-size:13px;">
+            <span style="color:var(--accent); font-weight:700; flex-shrink:0;">③</span>
+            <div>生成されたURLをブックマーク、または「AIに送る」で使う</div>
+          </div>
+        </div>
+        <div class="tip" style="margin-top:14px;">📌 新しいトランジットページのURLも忘れずブックマークしておいてください。</div>
+      </div>
+    </details>
+
   </div>
-
-  <a href="howto.html" style="margin-top:16px; background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:16px 20px; box-shadow:var(--shadow); display:flex; align-items:center; justify-content:space-between; text-decoration:none; color:inherit;">
-    <div>
-      <div style="font-size:13px; font-weight:500; margin-bottom:2px;">📸 画像つきの詳しい使い方</div>
-      <div style="font-size:12px; color:var(--text-sub);">画面を見ながら手順を確認できます</div>
-    </div>
-    <div style="font-size:13px; color:var(--accent-dark);">→</div>
-  </a>
 
   <hr class="divider">
 
