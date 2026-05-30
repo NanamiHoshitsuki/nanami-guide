@@ -1,0 +1,1151 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI比較実験：バーナム効果低減テスト（4モデル版）| nanami-astro</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Noto+Serif+JP:wght@300;400;500&family=Cinzel:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:       #faf8f4;
+      --bg2:      #f3ede4;
+      --card:     #ffffff;
+      --card-hover: #fdf9f3;
+      --border:   rgba(160,120,70,0.18);
+      --border-hover: rgba(160,120,70,0.5);
+      --gold:     #a07840;
+      --gold-dark:#7a5c2a;
+      --gold-soft:#c9a96e;
+      --gold-pale:#e8d5b0;
+      --text:     #2a1f10;
+      --text-sub: #8a7860;
+      --shadow:   0 2px 16px rgba(100,70,30,0.10);
+      --shadow-hover: 0 6px 28px rgba(100,70,30,0.16);
+
+      /* AI別カラー */
+      --ai-gpt:     #10a37f;
+      --ai-gpt-bg:  rgba(16,163,127,0.06);
+      --ai-gemini:  #4285f4;
+      --ai-gemini-bg: rgba(66,133,244,0.06);
+      --ai-gemini2: #7b68c8;
+      --ai-gemini2-bg: rgba(123,104,200,0.06);
+      --ai-claude:  #c97a3a;
+      --ai-claude-bg: rgba(201,122,58,0.06);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Noto Serif JP', serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* ── ナビ ── */
+    .lang-bar {
+      position: fixed;
+      top: 0; right: 0; left: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: flex-end;
+      padding: 10px 24px;
+      background: rgba(250,248,244,0.92);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+    }
+    .lang-btn {
+      font-family: 'Cinzel', serif;
+      font-size: 10px; letter-spacing: 2px;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--text-sub);
+      border-radius: 999px;
+      padding: 4px 14px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .lang-btn.active { background: var(--gold); border-color: var(--gold); color: #fff; }
+    .lang-btn + .lang-btn { margin-left: 6px; }
+
+    .container { max-width: 900px; margin: 0 auto; padding: 96px 24px 80px; }
+
+    .site-logo {
+      font-family: 'Cinzel', serif;
+      font-size: 11px; letter-spacing: 5px;
+      color: var(--text-sub); text-decoration: none;
+      display: block; margin-bottom: 40px;
+    }
+    .site-logo:hover { color: var(--gold); }
+
+    /* ── ヘッダー ── */
+    .page-eyebrow {
+      font-family: 'Cinzel', serif;
+      font-size: 9px; letter-spacing: 5px;
+      color: var(--gold-soft); margin-bottom: 14px;
+    }
+    .page-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(30px, 6vw, 50px);
+      font-weight: 300; color: var(--text);
+      line-height: 1.15; margin-bottom: 8px; letter-spacing: 0.03em;
+    }
+    .page-title em { font-style: italic; color: var(--gold); }
+    .gold-rule { width: 48px; height: 1px; background: linear-gradient(90deg, var(--gold), transparent); margin: 20px 0 18px; }
+    .page-desc { font-size: 13px; color: var(--text-sub); line-height: 2; max-width: 560px; }
+
+    /* ── 実験概要ボックス ── */
+    .exp-box {
+      margin-top: 40px;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 28px 28px;
+      background: var(--bg2);
+    }
+    .exp-box-title {
+      font-family: 'Cinzel', serif;
+      font-size: 9px; letter-spacing: 4px;
+      color: var(--gold-soft); margin-bottom: 12px;
+    }
+    .exp-box p { font-size: 13px; color: var(--text-sub); line-height: 2; }
+    .exp-box p + p { margin-top: 10px; }
+
+    /* ── チャート構成サマリー ── */
+    .chart-summary {
+      margin-top: 40px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 10px;
+    }
+    .chart-badge {
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px 16px;
+      background: var(--card);
+    }
+    .chart-badge-label {
+      font-family: 'Cinzel', serif;
+      font-size: 8px; letter-spacing: 3px;
+      color: var(--gold-soft); margin-bottom: 6px;
+    }
+    .chart-badge-val {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 17px; font-weight: 400;
+      color: var(--text); line-height: 1.3;
+    }
+
+    /* ── セクション ── */
+    .section { margin-top: 56px; }
+    .section-header { display: flex; align-items: center; gap: 14px; margin-bottom: 22px; }
+    .section-num { font-family: 'Cinzel', serif; font-size: 9px; letter-spacing: 4px; color: var(--gold-soft); }
+    .section-title { font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 400; color: var(--text); letter-spacing: 0.04em; }
+    .section-line { flex:1; height:1px; background: var(--border); }
+
+    /* ── スコアカード ── */
+    .score-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+    .score-card {
+      border-radius: 12px;
+      padding: 20px 18px;
+      border: 1px solid;
+    }
+    .score-card.gpt   { border-color: var(--ai-gpt);    background: var(--ai-gpt-bg); }
+    .score-card.gemini{ border-color: var(--ai-gemini);  background: var(--ai-gemini-bg); }
+    .score-card.gemini2{ border-color: var(--ai-gemini2); background: var(--ai-gemini2-bg); }
+    .score-card.claude{ border-color: var(--ai-claude);  background: var(--ai-claude-bg); }
+    .score-ai-name {
+      font-family: 'Cinzel', serif;
+      font-size: 11px; letter-spacing: 2px;
+      margin-bottom: 10px;
+    }
+    .score-card.gpt    .score-ai-name { color: var(--ai-gpt); }
+    .score-card.gemini .score-ai-name { color: var(--ai-gemini); }
+    .score-card.gemini2 .score-ai-name { color: var(--ai-gemini2); }
+    .score-card.claude .score-ai-name { color: var(--ai-claude); }
+    .score-rank {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 36px; font-weight: 300;
+      color: var(--text); line-height: 1;
+      margin-bottom: 4px;
+    }
+    .score-rank span { font-size: 14px; color: var(--text-sub); }
+    .score-label { font-size: 11px; color: var(--text-sub); line-height: 1.6; }
+
+    /* ── AI別詳細 ── */
+    .ai-block {
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+      margin-bottom: 16px;
+    }
+    .ai-header {
+      padding: 16px 22px;
+      display: flex; align-items: center; gap: 12px;
+      cursor: pointer;
+      user-select: none;
+    }
+    .ai-block.gpt    .ai-header { background: var(--ai-gpt-bg); border-bottom: 1px solid rgba(16,163,127,0.15); }
+    .ai-block.gemini .ai-header { background: var(--ai-gemini-bg); border-bottom: 1px solid rgba(66,133,244,0.15); }
+    .ai-block.gemini2 .ai-header { background: var(--ai-gemini2-bg); border-bottom: 1px solid rgba(123,104,200,0.15); }
+    .ai-block.claude .ai-header { background: var(--ai-claude-bg); border-bottom: 1px solid rgba(201,122,58,0.15); }
+    .ai-dot {
+      width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+    }
+    .ai-block.gpt    .ai-dot { background: var(--ai-gpt); }
+    .ai-block.gemini .ai-dot { background: var(--ai-gemini); }
+    .ai-block.gemini2 .ai-dot { background: var(--ai-gemini2); }
+    .ai-block.claude .ai-dot { background: var(--ai-claude); }
+    .ai-header-name {
+      font-family: 'Cinzel', serif;
+      font-size: 11px; letter-spacing: 2px;
+    }
+    .ai-block.gpt    .ai-header-name { color: var(--ai-gpt); }
+    .ai-block.gemini .ai-header-name { color: var(--ai-gemini); }
+    .ai-block.gemini2 .ai-header-name { color: var(--ai-gemini2); }
+    .ai-block.claude .ai-header-name { color: var(--ai-claude); }
+    .ai-header-sub { font-size: 12px; color: var(--text-sub); flex:1; }
+    .ai-toggle {
+      font-size: 11px; color: var(--text-sub);
+      font-family: 'Cinzel', serif; letter-spacing: 1px;
+      transition: transform 0.2s;
+    }
+    .ai-block.open .ai-toggle { transform: rotate(180deg); }
+    .ai-body {
+      display: none;
+      padding: 22px 24px;
+    }
+    .ai-block.open .ai-body { display: block; }
+
+    /* 評価タグ */
+    .eval-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px; }
+    .eval-tag {
+      font-size: 10px; font-family: 'Cinzel', serif; letter-spacing: 1px;
+      padding: 3px 10px; border-radius: 999px;
+      border: 1px solid;
+    }
+    .eval-tag.good  { color: #4a7c59; border-color: #4a7c59; background: rgba(74,124,89,0.07); }
+    .eval-tag.warn  { color: #8a6030; border-color: #8a6030; background: rgba(138,96,48,0.07); }
+    .eval-tag.bad   { color: #8a3030; border-color: #8a3030; background: rgba(138,48,48,0.07); }
+
+    .eval-body { font-size: 13px; color: var(--text-sub); line-height: 2; }
+    .eval-body strong { color: var(--text); font-weight: 500; }
+    .eval-body p + p { margin-top: 10px; }
+
+    /* 具体例引用 */
+    .quote-block {
+      margin: 14px 0;
+      padding: 12px 16px;
+      border-left: 2px solid var(--gold-pale);
+      background: var(--bg2);
+      border-radius: 0 8px 8px 0;
+    }
+    .quote-block p { font-size: 12px; color: var(--text-sub); line-height: 1.9; font-style: italic; }
+    .quote-label { font-family: 'Cinzel', serif; font-size: 9px; letter-spacing: 3px; color: var(--gold-soft); margin-bottom: 6px; }
+
+    /* ── 結論 ── */
+    .conclusion-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 16px;
+    }
+    .conclusion-card {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px 18px;
+      background: var(--card);
+    }
+    .conclusion-card-title {
+      font-family: 'Cinzel', serif;
+      font-size: 9px; letter-spacing: 3px;
+      color: var(--gold-soft); margin-bottom: 10px;
+    }
+    .conclusion-card p { font-size: 12px; color: var(--text-sub); line-height: 1.9; }
+    .conclusion-card strong { color: var(--text); font-weight: 500; }
+
+    /* ── フッター ── */
+    .page-footer {
+      margin-top: 72px; padding-top: 32px;
+      border-top: 1px solid var(--border);
+      text-align: center;
+    }
+    .page-footer p { font-size: 11px; color: var(--text-sub); line-height: 2.2; }
+    .page-footer a { color: var(--gold); text-decoration: none; }
+    footer {
+      text-align: center; padding: 28px 20px;
+      font-family: 'Cinzel', serif;
+      font-size: 9px; letter-spacing: 4px;
+      color: var(--text-sub);
+      border-top: 1px solid var(--border); margin-top: 20px;
+    }
+
+
+    /* ── 全文折りたたみ ── */
+    .fulltext-toggle {
+      margin-top: 20px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+    }
+    .fulltext-btn {
+      font-family: 'Cinzel', serif;
+      font-size: 9px; letter-spacing: 3px;
+      color: var(--gold);
+      background: none; border: 1px solid var(--gold-pale);
+      border-radius: 999px;
+      padding: 6px 16px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .fulltext-btn:hover { background: var(--gold-pale); }
+    .fulltext-body {
+      display: none;
+      margin-top: 16px;
+      padding: 20px 20px;
+      background: var(--bg2);
+      border-radius: 10px;
+      border: 1px solid var(--border);
+    }
+    .fulltext-body.open { display: block; }
+    .fulltext-body h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 16px; font-weight: 400;
+      color: var(--text);
+      margin: 20px 0 6px;
+    }
+    .fulltext-body h3:first-child { margin-top: 0; }
+    .fulltext-body h4 {
+      font-family: 'Noto Serif JP', serif;
+      font-size: 13px; font-weight: 500;
+      color: var(--text);
+      margin: 14px 0 4px;
+    }
+    .fulltext-body p {
+      font-size: 12px; color: var(--text-sub);
+      line-height: 2; margin-bottom: 8px;
+    }
+    .fulltext-body ul {
+      list-style: none; padding-left: 1em;
+      margin-bottom: 8px;
+    }
+    .fulltext-body ul li {
+      font-size: 12px; color: var(--text-sub);
+      line-height: 1.9; position: relative;
+    }
+    .fulltext-body ul li::before { content: "・"; position: absolute; left: -1em; }
+    .fulltext-body table {
+      width: 100%; border-collapse: collapse;
+      font-size: 12px; margin: 10px 0;
+    }
+    .fulltext-body th {
+      font-family: 'Cinzel', serif;
+      font-size: 9px; letter-spacing: 2px;
+      color: var(--gold-soft);
+      border-bottom: 1px solid var(--border);
+      padding: 6px 8px; text-align: left; font-weight: 400;
+    }
+    .fulltext-body td {
+      padding: 6px 8px;
+      border-bottom: 1px solid var(--border);
+      color: var(--text-sub); line-height: 1.7;
+      vertical-align: top;
+    }
+    .fulltext-label {
+      font-family: 'Cinzel', serif;
+      font-size: 8px; letter-spacing: 4px;
+      color: var(--gold-soft); margin-bottom: 12px;
+    }
+
+    @media (max-width: 660px) {
+      .score-grid { grid-template-columns: repeat(2, 1fr); }
+      .conclusion-grid { grid-template-columns: 1fr; }
+      .chart-summary { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+
+<div class="lang-bar">
+  <button class="lang-btn active" onclick="setLang('ja')" id="btn-ja">JA</button>
+  <button class="lang-btn" onclick="setLang('en')" id="btn-en">EN</button>
+</div>
+
+<div class="container">
+  <a href="https://guide.nanami-astro.com/" class="site-logo">NANAMI-ASTRO</a>
+
+  <div class="page-eyebrow" data-ja="公開実験レポート" data-en="EXPERIMENT REPORT">公開実験レポート</div>
+  <h1 class="page-title">
+    <span data-ja="バーナム効果低減を試みた" data-en="Reducing the Barnum Effect">バーナム効果低減を試みた</span><br>
+    <em data-ja="AI 4モデル 比較実験" data-en="4-Model AI Comparison Test">AI 4モデル 比較実験</em>
+  </h1>
+  <div class="gold-rule"></div>
+  <p class="page-desc"
+     data-ja="同一の計算済み星図データを ChatGPT・Gemini Pro・Gemini Flash・Claude の4モデルに渡し、「バーナム効果（誰にでも当てはまる曖昧な記述）を排除した鑑定」を指示。結果を精度・具体性・独自性の観点で比較した実験記録です。"
+     data-en="We supplied identical pre-computed natal chart data to ChatGPT, Gemini Pro, Gemini Flash, and Claude, instructing each to minimize Barnum Effect statements. This page documents the results compared across accuracy, specificity, and chart-native insight.">
+    同一の計算済み星図データを ChatGPT・Gemini Pro・Gemini Flash・Claude の4モデルに渡し、「バーナム効果を減らした鑑定」を指示。結果を精度・具体性・独自性の観点で比較した実験記録です。
+  </p>
+
+  <!-- 実験概要 -->
+  <div class="exp-box">
+    <div class="exp-box-title" data-ja="実験条件" data-en="EXPERIMENT CONDITIONS">実験条件</div>
+    <p data-ja="入力データ：Swiss Ephemeris で計算済みの出生図データ（天体位置・ハウス・アスペクト・小惑星含む）をYAML形式で提供。個人情報は含まない。" data-en="Input: Pre-calculated natal chart YAML (planet positions, houses, aspects, asteroids via Swiss Ephemeris). No personal information included.">
+      入力データ：Swiss Ephemeris で計算済みの出生図データ（天体位置・ハウス・アスペクト・小惑星含む）をYAML形式で提供。個人情報は含まない。
+    </p>
+    <p data-ja="プロンプト指示：「バーナム効果・一般論をできる限り排除し、このデータから直接読み取れる傾向を優先して記述せよ。」" data-en="Prompt instruction: Minimize Barnum Effect statements. Prioritize descriptions directly derivable from the provided data.">
+      プロンプト指示：「バーナム効果・一般論をできる限り排除し、このデータから直接読み取れる傾向を優先して記述せよ。」
+    </p>
+    <p data-ja="比較軸：①このチャート固有の情報を使っているか ②一般的な占星術知識で補完していないか ③バーナム表現（曖昧・普遍的な記述）を避けられているか" data-en="Evaluation axes: ① Chart-native insights used ② No supplementation with generic astrology knowledge ③ Barnum statements avoided">
+      比較軸：①このチャート固有の情報を使っているか　②一般的な占星術知識で補完していないか　③バーナム表現（曖昧・普遍的な記述）を避けられているか
+    </p>
+  </div>
+
+  <!-- チャート構成 -->
+  <section class="section">
+    <div class="section-header">
+      <span class="section-num">01</span>
+      <h2 class="section-title" data-ja="テストに使用した星図の構成" data-en="Chart Configuration Used">テストに使用した星図の構成</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="chart-summary">
+      <div class="chart-badge">
+        <div class="chart-badge-label" data-ja="ASC" data-en="ASC">ASC</div>
+        <div class="chart-badge-val" data-ja="牡羊座" data-en="Aries">牡羊座</div>
+      </div>
+      <div class="chart-badge">
+        <div class="chart-badge-label" data-ja="☉ 太陽" data-en="☉ Sun">☉ 太陽</div>
+        <div class="chart-badge-val" data-ja="獅子座<br><small style='font-size:12px;color:var(--text-sub)'>5ハウス</small>" data-en="Leo<br><small style='font-size:12px;color:var(--text-sub)'>5th House</small>">獅子座<br><small style="font-size:12px;color:var(--text-sub)">5ハウス</small></div>
+      </div>
+      <div class="chart-badge">
+        <div class="chart-badge-label" data-ja="☽ 月" data-en="☽ Moon">☽ 月</div>
+        <div class="chart-badge-val" data-ja="水瓶座<br><small style='font-size:12px;color:var(--text-sub)'>11ハウス</small>" data-en="Aquarius<br><small style='font-size:12px;color:var(--text-sub)'>11th House</small>">水瓶座<br><small style="font-size:12px;color:var(--text-sub)">11ハウス</small></div>
+      </div>
+      <div class="chart-badge">
+        <div class="chart-badge-label" data-ja="☿♀♂ 集中" data-en="☿♀♂ Cluster">☿♀♂ 集中</div>
+        <div class="chart-badge-val" data-ja="乙女座<br><small style='font-size:12px;color:var(--text-sub)'>6ハウス</small>" data-en="Virgo<br><small style='font-size:12px;color:var(--text-sub)'>6th House</small>">乙女座<br><small style="font-size:12px;color:var(--text-sub)">6ハウス</small></div>
+      </div>
+      <div class="chart-badge">
+        <div class="chart-badge-label" data-ja="7ハウス" data-en="7th House">7ハウス</div>
+        <div class="chart-badge-val" data-ja="♇♅ ☊<br><small style='font-size:12px;color:var(--text-sub)'>冥王星・天王星・ノード</small>" data-en="♇♅ ☊<br><small style='font-size:12px;color:var(--text-sub)'>Pluto · Uranus · Node</small>">♇♅ ☊<br><small style="font-size:12px;color:var(--text-sub)">冥王星・天王星・ノード</small></div>
+      </div>
+      <div class="chart-badge">
+        <div class="chart-badge-label" data-ja="MC" data-en="MC">MC</div>
+        <div class="chart-badge-val" data-ja="山羊座" data-en="Capricorn">山羊座</div>
+      </div>
+    </div>
+    <p style="font-size:12px;color:var(--text-sub);margin-top:14px;line-height:2;"
+       data-ja="※ 小惑星データ（パラス・ジュノー・キロン・リリス等）も含めて提供。アスペクトの角度・オーブの具体数値は非公開。"
+       data-en="※ Asteroid data (Pallas, Juno, Chiron, Lilith, etc.) also included. Exact aspect degrees and orbs are not disclosed.">
+      ※ 小惑星データ（パラス・ジュノー・キロン・リリス等）も含めて提供。アスペクトの角度・オーブの具体数値は非公開。
+    </p>
+  </section>
+
+  <!-- タイプ別特徴マップ -->
+  <section class="section">
+    <div class="section-header">
+      <span class="section-num">02</span>
+      <h2 class="section-title" data-ja="AIタイプ別 特徴マップ" data-en="AI Reading Style Map">AIタイプ別 特徴マップ</h2>
+      <div class="section-line"></div>
+    </div>
+
+    <div class="score-grid">
+      <div class="score-card claude">
+        <div class="score-ai-name">CLAUDE</div>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:400;color:var(--ai-claude);margin-bottom:6px;"
+             data-ja="解釈展開型" data-en="Interpretive Depth">解釈展開型</div>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:13px;color:var(--text-sub);opacity:0.6;margin-bottom:8px;letter-spacing:1px;">参考値: 45 / 50</span></div>
+        <div class="score-label"
+             data-ja="アスペクトを「論理の一部」として展開。小惑星まで積極的に活用し、解釈の厚みが最も出る。占い師っぽい読み方。"
+             data-en="Expands aspects as part of logical reasoning. Makes active use of asteroids. Produces the richest interpretation depth. Astrologer-like reading style.">
+          アスペクトを「論理の一部」として展開。小惑星まで積極的に活用し、解釈の厚みが最も出る。占い師っぽい読み方。
+        </div>
+      </div>
+      <div class="score-card gpt">
+        <div class="score-ai-name">CHATGPT</div>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:400;color:var(--ai-gpt);margin-bottom:6px;"
+             data-ja="圧縮構造型" data-en="Structural Compression">圧縮構造型</div>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:13px;color:var(--text-sub);opacity:0.6;margin-bottom:8px;letter-spacing:1px;">参考値: 43 / 50</span></div>
+        <div class="score-label"
+             data-ja="YAMLを圧縮して意味構造へ変換。5H→6H→7Hの流れでチャートを一枚の地図として読む。監査員っぽい読み方。"
+             data-en="Compresses YAML into meaning structures. Reads chart as a map via 5H→6H→7H flow. Auditor-like reading style.">
+          YAMLを圧縮して意味構造へ変換。5H→6H→7Hの流れでチャートを一枚の地図として読む。監査員っぽい読み方。
+        </div>
+      </div>
+      <div class="score-card gemini">
+        <div class="score-ai-name">GEMINI PRO</div>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:400;color:var(--ai-gemini);margin-bottom:6px;"
+             data-ja="データ監査型" data-en="Data Verification">データ監査型</div>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:13px;color:var(--text-sub);opacity:0.6;margin-bottom:8px;letter-spacing:1px;">参考値: 43 / 50</span></div>
+        <div class="score-label"
+             data-ja="推測と事実を分けて書く傾向が4モデル中最も強い。空データも正直に報告。データの扱い方が最も透明。"
+             data-en="Strongest tendency to separate speculation from fact. Reports empty data honestly. Most transparent data handling of all 4 models.">
+          推測と事実を分けて書く傾向が4モデル中最も強い。空データも正直に報告。データの扱い方が最も透明。
+        </div>
+      </div>
+      <div class="score-card gemini2">
+        <div class="score-ai-name">GEMINI FLASH</div>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:400;color:var(--ai-gemini2);margin-bottom:6px;"
+             data-ja="要約・説明型" data-en="Summary &amp; Description">要約・説明型</div>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:13px;color:var(--text-sub);opacity:0.6;margin-bottom:8px;letter-spacing:1px;">参考値: 37 / 50</span></div>
+        <div class="score-label"
+             data-ja="YAMLの構造を説明する読み方。数値は正確に拾うが、このチャート固有の特徴抽出まで踏み込めていない。"
+             data-en="Describes the YAML structure. Numbers are accurately captured but chart-specific feature extraction is limited.">
+          YAMLの構造を説明する読み方。数値は正確に拾うが、このチャート固有の特徴抽出まで踏み込めていない。
+        </div>
+      </div>
+    </div>
+
+    <p style="font-size:13px;color:var(--text-sub);line-height:2.1;"
+       data-ja="「どのAIが優れているか」ではなく「AIごとにどんな読み方をするか」が、この実験で見えてきたことです。4モデルとも同じYAMLを読んでいるのに、出力の性格が全然違う。同一データから4つの読み方が生まれる——これがnanami-productsの計算データを使う上で知っておきたいことです。"
+       data-en="The key finding is not 'which AI is best' but 'how each AI reads the same data.' All four models processed the same YAML, yet the character of their output differs entirely. Four distinct reading styles from one dataset — this is what matters when using nanami-products calculation data.">
+      「どのAIが優れているか」ではなく「AIごとにどんな読み方をするか」が、この実験で見えてきたことです。4モデルとも同じYAMLを読んでいるのに、出力の性格が全然違う。同一データから4つの読み方が生まれる——これがnanami-productsの計算データを使う上で知っておきたいことです。
+    </p>
+  </section>
+
+  <!-- AI別詳細 -->
+  <section class="section">
+    <div class="section-header">
+      <span class="section-num">03</span>
+      <h2 class="section-title" data-ja="AI別 詳細評価" data-en="Per-AI Evaluation">AI別 詳細評価</h2>
+      <div class="section-line"></div>
+    </div>
+
+    <!-- Claude -->
+    <div class="ai-block claude open" id="block-claude">
+      <div class="ai-header" onclick="toggleBlock('block-claude')">
+        <div class="ai-dot"></div>
+        <div class="ai-header-name">CLAUDE</div>
+        <div class="ai-header-sub" data-ja="解釈展開型：小惑星まで活用した深掘り読み" data-en="Interpretive Depth: thorough reading through asteroid usage">解釈展開型：小惑星まで活用した深掘り読み</div>
+        <div class="ai-toggle">▲</div>
+      </div>
+      <div class="ai-body">
+        <div class="eval-tags">
+          <span class="eval-tag good" data-ja="小惑星活用 10/10" data-en="Asteroid usage 10/10">小惑星活用 10/10</span>
+          <span class="eval-tag good" data-ja="YAML根拠 10/10" data-en="YAML basis 10/10">YAML根拠 10/10</span>
+          <span class="eval-tag good" data-ja="マイナーアスペクト参照" data-en="Minor aspects referenced">マイナーアスペクト参照</span>
+          <span class="eval-tag warn" data-ja="解釈が一歩踏み込みすぎる" data-en="Interpretation steps slightly beyond data">解釈が一歩踏み込みすぎる</span>
+        </div>
+        <div class="eval-body">
+          <p data-ja="一般的なAI占星術が無視しがちな小惑星（パラス・ジュノー・キロン・リリス）まで積極的に活用。「パラスとMCのオポジション（orb 0.20）」「ジュノーと木星のトライン（orb 0.04）」「水星とリリスのトライン」など、他のモデルが言及しなかった配置を複数拾っている。アスペクトをデータのまま使うのではなく「論理の一部」として組み込む点が特徴的。"
+               data-en="Actively used asteroids (Pallas, Juno, Chiron, Lilith) that general AI tools ignore. Referenced placements like Pallas opposite MC (orb 0.20), Juno trine Jupiter (orb 0.04), Mercury trine Lilith — none flagged by other models. Integrates aspects as part of logical reasoning rather than just citing them.">
+            一般的なAI占星術が無視しがちな小惑星まで積極的に活用。「パラスとMCのオポジション（orb 0.20）」「ジュノーと木星のトライン（orb 0.04）」「水星とリリスのトライン」など、他のモデルが言及しなかった配置を複数拾っている。アスペクトを「論理の一部」として組み込む点が特徴的。
+          </p>
+          <div class="quote-block">
+            <div class="quote-label" data-ja="Claudeの出力から" data-en="FROM CLAUDE'S OUTPUT">Claudeの出力から</div>
+            <p data-ja="「水星とリリスのトライン——言ってはいけないとされていることをことばにする力。タブーに触れる表現や、場を揺らすような問いかけが、実は才能の核心にある。」" data-en="'Mercury trine Lilith — the ability to articulate what is considered unspeakable. Expressions that touch taboo, questions that unsettle — these are at the core of the talent.'">
+              「水星とリリスのトライン——言ってはいけないとされていることをことばにする力。タブーに触れる表現や、場を揺らすような問いかけが、実は才能の核心にある。」
+            </p>
+          </div>
+          <p data-ja="弱点は「データから一歩踏み込む」傾向。「言いたいことがまとまらない」「説明しているうちに曖昧になる」などの心理描写は、配置に根拠はあるが、YAMLから直接読めるかというと一段飛んでいる。占い師として面白いが、純粋なデータリーダーとしては補完が入っている。"
+             data-en="Weakness is the tendency to step beyond the data. Psychological descriptions like 'feeling unclear when explaining' have planetary basis but are one step removed from what YAML directly reads. Fascinating as an astrologer, but involves supplementation as a pure data reader.">
+            弱点は「データから一歩踏み込む」傾向。心理描写は配置に根拠はあるが、YAMLから直接読めるかというと一段飛んでいる。占い師として面白いが、純粋なデータリーダーとしては補完が入っている。
+          </p>
+        </div>
+        <div class="fulltext-toggle">
+          <button class="fulltext-btn" onclick="toggleFull('full-claude')">全文を見る ▾</button>
+          <div class="fulltext-body" id="full-claude"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Gemini Pro -->
+    <div class="ai-block gemini" id="block-gemini">
+      <div class="ai-header" onclick="toggleBlock('block-gemini')">
+        <div class="ai-dot"></div>
+        <div class="ai-header-name">GEMINI PRO</div>
+        <div class="ai-header-sub" data-ja="データ監査型：推測の明示と空データ報告が4モデル中最も誠実" data-en="Data Verification: most transparent handling of assumptions and empty data">データ監査型：推測の明示と空データ報告が4モデル中最も誠実</div>
+        <div class="ai-toggle">▼</div>
+      </div>
+      <div class="ai-body">
+        <div class="eval-tags">
+          <span class="eval-tag good" data-ja="推測の明示 10/10" data-en="Assumption transparency 10/10">推測の明示 10/10</span>
+          <span class="eval-tag good" data-ja="小惑星活用 9/10" data-en="Asteroid usage 9/10">小惑星活用 9/10</span>
+          <span class="eval-tag good" data-ja="空データを正直に明記" data-en="Empty data honestly flagged">空データを正直に明記</span>
+          <span class="eval-tag warn" data-ja="解釈がやや強い箇所あり" data-en="Some overstatement in interpretation">解釈がやや強い箇所あり</span>
+        </div>
+        <div class="eval-body">
+          <p data-ja="4モデル中、最も「誠実な読み方」をしている。31日サマリーが空（{}）であることを明記し、推測部分には「推測を含みます」と注記している。他の3モデルは空データを読み飛ばしているため、この点はGemini Pro単独で評価できる。小惑星もジュノー・パラス・リリス・キロンまで拾っており、精度は高い。"
+               data-en="Most 'honest' reading among all 4 models. Explicitly notes that 31-day summary is empty ({}), and flags speculative sections. The other 3 models silently skip empty data — Gemini Pro stands alone on this point. Also picks up Juno, Pallas, Lilith, and Chiron accurately.">
+            4モデル中、最も「誠実な読み方」をしている。31日サマリーが空であることを明記し、推測には「推測を含みます」と注記。他のモデルは空データを読み飛ばすため、この点はGemini Pro単独で評価できる。小惑星もジュノー・パラス・リリス・キロンまで拾っている。
+          </p>
+          <div class="quote-block">
+            <div class="quote-label" data-ja="Gemini Proの出力から" data-en="FROM GEMINI PRO'S OUTPUT">Gemini Proの出力から</div>
+            <p data-ja="「YAMLの next_31_days_summary は空（{}）です。（推測・現在値からの進行）現在の太陽・水星・天王星が双子座にあり、今後数週間のうちに蟹座へと移動していきます。」" data-en="'The YAML next_31_days_summary is empty ({}). (Speculative, based on current positions) Currently the Sun, Mercury, and Uranus are in Gemini, and will shift into Cancer over the coming weeks.'">
+              「YAMLの next_31_days_summary は空（{}）です。（推測を含みます）現在の太陽・水星・天王星が双子座にあり、今後数週間のうちに蟹座へと移動していきます。」
+            </p>
+          </div>
+          <p data-ja="弱点は解釈がやや強い箇所がある点。「自身の価値を正当に認めさせる才能」「高い安定性と調和を維持する能力」は、配置根拠はあるが少し盛っている。バーナムっぽさが若干残る。ただし全体として見ると4モデル中最も「商品サンプルとして見せやすい」構成をしている。"
+             data-en="Weakness: some overstatement, e.g. 'talent for getting one's value properly recognized.' Has basis but slightly embellished. Overall though, the most transparent handling of speculation vs. fact among 4 models.">
+            弱点は解釈がやや強い箇所がある点。「自身の価値を正当に認めさせる才能」は配置根拠はあるが少し盛っている。ただし全体として4モデル中最も推測と事実を分けて書いており、データの透明性が高い。
+          </p>
+        </div>
+        <div class="fulltext-toggle">
+          <button class="fulltext-btn" onclick="toggleFull('full-gemini')">全文を見る ▾</button>
+          <div class="fulltext-body" id="full-gemini"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ChatGPT -->
+    <div class="ai-block gpt" id="block-gpt">
+      <div class="ai-header" onclick="toggleBlock('block-gpt')">
+        <div class="ai-dot"></div>
+        <div class="ai-header-name">CHATGPT</div>
+        <div class="ai-header-sub" data-ja="圧縮構造型：YAMLをハウス構造の地図として読む" data-en="Structural Compression: reads YAML as a house-structure map">圧縮構造型：YAMLをハウス構造の地図として読む</div>
+        <div class="ai-toggle">▼</div>
+      </div>
+      <div class="ai-body">
+        <div class="eval-tags">
+          <span class="eval-tag good" data-ja="構造把握 9/10" data-en="Structure grasp 9/10">構造把握 9/10</span>
+          <span class="eval-tag good" data-ja="トランジット活用 9/10" data-en="Transit usage 9/10">トランジット活用 9/10</span>
+          <span class="eval-tag warn" data-ja="占星術知識ベースによる補完あり" data-en="Knowledge-base supplementation present">占星術知識ベースによる補完あり</span>
+          <span class="eval-tag warn" data-ja="データより解釈が先行する箇所" data-en="Interpretation precedes data in places">データより解釈が先行する箇所</span>
+        </div>
+        <div class="eval-body">
+          <p data-ja="4モデル中、最も「構造を読む」アプローチをとっている。「5ハウス（表現）→6ハウス（改善）→7ハウス（変容）」という流れを早い段階で把握し、チャートを一枚の地図として読んでいる。これは単なる説明ではなくチャートの特徴抽出であり、監査員っぽい精度重視の読み方として評価が高い。"
+               data-en="Most 'structure-first' approach among 4 models. Identifies the '5th house (expression) → 6th house (refinement) → 7th house (transformation)' flow early and reads the chart as a single map. This is feature extraction, not mere description — strong as an auditor-style precision reading.">
+            4モデル中、最も「構造を読む」アプローチをとっている。「5H（表現）→6H（改善）→7H（変容）」という流れを早い段階で把握し、チャートを一枚の地図として読んでいる。単なる説明ではなくチャートの特徴抽出であり、監査員っぽい精度重視の読み方として評価が高い。
+          </p>
+          <div class="quote-block">
+            <div class="quote-label" data-ja="ChatGPTの出力から" data-en="FROM CHATGPT'S OUTPUT">ChatGPTの出力から</div>
+            <p data-ja="「この配置は、『自分が目立ちたい』よりも、何かを整え、役立つ形にし、人に届けるために表現する方向に強く出ています。」" data-en="'This configuration strongly points toward expressing things to refine them, make them useful, and deliver them to others — more than wanting to stand out personally.'">
+              「この配置は、『自分が目立ちたい』よりも、何かを整え、役立つ形にし、人に届けるために表現する方向に強く出ています。」
+            </p>
+          </div>
+          <p data-ja="弱点は占星術知識ベースによる補完。「7ハウス冥王星＋ノード→運命的な出会いを繰り返す」という記述は、占星術の定番解釈であり、YAMLデータから直接確定できる結論ではない。Claudeが「アスペクトを展開して説明文へ変換」するのに対し、ChatGPTは「YAMLを圧縮して意味構造へ変換」する——目的別に使い分けが有効。"
+             data-en="Weakness: knowledge-base supplementation. '7th house Pluto + Node → fated encounters' is standard astrological interpretation, not directly derivable from YAML. While Claude 'expands aspects into explanation text,' ChatGPT 'compresses YAML into meaning structures' — each has its optimal use case.">
+            弱点は占星術知識ベースによる補完。「7ハウス冥王星＋ノード→運命的な出会いを繰り返す」は定番解釈であり、YAMLから直接確定できる結論ではない。Claudeが「アスペクトを展開して説明文へ変換」するのに対し、ChatGPTは「YAMLを圧縮して意味構造へ変換」する——目的別の使い分けが有効。
+          </p>
+        </div>
+        <div class="fulltext-toggle">
+          <button class="fulltext-btn" onclick="toggleFull('full-gpt')">全文を見る ▾</button>
+          <div class="fulltext-body" id="full-gpt"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Gemini Flash -->
+    <div class="ai-block gemini2" id="block-flash">
+      <div class="ai-header" onclick="toggleBlock('block-flash')">
+        <div class="ai-dot"></div>
+        <div class="ai-header-name">GEMINI FLASH</div>
+        <div class="ai-header-sub" data-ja="要約・説明型：構造の説明はできるが固有性の抽出が弱い" data-en="Summary &amp; Description: structure explained but chart-specific extraction is limited">要約・説明型：構造の説明はできるが固有性の抽出が弱い</div>
+        <div class="ai-toggle">▼</div>
+      </div>
+      <div class="ai-body">
+        <div class="eval-tags">
+          <span class="eval-tag warn" data-ja="小惑星活用 6/10" data-en="Asteroid usage 6/10">小惑星活用 6/10</span>
+          <span class="eval-tag warn" data-ja="固有性の抽出が弱い" data-en="Weak chart-specific extraction">固有性の抽出が弱い</span>
+          <span class="eval-tag bad" data-ja="テンプレ感が残る" data-en="Template-like feel remains">テンプレ感が残る</span>
+        </div>
+        <div class="eval-body">
+          <p data-ja="YAMLを読んだというより「YAMLの構造を説明している」だけになっている箇所が多い。固定宮5・地4・6ハウス集中という数値は正確に読めているが、そこから「このチャートだから出てくる固有の特徴」まで踏み込めていない。"
+             data-en="More 'describes YAML structure' than 'reads the YAML.' Correctly identifies fixed sign 5, earth 4, 6th house concentration — but doesn't extract what makes this specific chart distinctive.">
+            YAMLを読んだというより「YAMLの構造を説明している」だけになっている箇所が多い。数値は正確に読めているが、「このチャートだから出てくる固有の特徴」まで踏み込めていない。
+          </p>
+          <div class="quote-block">
+            <div class="quote-label" data-ja="Gemini Flashの出力から" data-en="FROM GEMINI FLASH'S OUTPUT">Gemini Flashの出力から</div>
+            <p data-ja="「高い分析力と実務能力をベースにしつつ、大局的な視点からタスクを割り振っていくことで、この1ヶ月の流れを安定して乗りこなすことができる傾向にあります。」→ 誰のチャートでも出てきそうな表現。" data-en="'Leveraging high analytical and practical ability, distributing tasks from a bird's-eye view will allow stable navigation of this month's flow.' → Could apply to almost any chart.">
+              「高い分析力と実務能力をベースにしつつ、大局的な視点からタスクを割り振っていくことで、この1ヶ月を安定して乗りこなすことができる傾向にあります。」<br>
+              <small>→ 誰のチャートでも出てきそうな表現。</small>
+            </p>
+          </div>
+          <p data-ja="小惑星はジュノー・パラス・バーテックスを出しているが、チャート全体のテーマへの組み込みが弱い。アスペクト説明にとどまっている。また「乙女座は地の固定宮に近い柔軟宮」という表現は乙女座は柔軟宮なので余計な修飾で若干不正確。Proとの差は大きく、同じGeminiでも別物に近い。"
+             data-en="Asteroids Juno, Pallas, Vertex are mentioned but not integrated into the chart's overall theme — stays at aspect description level. Also 'Virgo is a mutable sign close to fixed' is redundant wording for a mutable sign. Gap from Pro is significant — effectively different models.">
+            小惑星はジュノー・パラス・バーテックスを出しているが、チャート全体のテーマへの組み込みが弱い。同じGeminiでもProとは別物に近く、長文構造物はFlashよりProの方が得意な傾向が今回の実験でも確認された。
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 実験から見えたこと -->
+  <section class="section">
+    <div class="section-header">
+      <span class="section-num">04</span>
+      <h2 class="section-title" data-ja="実験から見えたこと" data-en="Key Findings">実験から見えたこと</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="conclusion-grid">
+      <div class="conclusion-card">
+        <div class="conclusion-card-title" data-ja="FINDING 01" data-en="FINDING 01">FINDING 01</div>
+        <p data-ja="<strong>同一YAMLから4つの文体が生まれる</strong><br>Claudeはアスペクトの深掘り。ChatGPTはハウス構造の把握。Gemini Proはデータの信頼性の明示。Gemini Flashは構造説明。出力の「粒度」がモデルごとに全然違う——これはnanami-productsのガイド素材として使える発見。"
+           data-en="<strong>One YAML, four writing styles</strong><br>Claude drills into aspects. ChatGPT maps house structure. Gemini Pro flags data reliability. Flash describes structure. Output 'granularity' differs completely per model — a finding usable as guide content for nanami-products.">
+          <strong>同一YAMLから4つの文体が生まれる</strong><br>Claudeはアスペクト深掘り、ChatGPTはハウス構造把握、Gemini Proはデータ信頼性明示、Flashは構造説明。同一データから4つの文体が生まれる。
+        </p>
+      </div>
+      <div class="conclusion-card">
+        <div class="conclusion-card-title" data-ja="FINDING 02" data-en="FINDING 02">FINDING 02</div>
+        <p data-ja="<strong>占い師っぽさ vs 監査員っぽさ</strong><br>Claudeは「この人はこういう人です」に寄る。ChatGPTは「この配置から読めることはこれです」に寄る。どちらが優れているかではなく、目的によって使い分けが有効。鑑定サンプルはClaude、データ監査はChatGPT。"
+           data-en="<strong>Astrologer style vs Auditor style</strong><br>Claude leans toward 'this person is like this.' ChatGPT leans toward 'this is what this placement reads.' Not better or worse — use-case dependent. Claudefor reading samples, ChatGPT for data auditing.">
+          <strong>占い師っぽさ vs 監査員っぽさ</strong><br>Claudeは人物像へ寄り、ChatGPTは配置から読めることへ寄る。目的によって使い分けが有効。
+        </p>
+      </div>
+      <div class="conclusion-card">
+        <div class="conclusion-card-title" data-ja="FINDING 03" data-en="FINDING 03">FINDING 03</div>
+        <p data-ja="<strong>Gemini ProとFlashは別物</strong><br>同じGeminiでも、Proは推測の明示・空データの正直な報告・小惑星の組み込みで高評価。Flashは構造説明にとどまりテンプレ感が残る。長文構造物（鑑定文）にはProの方が適している。"
+           data-en="<strong>Gemini Pro and Flash are effectively different models</strong><br>Same brand, very different results. Pro earns high marks for transparency, empty-data honesty, and asteroid integration. Flash stays at structural description with template feel. For long-form readings, Pro is clearly more suitable.">
+          <strong>Gemini ProとFlashは別物</strong><br>Proは誠実さと小惑星活用で高評価。Flashは構造説明にとどまりテンプレ感が残る。長文鑑定文にはProが適している。
+        </p>
+      </div>
+      <div class="conclusion-card">
+        <div class="conclusion-card-title" data-ja="FINDING 04" data-en="FINDING 04">FINDING 04</div>
+        <p data-ja="<strong>AI出力の質はモデルと入力データの両方に依存する</strong><br>小惑星・細かいアスペクトまで含む計算データを渡すほど、鑑定の固有性が上がる。ただし今回の実験が示した通り、同じデータでもモデルによって出力の性格は大きく変わる。データ品質とモデル特性の両方を理解して使うことが重要。"
+           data-en="<strong>Output quality depends on both model and input data</strong><br>Richer calculation data (asteroids, tight aspects) raises chart individuality in output. But as this experiment shows, the same data produces very different output characters across models. Understanding both data quality and model characteristics matters.">
+          <strong>AI出力の質はモデルと入力データの両方に依存する</strong><br>小惑星・細かいアスペクトまで含む計算データを渡すほど、鑑定の固有性が上がる。ただし同じデータでもモデルによって出力の性格は大きく変わる。データ品質とモデル特性の両方を理解して使うことが重要。
+        </p>
+      </div>
+    </div>
+
+    <!-- 用途マップ -->
+    <div style="margin-top:32px;border:1px solid var(--border);border-radius:14px;padding:24px 28px;background:var(--bg2);">
+      <div style="font-family:'Cinzel',serif;font-size:9px;letter-spacing:4px;color:var(--gold-soft);margin-bottom:16px;"
+           data-ja="目的別 使い分けガイド" data-en="USE CASE GUIDE">目的別 使い分けガイド</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+        <div style="display:flex;align-items:baseline;gap:10px;">
+          <span style="font-family:'Cinzel',serif;font-size:9px;letter-spacing:2px;color:var(--ai-claude);white-space:nowrap;" data-ja="深掘り解釈したい" data-en="Deep Interpretation">深掘り解釈したい</span>
+          <span style="font-size:11px;color:var(--text-sub);">→ Claude</span>
+        </div>
+        <div style="display:flex;align-items:baseline;gap:10px;">
+          <span style="font-family:'Cinzel',serif;font-size:9px;letter-spacing:2px;color:var(--ai-gpt);white-space:nowrap;" data-ja="構造を把握したい" data-en="Structural Overview">構造を把握したい</span>
+          <span style="font-size:11px;color:var(--text-sub);">→ ChatGPT</span>
+        </div>
+        <div style="display:flex;align-items:baseline;gap:10px;">
+          <span style="font-family:'Cinzel',serif;font-size:9px;letter-spacing:2px;color:var(--ai-gemini);white-space:nowrap;" data-ja="データを検証したい" data-en="Data Verification">データを検証したい</span>
+          <span style="font-size:11px;color:var(--text-sub);">→ Gemini Pro</span>
+        </div>
+        <div style="display:flex;align-items:baseline;gap:10px;">
+          <span style="font-family:'Cinzel',serif;font-size:9px;letter-spacing:2px;color:var(--ai-gemini2);white-space:nowrap;" data-ja="手早く要約したい" data-en="Quick Summary">手早く要約したい</span>
+          <span style="font-size:11px;color:var(--text-sub);">→ Gemini Flash</span>
+        </div>
+      </div>
+      <p style="font-size:11px;color:var(--text-sub);margin-top:16px;line-height:1.9;border-top:1px solid var(--border);padding-top:14px;"
+         data-ja="※ 参考値の点数は「どちらが優れているか」を示すものではありません。評価軸が異なるため同点でも読み方の方向性は異なります。"
+         data-en="※ Reference scores do not indicate which model is superior. Equal scores reflect different strengths, not equivalent reading approaches.">
+        ※ 参考値の点数は「どちらが優れているか」を示すものではありません。評価軸が異なるため同点でも読み方の方向性は異なります。
+      </p>
+    </div>
+  </section>
+
+  <div class="page-footer">
+    <!-- リットリンク：メイン導線 -->
+    <p style="margin-bottom: 6px;">
+      <span style="font-size:11px;color:var(--text-sub);"
+            data-ja="興味を持った方はこちら" data-en="Want to know more?">興味を持った方はこちら</span>
+    </p>
+    <a href="https://lit.link/rhayamaZ4X?utm_source=threads&amp;utm_medium=social&amp;utm_content=link_in_bio"
+       target="_blank" rel="noopener"
+       style="display:inline-flex;align-items:center;gap:8px;
+              font-family:'Cinzel',serif;font-size:11px;letter-spacing:2px;
+              color:#fff;background:var(--gold);
+              border-radius:999px;padding:10px 24px;text-decoration:none;
+              transition:background 0.2s;"
+       onmouseover="this.style.background='var(--gold-dark)'"
+       onmouseout="this.style.background='var(--gold)'">
+      ▶︎ nanami-astro Links
+    </a>
+
+    <!-- 関連記事 -->
+    <div style="margin-top:36px;text-align:left;max-width:480px;margin-left:auto;margin-right:auto;">
+      <p style="font-family:'Cinzel',serif;font-size:9px;letter-spacing:4px;color:var(--gold-soft);margin-bottom:4px;"
+         data-ja="関連記事" data-en="RELATED ARTICLES">関連記事</p>
+      <p style="font-size:11px;color:var(--text-sub);margin-bottom:14px;line-height:1.8;"
+         data-ja="このページの背景にある思想と実験" data-en="The thinking behind this page">このページの背景にある思想と実験</p>
+      <ul style="list-style:none;padding:0;">
+        <li style="border-top:1px solid var(--border);padding:12px 0;">
+          <a href="https://note.com/unique_r_haya_ma/n/n134f4aa6e68c" target="_blank" rel="noopener"
+             style="font-size:13px;color:var(--text);text-decoration:none;line-height:1.8;display:block;"
+             onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='var(--text)'">
+            「自分専用AI」と対話した話 →
+          </a>
+        </li>
+        <li style="border-top:1px solid var(--border);padding:12px 0;">
+          <a href="https://note.com/unique_r_haya_ma/n/n6cd471fae5bf" target="_blank" rel="noopener"
+             style="font-size:13px;color:var(--text);text-decoration:none;line-height:1.8;display:block;"
+             onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='var(--text)'">
+            AIに得意機能を全部封じられた →
+          </a>
+        </li>
+        <li style="border-top:1px solid var(--border);padding:12px 0;">
+          <a href="https://note.com/unique_r_haya_ma/n/n39c29a7af0a1" target="_blank" rel="noopener"
+             style="font-size:13px;color:var(--text);text-decoration:none;line-height:1.8;display:block;"
+             onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='var(--text)'">
+            AI占いを作ってるのに、人間占い師を推してる話 →
+          </a>
+        </li>
+        <li style="border-top:1px solid var(--border);padding:12px 0;">
+          <a href="https://note.com/unique_r_haya_ma/n/n4f33c1bcb284" target="_blank" rel="noopener"
+             style="font-size:13px;color:var(--text);text-decoration:none;line-height:1.8;display:block;"
+             onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='var(--text)'">
+            Tokyo-born Hayama vs New York-born Hayama →
+          </a>
+        </li>
+        <li style="border-top:1px solid var(--border);padding:12px 0;border-bottom:1px solid var(--border);">
+          <a href="https://note.com/unique_r_haya_ma/n/n9fced1a9d8d6" target="_blank" rel="noopener"
+             style="font-size:13px;color:var(--text);text-decoration:none;line-height:1.8;display:block;"
+             onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='var(--text)'">
+            東京生まれの葉山 →
+          </a>
+        </li>
+      </ul>
+      <p style="font-size:11px;color:var(--text-sub);margin-top:20px;line-height:1.8;"
+         data-ja="実際のデータを見てみる" data-en="See the actual data">実際のデータを見てみる</p>
+      <ul style="list-style:none;padding:0;">
+        <li style="border-top:1px solid var(--border);padding:12px 0;">
+          <a href="https://note.com/unique_r_haya_ma/n/n467bfaeebd6f" target="_blank" rel="noopener"
+             style="font-size:13px;color:var(--text);text-decoration:none;line-height:1.8;display:block;"
+             onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='var(--text)'">
+            <span data-ja="ホロスコープサンプル集〜レオナルド・ダ・ヴィンチは未来人？" data-en="Horoscope Sample — Was Leonardo da Vinci a Man from the Future?">ホロスコープサンプル集〜レオナルド・ダ・ヴィンチは未来人？</span> →
+          </a>
+        </li>
+        <li style="border-top:1px solid var(--border);padding:12px 0;border-bottom:1px solid var(--border);">
+          <a href="https://guide.nanami-astro.com/samples.html" target="_blank" rel="noopener"
+             style="font-size:13px;color:var(--text);text-decoration:none;line-height:1.8;display:block;"
+             onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='var(--text)'">
+            <span data-ja="ホロスコープサンプル集（一覧）" data-en="Horoscope Sample Collection">ホロスコープサンプル集（一覧）</span> →
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <!-- STORES：控えめに -->
+    <p style="margin-top:28px;">
+      <a href="https://nanami-astro.stores.jp/" target="_blank" rel="noopener"
+         style="font-size:11px;color:var(--text-sub);text-decoration:none;"
+         data-ja="計算データを注文する →" data-en="Order chart data →">計算データを注文する →</a>
+    </p>
+  </div>
+</div>
+
+<footer>© nanami-astro</footer>
+
+<script>
+/* ── Full output content (JA / EN) ── */
+const FULL_CONTENT = {
+  'full-claude': {
+    ja: `<div class="fulltext-label">CLAUDE · FULL OUTPUT</div>
+<h3>全体像</h3>
+<p>牡羊座ASC、獅子座太陽（5ハウス）、水瓶座月（11ハウス）という構造が、この星図の軸です。「自分が主役として表現する」衝動と、「個人を超えた集合・社会の中に居場所を見つける」欲求が、同一人物の中で綱引きをしています。これは矛盾ではなく、両方が本物です。</p>
+<p>乙女座に水星・金星・火星が集中（6ハウス）しており、地の要素が最多。「完璧に準備が整ってから動く」「細部が気になって全体が見えなくなる」という傾向の強さは、この星配置からくるものです。</p>
+<h3>才能・強み</h3>
+<h4>分析しながら動ける</h4>
+<p>6ハウスの乙女座三連星（水星・金星・火星）は、情報を精度高く処理しながら実務を動かせる配置。「この人に任せると仕事が細かく、かつちゃんと美しくなる」という評価を受けやすい。</p>
+<h4>パラスとMCのオポジション（オーブ0.2°）</h4>
+<p>「戦略や知性が、社会的な役割と正面衝突する」可能性。「私がやりたいこと」と「外から期待されていること」のズレを感じやすい配置でもある。</p>
+<h4>水星とリリスのトライン</h4>
+<p>言ってはいけないとされていることをことばにする力。タブーに触れる表現や、場を揺らすような問いかけが、実は才能の核心にある。</p>
+<h4>金星とキロン・MCのトライン</h4>
+<p>自分自身の傷やコンプレックスを昇華した独自の美学・価値観を、仕事や社会的な成果へ直接的に繋げることができる。</p>
+<h3>つまずきやすいパターン</h3>
+<h4>「準備が終わらない」罠</h4>
+<p>乙女座集中＋火星6ハウスは、行動力はあるのに「まだ足りない」「もっと整えてから」と動き出しを遅らせます。この「もう少し」が積み重なって、機会を逃すか、過負荷で消耗するかのどちらかになりやすい。</p>
+<h4>土星と北ノードのスクエア</h4>
+<p>社会的な「正しい生き方」「こうあるべき」への圧力を内側から感じやすく、それが自由な表現や関係性への踏み出しにブレーキをかけます。自分で自分を審査しているような感覚が慢性的にある場合、ここが原因です。</p>
+<h4>天王星・冥王星が7ハウス</h4>
+<p>一対一の関係（パートナー、重要なビジネス相手）が、突然変わる・終わる・強度が高すぎるというパターンが繰り返しやすい。「強度が高い関係に引き寄せられやすい自分」という視点も必要。</p>
+<h3>仕事・活動の向き</h3>
+<p>MCが山羊座という位置は、「成果・実績・積み上げ」を社会から求められるキャリア軸を示します。向いているのは精度が問われる仕事、言語化・編集・分析・審美眼が必要な仕事、あるいは既存のルールに疑問を呈しながら改善していく仕事。乙女座集中＋水瓶座月の組み合わせは、「現場の細部を知りながら、システム全体を変えようとする人」の配置です。</p>
+<h3>人間関係の傾向</h3>
+<p>7ハウスに天王星・冥王星・北ノード。変容・別れ・再構築を経て、関係から何かを学ぶ設計です。水瓶座月（11ハウス）は、親密な二者関係より、コミュニティや仲間との関係に感情が安定しやすい。</p>
+<p>ジュノーが乙女座6ハウスにある（木星とのトライン・オーブ極小）ことは、「対等で、お互いの仕事や日常を尊重し合えるパートナー」が最も機能しやすいことを示しています。</p>
+<h3>現在の流れ（トランジット）</h3>
+<table>
+  <tr><th>トランジット</th><th>出生天体</th><th>アスペクト</th><th>意味</th></tr>
+  <tr><td>火星♂</td><td>出生土星</td><td>スクエア（タイト）</td><td>行動と制約の衝突。焦りが出やすい</td></tr>
+  <tr><td>天王星♅</td><td>出生金星</td><td>スクエア</td><td>価値観・関係・収入への揺さぶり</td></tr>
+  <tr><td>太陽☉</td><td>出生土星</td><td>セクスタイル</td><td>積み上げたものを前に進める好機</td></tr>
+  <tr><td>土星♄</td><td>出生海王星</td><td>トライン</td><td>曖昧だったビジョンを現実に落とす流れ</td></tr>
+  <tr><td>太陽☉</td><td>出生冥王星</td><td>トライン</td><td>深いところでの再生・静かな変容</td></tr>
+</table>
+<h3>今日の使い方（朝・昼・夜）</h3>
+<h4>朝——月が出生火星にセクスタイル</h4>
+<p>行動に踏み出しやすい感情のエネルギーがある時間帯。「やるべきだとわかっていてずっと後回しにしていたこと」を、朝のうちに一つ手をつけてください。完成させなくていい、手をつけるだけでいい。</p>
+<h4>昼——出生天体へのアスペクトなし</h4>
+<p>エネルギーが中立な時間帯。判断より処理・作業向き。感情的な決断は午後に持ち越さず、情報整理や事務作業に充てると消耗しません。</p>
+<h4>夜——月が出生木星にオポジション</h4>
+<p>広がりたい気持ちと現実の限界が衝突しやすい。「もっとできるはずなのに」という不満や焦りが出やすい時間帯です。この時間に大きな意思決定・重要なやり取りはしないほうが無難。</p>
+<h3>今後の活かし方</h3>
+<p>乙女座の精度と水瓶座の距離感を、同時に使ってください。細部を整える力（乙女座）と、全体を俯瞰して既存の枠に縛られない視点（水瓶座月）は、セットで使ったときに最も機能します。</p>
+<p>「準備が終わったら動く」をやめる。この星図に「準備が完全に終わる日」は来ません。「今の状態で出す」という判断を、意識的に練習することが、今後の主要課題です。</p>
+<p>7ハウスの重さを「運命」として受け取らない。強度の高い出会いほど、距離感と時間を使って見極めてください。</p>`,
+    en: `<div class="fulltext-label">CLAUDE · FULL OUTPUT</div>
+<h3>Overall Picture</h3>
+<p>The structural axis of this chart is Aries ASC, Leo Sun (5th house), and Aquarius Moon (11th house). The impulse to "express oneself as the protagonist" and the desire to "find a place within a collective or society beyond the individual" are in constant tension within the same person. This is not a contradiction — both are genuine.</p>
+<p>Mercury, Venus, and Mars concentrate in Virgo (6th house), making earth the dominant element. The tendency to "wait until perfectly prepared before acting" or to "get caught up in details and lose sight of the whole" originates from this planetary configuration.</p>
+<h3>Talents &amp; Strengths</h3>
+<h4>Can Act While Analyzing</h4>
+<p>The Virgo trio in the 6th house (Mercury, Venus, Mars) enables high-precision information processing alongside practical execution. This person tends to receive evaluations like "when you delegate to them, the work becomes meticulous and truly beautiful."</p>
+<h4>Pallas Opposite MC (orb 0.2°)</h4>
+<p>The potential for "strategy and intellect to clash head-on with social role." A configuration that makes it easy to sense the gap between "what I want to do" and "what is expected from outside."</p>
+<h4>Mercury Trine Lilith</h4>
+<p>The ability to put into words what is considered unspeakable. Expressions that touch taboo, questions that unsettle a room — these are actually at the core of the talent.</p>
+<h4>Venus Trine Chiron &amp; MC</h4>
+<p>The ability to connect a unique aesthetic and value system — sublimated from one's own wounds and insecurities — directly to work and social achievements.</p>
+<h3>Patterns That Cause Stumbling</h3>
+<h4>The "Preparation Never Ends" Trap</h4>
+<p>Virgo concentration plus Mars in the 6th house creates drive, yet delays starting with thoughts like "not enough yet" or "let me refine it a bit more." This accumulation of "just a little more" tends to result in either missed opportunities or exhaustion from overload.</p>
+<h4>Saturn Square North Node</h4>
+<p>A tendency to feel internal pressure toward the socially "correct way of living" or "how things should be," which applies the brakes on stepping into free expression or relationships. If there is a chronic sense of putting yourself on trial, this configuration is the source.</p>
+<h4>Uranus &amp; Pluto in the 7th House</h4>
+<p>One-on-one relationships (partners, key business contacts) tend to follow a repeating pattern of sudden change, endings, or intensity that is too high. It is also necessary to hold the perspective of "a self that is easily drawn to high-intensity relationships."</p>
+<h3>Career &amp; Activity Direction</h3>
+<p>MC in Capricorn indicates a career axis where society expects "results, track record, and accumulation." Suited work includes precision-demanding roles, work requiring verbalization, editing, analysis, and aesthetic judgment, or work that improves things while questioning existing rules. Virgo concentration plus Aquarius Moon describes someone who "knows the details on the ground while trying to change the entire system."</p>
+<h3>Relationship Tendencies</h3>
+<p>Uranus, Pluto, and North Node in the 7th house. The design is to learn something from relationships through transformation, separation, and reconstruction. Aquarius Moon (11th house) finds emotional stability more easily in community and peer connections than in intimate one-on-one relationships.</p>
+<p>Juno in Virgo 6th house (trine Jupiter, extremely tight orb) indicates that "an equal partner who respects each other's work and daily life" functions best.</p>
+<h3>Current Transits</h3>
+<table>
+  <tr><th>Transit</th><th>Natal Planet</th><th>Aspect</th><th>Meaning</th></tr>
+  <tr><td>Mars ♂</td><td>Natal Saturn</td><td>Square (tight)</td><td>Collision of action and restriction. Frustration likely.</td></tr>
+  <tr><td>Uranus ♅</td><td>Natal Venus</td><td>Square</td><td>Disruption to values, relationships, income.</td></tr>
+  <tr><td>Sun ☉</td><td>Natal Saturn</td><td>Sextile</td><td>Good timing to advance what has been built up.</td></tr>
+  <tr><td>Saturn ♄</td><td>Natal Neptune</td><td>Trine</td><td>Flow toward making vague visions concrete.</td></tr>
+  <tr><td>Sun ☉</td><td>Natal Pluto</td><td>Trine</td><td>Deep regeneration, quiet transformation.</td></tr>
+</table>
+<h3>How to Use Today (Morning / Afternoon / Evening)</h3>
+<h4>Morning — Moon Sextile Natal Mars</h4>
+<p>A time window when emotional energy makes it easy to take action. Pick one thing "you know you should do but have been putting off" and start it in the morning. Completing it is not required — starting is enough.</p>
+<h4>Afternoon — No aspects to natal planets</h4>
+<p>A neutral energy period. Better suited for processing and tasks than decisions. Avoid carrying emotional decisions into the afternoon — use the time for information organization and administrative work without burning out.</p>
+<h4>Evening — Moon Opposition Natal Jupiter</h4>
+<p>The desire to expand easily collides with real-world limits. A time window prone to dissatisfaction and impatience like "I should be able to do more." Avoid major decisions or important exchanges during this time.</p>
+<h3>How to Apply Going Forward</h3>
+<p>Use Virgo precision and Aquarius detachment simultaneously. The ability to refine details (Virgo) and the perspective to see the whole without being bound by existing frameworks (Aquarius Moon) function best when used together.</p>
+<p>Stop waiting until "preparation is done before acting." For this chart, the day when preparation is completely finished will never come. Consciously practicing the judgment of "releasing in the current state" is the primary task going forward.</p>
+<p>Do not receive the weight of the 7th house as "fate." The higher the intensity of an encounter, the more important it is to evaluate it using distance and time.</p>`
+  },
+
+  'full-gemini': {
+    ja: `<div class="fulltext-label">GEMINI PRO · FULL OUTPUT</div>
+<h3>全体像</h3>
+<p>太陽（☉）は獅子座の5ハウス、月（☽）は水瓶座の11ハウスに位置しています。個人のクリエイティビティを発揮することと、集団や未来視点での冷静な判断が同居する土台があります。</p>
+<p>水星（☿）、金星（♀）、火星（♂）、さらに小惑星ジュノー（⚵）が乙女座の6ハウスに集中しています。物事を細部まで分析し、実務として完璧に機能させる能力が極めて高く、この領域が人生の強い推進力となります。</p>
+<h3>才能・強み</h3>
+<h4>鋭い知覚と実務への落とし込み</h4>
+<p>乙女座の水星（☿）が牡牛座のリリス（⚸）とトライン（調和）を形成しています。直感的・身体的な感覚を、正確な言葉や手順に変換する能力に長けています。</p>
+<h4>独自の美意識とキャリアへの直結</h4>
+<p>6ハウスの金星（♀）が牡牛座のキロン（⚷）とトライン、さらにMC（山羊座）ともトラインを形成しています。自分自身の傷やコンプレックスを昇華した独自の美学・価値観を、仕事や社会的な成果へ直接的に繋げることができます。</p>
+<h3>つまずきやすいパターン</h3>
+<h4>論理と理想のバッティング</h4>
+<p>水星（☿）と射手座の海王星（♆）がスクエア（葛藤）を持っています。実務的で完璧を求める思考（乙女座）に対して、壮大で境界線のないビジョン（射手座）が干渉しやすく、目的が曖昧な環境では混乱や考えすぎを引き起こす傾向があります。</p>
+<h4>他者との距離感による摩擦</h4>
+<p>7ハウス（対人関係）に蠍座の天王星（♅）と天秤座の冥王星（♇）が位置しています。深く繋がりたい欲求と、突発的に独立したくなる欲求が混在しており、関係性に突然の断絶をもたらすパターンに注意が必要です。</p>
+<h3>仕事・活動の向き</h3>
+<p>社会的頂点であるMCは山羊座にあり、着実な成果と構造化を求めます。ここに天王星（♅）がセクスタイルでサポートしているため、独立した立場や独自の技術を用いながら、社会的に信頼される枠組みを構築していく働き方が最もズレが生じません。パラス（⚴）がMCとオポジションのため、知的な戦略を社会へ打ち出す際には周囲との調整が鍵となります。</p>
+<h3>人間関係の傾向</h3>
+<h4>義務感と自己表現の葛藤</h4>
+<p>ドラゴンヘッド（☊・7ハウス）とドラゴンテイル（☋・1ハウス）の軸に対して、5ハウスの土星（♄）がスクエアを形成しています。他者との関わりにおいて、「自分が楽しむこと・表現すること（5ハウス）」に無意識の制限や義務感を感じやすい傾向があります。</p>
+<h3>現在の流れ（トランジット）</h3>
+<h4>制限と摩擦のタイミング</h4>
+<p>現在、トランジットの火星（♂）が出生図の土星（♄）に対し非常にタイトなスクエアを形成しています。無理に突破しようとすると大きな疲労や反発を生むため、「今は焦らず基盤を固める時間」と割り切るのが正しい使い方です。</p>
+<h4>価値観のアップデート</h4>
+<p>トランジットの天王星（♅）が出生図の金星（♀）にスクエアを取っています。これまでの対人関係の距離感や、お金・趣味の使い道に対して、突発的な変化や見直しのメスが入るタイミングです。</p>
+<h4>理想を現実化する着実な歩み</h4>
+<p>トランジットの土星（♄）が出生図の海王星（♆）とトライン、トランジット太陽（☉）が出生図の冥王星（♇）とトラインです。長期的なビジョンを具体的な形に落とし込む作業には強い後押しがあります。</p>
+<h3>今日の使い方（朝・昼・夜）</h3>
+<h4>朝 (06:00)</h4>
+<p>トランジットの月（☽）が出生図の火星（♂）とセクスタイル（調和）を取ります。感情と行動力がスムーズに連動する時間帯です。朝一番にエネルギーの要る実務や運動をこなすと効率よく進みます。</p>
+<h4>昼 (12:00)</h4>
+<p>タイトなアスペクトを持たない平坦な時間帯です。コミュニケーションや情報収集（3ハウス）に向いています。</p>
+<h4>夜 (21:00)</h4>
+<p>トランジットの月（☽）が出生図の木星（♃）とオポジション（対立）を形成します。感情が拡大しやすく、意識的に情報のインプットを減らし、心身をリラックスさせることに努めてください。</p>
+<h3>今後31日間の流れ</h3>
+<p>※YAMLの next_31_days_summary は空（{}）です。以下は現在値からの推測を含みます。</p>
+<p>テーマは「再構築」です。本当に必要か、続ける価値があるか、誰と組むかを見直す期間。特に仕事面で「やることを増やす」より「不要を削る」方が成果につながりやすいです。</p>
+<h3>今後の活かし方</h3>
+<p>持ち前の「乙女座6ハウス」の実務能力と分析力は、他者のために機能させすぎると自身の摩耗に直結します。現在はトランジットの天王星（♅）が「自分の価値（金星）」に揺さぶりをかけているため、「本当に自分が心地よく使えるスキルの提供先はどこか」を再評価する時期として活用してください。</p>`,
+    en: `<div class="fulltext-label">GEMINI PRO · FULL OUTPUT</div>
+<h3>Overall Picture</h3>
+<p>The Sun (☉) is in Leo in the 5th house; the Moon (☽) is in Aquarius in the 11th house. There is a foundation where individual creativity and calm, future-oriented collective judgment coexist.</p>
+<p>Mercury (☿), Venus (♀), Mars (♂), and the asteroid Juno (⚵) concentrate in Virgo in the 6th house. The ability to analyze things down to the finest detail and make them function perfectly in practice is extremely high, making this area a strong driving force in life.</p>
+<h3>Talents &amp; Strengths</h3>
+<h4>Sharp Perception Translated into Practice</h4>
+<p>Mercury (☿) in Virgo forms a trine (harmonious aspect) with Lilith (⚸) in Taurus. There is an exceptional ability to convert intuitive and physical sensations into precise words and procedures.</p>
+<h4>Unique Aesthetic Directly Linked to Career</h4>
+<p>Venus (♀) in the 6th house forms a trine with Chiron (⚷) in Taurus and also a trine with MC (Capricorn). This enables directly connecting a unique aesthetic and value system — sublimated from one's own wounds and insecurities — to work and social achievements.</p>
+<h3>Patterns That Cause Stumbling</h3>
+<h4>Logic vs. Ideals Collision</h4>
+<p>Mercury (☿) forms a square (tension) with Neptune (♆) in Sagittarius. The vast, boundless vision of Sagittarius tends to interfere with the practical, perfectionist Virgo thinking, producing confusion or overthinking in environments where the purpose is unclear.</p>
+<h4>Friction from Distance in Relationships</h4>
+<p>Uranus (♅) in Scorpio and Pluto (♇) in Libra are in the 7th house (relationships). A deep desire to connect coexists with a sudden impulse toward independence, and caution is needed around patterns that bring abrupt breaks in relationships.</p>
+<h3>Career &amp; Activity Direction</h3>
+<p>MC in Capricorn, the social pinnacle, calls for steady results and structure. With Uranus (♅) supporting via sextile, the way of working that creates the least misalignment is building a socially trusted framework while maintaining an independent position and unique techniques. Because Pallas (⚴) is in opposition to MC, coordination with others becomes key when putting intellectual strategies into the world.</p>
+<h3>Relationship Tendencies</h3>
+<h4>Conflict Between Obligation and Self-Expression</h4>
+<p>Saturn (♄) in the 5th house forms a square to the North Node (☊, 7th house) and South Node (☋, 1st house) axis. In relationships with others, there is a tendency to unconsciously feel restriction or a sense of obligation around "enjoying and expressing oneself (5th house)."</p>
+<h3>Current Transits</h3>
+<h4>Timing of Restriction and Friction</h4>
+<p>Currently, transit Mars (♂) forms a very tight square to natal Saturn (♄). Forcing a breakthrough would create significant fatigue and pushback — the correct use of this transit is to accept that "now is a time to consolidate the foundation without rushing."</p>
+<h4>Values Update</h4>
+<p>Transit Uranus (♅) is squaring natal Venus (♀). This is a timing when sudden changes and reassessment come to how one handles interpersonal distance, money, and hobbies. Suitable for releasing old attachments.</p>
+<h4>Steady Progress Toward Materializing Ideals</h4>
+<p>Transit Saturn (♄) trines natal Neptune (♆), and transit Sun (☉) trines natal Pluto (♇). There is strong support for work that translates long-term vision into concrete form.</p>
+<h3>How to Use Today (Morning / Afternoon / Evening)</h3>
+<h4>Morning (06:00)</h4>
+<p>Transit Moon (☽) forms a sextile (harmonious) with natal Mars (♂). Emotions and drive connect smoothly — a good time to tackle energy-intensive tasks or physical activity first thing in the morning.</p>
+<h4>Afternoon (12:00)</h4>
+<p>A flat period with no tight aspects. Well suited to communication and information gathering (3rd house).</p>
+<h4>Evening (21:00)</h4>
+<p>Transit Moon (☽) forms an opposition with natal Jupiter (♃). Emotions tend to expand — consciously reduce information intake and focus on allowing the mind and body to relax.</p>
+<h3>Next 31 Days</h3>
+<p>※ The YAML next_31_days_summary is empty ({}). The following contains speculative content based on current positions.</p>
+<p>The theme is "reconstruction." Not a month for expansive momentum. A period for reviewing what is truly necessary, worth continuing, and who to work with. In work, eliminating the unnecessary tends to produce more results than adding more.</p>
+<h3>How to Apply Going Forward</h3>
+<p>The practical ability and analytical power of the "Virgo 6th house" directly leads to self-erosion when applied too much for others. With transit Uranus (♅) currently shaking "one's own value (Venus)," use this as a period to re-evaluate "where can I most comfortably apply my skills."</p>`
+  },
+
+  'full-gpt': {
+    ja: `<div class="fulltext-label">CHATGPT · FULL OUTPUT</div>
+<h3>全体像</h3>
+<p>ASC牡羊座、太陽獅子座5ハウス、月水瓶座11ハウス、水星・金星・火星が乙女座6ハウスに集中、7ハウスに冥王星・ドラゴンヘッド・天王星という配置です。「表現したい人（獅子座）」と「改善したい人（乙女座）」と「個人よりも社会や集団の未来を見たい人（水瓶座）」が同時に存在しています。単純な自己表現型ではなく、「自分が目立ちたい」よりも、何かを整え、役立つ形にし、人に届けるために表現する方向に強く出ています。</p>
+<h3>才能・強み</h3>
+<h4>水星乙女座6ハウス</h4>
+<p>非常に強い観察力があります。人が気づかないミス・非効率・改善点を発見しやすい。単なる批判ではなく、改善策まで考えられる配置です。</p>
+<h4>金星乙女座 × MCトライン</h4>
+<p>仕事運の強さが目立ちます。特にサービス・教育・編集・執筆・健康・カウンセリング・サポート業との相性が良い。評価は派手に上がるというより、積み上げで信頼が増えるタイプです。</p>
+<h4>火星乙女座6ハウス</h4>
+<p>行動力が細部へ向きます。大雑把な勝負より、継続改善で結果を出す人。長期戦に強いです。</p>
+<h4>木星2ハウス牡牛座</h4>
+<p>自分が価値を感じるものを育てる力があります。短期的な投機より、品質や蓄積で伸びるタイプです。</p>
+<h3>つまずきやすいパターン</h3>
+<h4>水星□海王星</h4>
+<p>この出生図で最重要のひとつ。情報過多・理想化・相手を良く見すぎる・イメージ先行が起きやすい。アイデア段階では素晴らしくても、実務確認を飛ばすと誤差が出ます。</p>
+<h4>固定宮優勢</h4>
+<p>一度決めると強い。反面、方向転換が遅れやすい。頑張り続ける能力が高いため、「やめる判断」が課題になりやすいです。</p>
+<h4>土星□ノード</h4>
+<p>人生の節目で責任・義務・自由の葛藤が出やすい。自分だけで抱えるほど苦しくなります。</p>
+<h3>仕事・活動の向き</h3>
+<p>このチャートはかなり明確です。向いているのは教える・書く・編集する・整理する・相談に乗る・改善する仕事。特に太陽5ハウス＋乙女座6ハウス集中なので、「自分の表現」と「人の役に立つ実務」が重なる活動が強いです。</p>
+<h3>人間関係の傾向</h3>
+<p>7ハウスに冥王星・天王星・ドラゴンヘッドがあります。人間関係が人生を変える配置。普通の関係より、強烈・運命的・急展開になりやすい。この配置は「人との出会いを通じて変容する」ことがテーマです。</p>
+<h3>現在の流れ（2026/5/30）</h3>
+<h4>トランジット火星□出生土星（最もタイト）</h4>
+<p>今は「進みたい、でも進まない」という感覚が出やすい時期。この配置は「止められている」というより、やり方の見直し要求として使う方がズレません。</p>
+<h4>トランジット天王星□出生金星</h4>
+<p>人間関係・価値観・仕事のスタイルに変化圧力。古い心地よさより、新しい形へ移る流れです。</p>
+<h4>土星△出生海王星（現在の救済ポイント）</h4>
+<p>夢や理想を現実化しやすい。空想ではなく、形にする力が働いています。</p>
+<h3>今日の使い方（5/30）</h3>
+<h4>朝——月蠍座、出生火星セクスタイル</h4>
+<p>行動力が使いやすい時間帯。片付け・作業開始・実務処理向き。考えるより動く方が良い。</p>
+<h4>昼——月アスペクトなし</h4>
+<p>感情の偏りが少ない。事務処理や調整向き。判断は比較的フラット。</p>
+<h4>夜——月が出生木星とオポジション</h4>
+<p>気持ちが大きくなりやすい。買い過ぎ・引き受け過ぎ・約束し過ぎには注意。楽観的な判断は一晩置く方が安全です。</p>
+<h3>今後31日間のテーマ</h3>
+<p>テーマは「再構築」です。勢いで拡大する月ではありません。本当に必要か、続ける価値があるか、誰と組むかを見直す期間。特に仕事面で「やることを増やす」より「不要を削る」方が成果につながりやすいです。</p>
+<h4>動きやすい日</h4>
+<p>土星△出生海王星、太陽✶出生土星、太陽△出生冥王星が同時に立っている5月末〜6月前半。計画作成・長期設計・学習・執筆・企画整理に向きます。</p>
+<h4>注意したい日</h4>
+<p>現在〜6月上旬は火星□出生土星が強い期間。特に焦り・無理な前進・強行突破は消耗しやすい。予定変更を前提にした方が合います。</p>
+<h3>今後の活かし方</h3>
+<p>才能を見せること自体ではなく、才能を使える形に編集することが強みです。この31日間は、本当に続けたい活動を選ぶ・人間関係を整理する・仕事の導線を整える・曖昧な計画を具体化することに力を使う方が、出生図と現在の流れの両方に合っています。</p>`,
+    en: `<div class="fulltext-label">CHATGPT · FULL OUTPUT</div>
+<h3>Overall Picture</h3>
+<p>ASC Aries, Sun Leo 5th house, Moon Aquarius 11th house, Mercury / Venus / Mars concentrated in Virgo 6th house, and Pluto / North Node / Uranus in the 7th house. "The person who wants to express (Leo)," "the person who wants to improve (Virgo)," and "the person who wants to see the future of society and the collective rather than the individual (Aquarius)" all coexist. Rather than a simple self-expression type, this configuration strongly points toward expressing things in order to refine them, make them useful, and deliver them to others — more than wanting to stand out personally.</p>
+<h3>Talents &amp; Strengths</h3>
+<h4>Mercury Virgo 6th House</h4>
+<p>An exceptionally strong power of observation. Easily spots mistakes, inefficiencies, and areas for improvement that others miss. Not merely critical — this configuration enables thinking through improvements as well.</p>
+<h4>Venus Virgo × MC Trine</h4>
+<p>Strong career fortune stands out. Particularly well-matched with service, education, editing, writing, health, counseling, and support work. Reputation grows through steady accumulation rather than sudden rises.</p>
+<h4>Mars Virgo 6th House</h4>
+<p>Drive is directed toward detail. Produces results through continuous improvement rather than rough competition. Strong in the long game.</p>
+<h4>Jupiter 2nd House Taurus</h4>
+<p>The ability to cultivate things that feel valuable. Grows through quality and accumulation rather than short-term speculation.</p>
+<h3>Patterns That Cause Stumbling</h3>
+<h4>Mercury Square Neptune</h4>
+<p>One of the most important aspects in this chart. Prone to information overload, idealization, seeing others too favorably, and leading with imagination. Ideas may be excellent, but skipping practical verification produces errors.</p>
+<h4>Fixed Sign Dominance</h4>
+<p>Strong once committed. The flip side is that course corrections tend to be delayed. High ability to keep pushing through, which makes "the judgment to stop" a recurring challenge.</p>
+<h4>Saturn Square Nodes</h4>
+<p>At life's turning points, conflict between responsibility, obligation, and freedom tends to emerge. The more one carries it alone, the harder it becomes.</p>
+<h3>Career &amp; Activity Direction</h3>
+<p>This chart is quite clear. Suited work includes teaching, writing, editing, organizing, consulting, and improving. Especially because of Sun 5th house plus Virgo 6th house concentration, activities where "personal expression" and "practical work that helps others" overlap are strongest.</p>
+<h3>Relationship Tendencies</h3>
+<p>Pluto, Uranus, and North Node are in the 7th house. A configuration where relationships transform life. More intense, fateful, and rapid-developing than ordinary relationships. The theme of this configuration is "transforming through encounters with people."</p>
+<h3>Current Transits (2026/5/30)</h3>
+<h4>Transit Mars Square Natal Saturn (tightest)</h4>
+<p>A period prone to the sensation of "wanting to move forward, but unable to." Rather than reading this as "being stopped," using it as a request to review one's approach produces less misalignment.</p>
+<h4>Transit Uranus Square Natal Venus</h4>
+<p>Pressure for change in relationships, values, and work style. A flow toward moving to new forms rather than old comforts.</p>
+<h4>Saturn Trine Natal Neptune (current support point)</h4>
+<p>Favorable for making dreams and ideals concrete. Not fantasy — the power to give form is active.</p>
+<h3>How to Use Today (5/30)</h3>
+<h4>Morning — Moon Scorpio, sextile natal Mars</h4>
+<p>A time window when drive is easy to use. Suited for clearing tasks, starting work, and processing practical matters. Better to move than to think.</p>
+<h4>Afternoon — Moon no major aspects</h4>
+<p>Low emotional bias. Suited for administrative processing and adjustments. Judgment is relatively flat.</p>
+<h4>Evening — Moon opposition natal Jupiter</h4>
+<p>Feelings tend to expand. Watch for overspending, over-committing, and over-promising. Optimistic judgments are safer left overnight.</p>
+<h3>Theme for the Next 31 Days</h3>
+<p>The theme is "reconstruction." Not a month for expansive momentum. A period for reviewing what is truly necessary, worth continuing, and who to work with. In work, eliminating the unnecessary tends to produce more results than adding more.</p>
+<h4>Favorable Days</h4>
+<p>Late May through early June, when Saturn trine natal Neptune, Sun sextile natal Saturn, and Sun trine natal Pluto are all active simultaneously. Well suited for planning, long-term design, learning, writing, and project organization.</p>
+<h4>Days Requiring Caution</h4>
+<p>Now through early June, Mars square natal Saturn is strong. Rushing, forcing progress, and breaking through by force are especially draining. It is better to build in the assumption of schedule changes.</p>
+<h3>How to Apply Going Forward</h3>
+<p>The strength lies not in showing the talent itself, but in editing the talent into a usable form. Over this 31-day period, putting energy into choosing activities worth continuing, reorganizing relationships, streamlining work pathways, and making vague plans concrete aligns with both the natal chart and the current transits.</p>`
+  }
+};
+
+/* ── state ── */
+let currentLang = 'ja';
+const fulltextOpenState = {};
+
+function toggleBlock(id) {
+  const el = document.getElementById(id);
+  el.classList.toggle('open');
+  const toggle = el.querySelector('.ai-toggle');
+  toggle.textContent = el.classList.contains('open') ? '▲' : '▼';
+}
+
+function toggleFull(id) {
+  const body = document.getElementById(id);
+  const isOpen = body.classList.toggle('open');
+  fulltextOpenState[id] = isOpen;
+  const btn = body.previousElementSibling;
+  btn.textContent = isOpen
+    ? (currentLang === 'en' ? 'Close full text ▴' : '全文を閉じる ▴')
+    : (currentLang === 'en' ? 'Read full output ▾' : '全文を見る ▾');
+}
+
+function renderFulltexts(lang) {
+  Object.keys(FULL_CONTENT).forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.innerHTML = FULL_CONTENT[id][lang] || FULL_CONTENT[id]['ja'];
+  });
+  /* sync button labels */
+  document.querySelectorAll('.fulltext-btn').forEach(btn => {
+    const bodyId = btn.nextElementSibling && btn.nextElementSibling.id;
+    if (!bodyId) return;
+    const isOpen = fulltextOpenState[bodyId];
+    btn.textContent = isOpen
+      ? (lang === 'en' ? 'Close full text ▴' : '全文を閉じる ▴')
+      : (lang === 'en' ? 'Read full output ▾' : '全文を見る ▾');
+  });
+}
+
+function setLang(lang) {
+  currentLang = lang;
+  document.documentElement.lang = lang === 'en' ? 'en' : 'ja';
+  document.querySelectorAll('[data-ja]').forEach(el => {
+    el.innerHTML = lang === 'en' ? el.dataset.en : el.dataset.ja;
+  });
+  renderFulltexts(lang);
+  document.getElementById('btn-ja').classList.toggle('active', lang === 'ja');
+  document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+  localStorage.setItem('na-lang', lang);
+}
+
+(function() {
+  /* initial render of fulltexts in JA */
+  renderFulltexts('ja');
+  const saved = localStorage.getItem('na-lang');
+  if (saved === 'en') setLang('en');
+})();
+</script>
+</body>
+</html>
