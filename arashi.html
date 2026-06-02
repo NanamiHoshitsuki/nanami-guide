@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>嵐 — Natal Chart Data | nanami-astro</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Noto+Serif+JP:wght@300;400;500&family=Cinzel:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:       #faf8f4;
+      --bg2:      #f3ede4;
+      --card:     #ffffff;
+      --card-hover: #fdf9f3;
+      --border:   rgba(160,120,70,0.18);
+      --border-hover: rgba(160,120,70,0.5);
+      --gold:     #a07840;
+      --gold-dark:#7a5c2a;
+      --gold-soft:#c9a96e;
+      --gold-pale:#e8d5b0;
+      --text:     #2a1f10;
+      --text-sub: #8a7860;
+      --shadow:   0 2px 16px rgba(100,70,30,0.10);
+      --shadow-hover: 0 6px 28px rgba(100,70,30,0.16);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Noto Serif JP', serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+    .lang-bar {
+      position: fixed;
+      top: 0; right: 0; left: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: flex-end;
+      padding: 10px 24px;
+      background: rgba(250,248,244,0.92);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+    }
+    .lang-btn {
+      font-family: 'Cinzel', serif;
+      font-size: 10px;
+      letter-spacing: 2px;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--text-sub);
+      border-radius: 999px;
+      padding: 4px 14px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .lang-btn.active {
+      background: var(--gold);
+      border-color: var(--gold);
+      color: #fff;
+    }
+    .lang-btn + .lang-btn { margin-left: 6px; }
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 96px 24px 80px;
+    }
+    .back-link {
+      font-family: 'Cinzel', serif;
+      font-size: 10px;
+      letter-spacing: 3px;
+      color: var(--text-sub);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 40px;
+      transition: color 0.2s;
+    }
+    .back-link::before { content: '←'; }
+    .back-link:hover { color: var(--gold); }
+    .page-eyebrow {
+      font-family: 'Cinzel', serif;
+      font-size: 9px;
+      letter-spacing: 5px;
+      color: var(--gold-soft);
+      margin-bottom: 14px;
+    }
+    .page-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(40px, 9vw, 68px);
+      font-weight: 300;
+      color: var(--text);
+      line-height: 1.1;
+      margin-bottom: 6px;
+      letter-spacing: 0.05em;
+    }
+    .page-title-en {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 14px;
+      font-style: italic;
+      color: var(--text-sub);
+      margin-bottom: 4px;
+    }
+    .gold-rule {
+      width: 48px; height: 1px;
+      background: linear-gradient(90deg, var(--gold), transparent);
+      margin: 20px 0 18px;
+    }
+    .page-desc {
+      font-size: 13px;
+      color: var(--text-sub);
+      line-height: 2;
+      max-width: 520px;
+    }
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 14px;
+      margin-top: 48px;
+    }
+    .member-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 24px 22px;
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      box-shadow: var(--shadow);
+      transition: all 0.22s;
+    }
+    .member-card:hover {
+      border-color: var(--border-hover);
+      box-shadow: var(--shadow-hover);
+      transform: translateY(-2px);
+      background: var(--card-hover);
+    }
+    .card-tag {
+      font-family: 'Cinzel', serif;
+      font-size: 9px; letter-spacing: 3px;
+      color: var(--gold-soft);
+    }
+    .card-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 26px; font-weight: 400;
+      color: var(--text);
+      letter-spacing: 0.04em;
+      line-height: 1.2;
+    }
+    .card-name-en {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 11px; font-style: italic;
+      color: var(--text-sub);
+    }
+    .card-meta { font-size: 11px; color: var(--text-sub); line-height: 1.8; }
+    .card-signs {
+      display: flex; flex-wrap: wrap; gap: 5px;
+      margin-top: 4px;
+    }
+    .sign-badge {
+      font-size: 10px;
+      color: var(--gold-dark);
+      border: 1px solid rgba(160,120,70,0.3);
+      border-radius: 999px;
+      padding: 2px 9px;
+    }
+    .card-link {
+      font-family: 'Cinzel', serif;
+      font-size: 10px; letter-spacing: 2px;
+      color: var(--gold);
+      margin-top: auto;
+      padding-top: 12px;
+    }
+    .card-link::after { content: ' →'; }
+    .page-footer {
+      margin-top: 72px;
+      padding-top: 32px;
+      border-top: 1px solid var(--border);
+      text-align: center;
+    }
+    .page-footer p { font-size: 11px; color: var(--text-sub); line-height: 2.2; }
+    .page-footer a { color: var(--gold); text-decoration: none; }
+    .page-footer a:hover { color: var(--gold-dark); }
+    footer {
+      text-align: center;
+      padding: 28px 20px;
+      font-family: 'Cinzel', serif;
+      font-size: 9px; letter-spacing: 4px;
+      color: var(--text-sub);
+      border-top: 1px solid var(--border);
+      margin-top: 20px;
+    }
+    @media (max-width: 600px) {
+      .container { padding: 80px 16px 60px; }
+      .card-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="lang-bar">
+  <button class="lang-btn active" onclick="setLang('ja')" id="btn-ja">JA</button>
+  <button class="lang-btn" onclick="setLang('en')" id="btn-en">EN</button>
+</div>
+
+<div class="container">
+  <a href="samples.html" class="back-link" data-ja="サンプル一覧へ" data-en="Back to Archive">サンプル一覧へ</a>
+
+  <div class="page-eyebrow">GROUP · 5 MEMBERS · 1999–</div>
+  <h1 class="page-title">嵐</h1>
+  <div class="page-title-en">Arashi</div>
+  <div class="gold-rule"></div>
+  <p class="page-desc"
+     data-ja="5人それぞれの出生データから生成した Swiss Ephemeris 精度の星図データです。ホロスコープチャートおよびプラネタリーデータをご確認いただけます。"
+     data-en="Natal chart data generated from each member's birth data using Swiss Ephemeris precision. View the horoscope chart and full planetary data for all five members.">
+    5人それぞれの出生データから生成した Swiss Ephemeris 精度の星図データです。ホロスコープチャートおよびプラネタリーデータをご確認いただけます。
+  </p>
+
+  <div class="card-grid">
+
+    <!-- 大野智 -->
+    <a href="https://chart.nanami-astro.com/chart/kMoFCgX9QXBAubfeVtJJYChG" class="member-card" target="_blank" rel="noopener">
+      <div class="card-tag">MEMBER 01 · LEADER</div>
+      <div class="card-name">大野智</div>
+      <div class="card-name-en">Ohno Satoshi</div>
+      <div class="card-meta">1980.11.26</div>
+      <div class="card-signs">
+        <span class="sign-badge">♐ Sagittarius ☉</span>
+      </div>
+      <div class="card-link" data-ja="チャートを見る" data-en="View Chart">チャートを見る</div>
+    </a>
+
+    <!-- 櫻井翔 -->
+    <a href="https://chart.nanami-astro.com/chart/blQG-sX70p4oY3eUJ-WZRsvh" class="member-card" target="_blank" rel="noopener">
+      <div class="card-tag">MEMBER 02</div>
+      <div class="card-name">櫻井翔</div>
+      <div class="card-name-en">Sakurai Sho</div>
+      <div class="card-meta">1982.01.25</div>
+      <div class="card-signs">
+        <span class="sign-badge">♒ Aquarius ☉</span>
+      </div>
+      <div class="card-link" data-ja="チャートを見る" data-en="View Chart">チャートを見る</div>
+    </a>
+
+    <!-- 相葉雅紀 -->
+    <a href="https://chart.nanami-astro.com/chart/zUQQCaa3PYmWZrCYFy1sBBsp" class="member-card" target="_blank" rel="noopener">
+      <div class="card-tag">MEMBER 03</div>
+      <div class="card-name">相葉雅紀</div>
+      <div class="card-name-en">Aiba Masaki</div>
+      <div class="card-meta">1982.12.24</div>
+      <div class="card-signs">
+        <span class="sign-badge">♑ Capricorn ☉</span>
+      </div>
+      <div class="card-link" data-ja="チャートを見る" data-en="View Chart">チャートを見る</div>
+    </a>
+
+    <!-- 二宮和也 -->
+    <a href="https://chart.nanami-astro.com/chart/hJHW9NpfVcDmIUfEL7RJGrU-" class="member-card" target="_blank" rel="noopener">
+      <div class="card-tag">MEMBER 04</div>
+      <div class="card-name">二宮和也</div>
+      <div class="card-name-en">Ninomiya Kazunari</div>
+      <div class="card-meta">1983.06.17</div>
+      <div class="card-signs">
+        <span class="sign-badge">♊ Gemini ☉</span>
+      </div>
+      <div class="card-link" data-ja="チャートを見る" data-en="View Chart">チャートを見る</div>
+    </a>
+
+    <!-- 松本潤 -->
+    <a href="https://chart.nanami-astro.com/chart/hHpG84r1VFtsFmrPMVXJWVIL" class="member-card" target="_blank" rel="noopener">
+      <div class="card-tag">MEMBER 05</div>
+      <div class="card-name">松本潤</div>
+      <div class="card-name-en">Matsumoto Jun</div>
+      <div class="card-meta">1983.08.30</div>
+      <div class="card-signs">
+        <span class="sign-badge">♍ Virgo ☉</span>
+      </div>
+      <div class="card-link" data-ja="チャートを見る" data-en="View Chart">チャートを見る</div>
+    </a>
+
+  </div>
+
+  <div class="page-footer">
+    <p>
+      <span data-ja="鑑定データページは有効期限内のみ開けます。データの二次利用・転載はご遠慮ください。" data-en="Chart data pages are accessible during the validity period only. Please do not redistribute or repost the data.">鑑定データページは有効期限内のみ開けます。データの二次利用・転載はご遠慮ください。</span><br>
+      <a href="https://nanami-astro.stores.jp/" target="_blank" rel="noopener"
+         data-ja="あなた自身のデータを注文する →" data-en="Order your own chart data →">あなた自身のデータを注文する →</a>
+    </p>
+  </div>
+</div>
+
+<footer>© nanami-astro</footer>
+
+<script>
+function setLang(lang) {
+  document.documentElement.lang = lang === 'en' ? 'en' : 'ja';
+  document.querySelectorAll('[data-ja]').forEach(el => {
+    el.innerHTML = lang === 'en' ? el.dataset.en : el.dataset.ja;
+  });
+  document.getElementById('btn-ja').classList.toggle('active', lang === 'ja');
+  document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+  localStorage.setItem('na-lang', lang);
+}
+(function() {
+  const saved = localStorage.getItem('na-lang');
+  if (saved === 'en') setLang('en');
+})();
+</script>
+</body>
+</html>
