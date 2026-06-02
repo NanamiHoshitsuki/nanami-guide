@@ -1,0 +1,1131 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI比較実験：計算データの有無で何が変わるか | nanami-astro</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Noto+Serif+JP:wght@300;400;500&family=Cinzel:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:       #faf8f4;
+      --bg2:      #f3ede4;
+      --card:     #ffffff;
+      --card-hover: #fdf9f3;
+      --border:   rgba(160,120,70,0.18);
+      --border-hover: rgba(160,120,70,0.5);
+      --gold:     #a07840;
+      --gold-dark:#7a5c2a;
+      --gold-soft:#c9a96e;
+      --gold-pale:#e8d5b0;
+      --text:     #2a1f10;
+      --text-sub: #8a7860;
+      --shadow:   0 2px 16px rgba(100,70,30,0.10);
+      --shadow-hover: 0 6px 28px rgba(100,70,30,0.16);
+
+      /* AI別カラー */
+      --ai-gpt:      #10a37f;
+      --ai-gpt-bg:   rgba(16,163,127,0.06);
+      --ai-gemini:   #4285f4;
+      --ai-gemini-bg: rgba(66,133,244,0.06);
+      --ai-claude:   #c97a3a;
+      --ai-claude-bg: rgba(201,122,58,0.06);
+
+      /* 条件バッジカラー */
+      --cond-no:  #8a5050;
+      --cond-yes: #4a7c59;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Noto Serif JP', serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* ── ナビ ── */
+    .lang-bar {
+      position: fixed;
+      top: 0; right: 0; left: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: flex-end;
+      padding: 10px 24px;
+      background: rgba(250,248,244,0.92);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+    }
+    .lang-btn {
+      font-family: 'Cinzel', serif;
+      font-size: 10px; letter-spacing: 2px;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--text-sub);
+      border-radius: 999px;
+      padding: 4px 14px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .lang-btn.active { background: var(--gold); border-color: var(--gold); color: #fff; }
+    .lang-btn + .lang-btn { margin-left: 6px; }
+
+    .container { max-width: 900px; margin: 0 auto; padding: 96px 24px 80px; }
+
+    .site-logo {
+      font-family: 'Cinzel', serif;
+      font-size: 11px; letter-spacing: 5px;
+      color: var(--text-sub); text-decoration: none;
+      display: block; margin-bottom: 40px;
+    }
+    .site-logo:hover { color: var(--gold); }
+
+    /* ── ヘッダー ── */
+    .page-eyebrow {
+      font-family: 'Cinzel', serif;
+      font-size: 9px; letter-spacing: 5px;
+      color: var(--gold-soft); margin-bottom: 14px;
+    }
+    .page-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(30px, 6vw, 50px);
+      font-weight: 300; color: var(--text);
+      line-height: 1.15; margin-bottom: 8px; letter-spacing: 0.03em;
+    }
+    .page-title em { font-style: italic; color: var(--gold); }
+    .gold-rule { width: 48px; height: 1px; background: linear-gradient(90deg, var(--gold), transparent); margin: 20px 0 18px; }
+    .page-desc { font-size: 13px; color: var(--text-sub); line-height: 2; max-width: 560px; }
+
+    /* ── 実験概要ボックス ── */
+    .exp-box {
+      margin-top: 40px;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 28px 28px;
+      background: var(--bg2);
+    }
+    .exp-box-title {
+      font-family: 'Cinzel', serif;
+      font-size: 9px; letter-spacing: 4px;
+      color: var(--gold-soft); margin-bottom: 12px;
+    }
+    .exp-box p { font-size: 13px; color: var(--text-sub); line-height: 2; }
+    .exp-box p + p { margin-top: 10px; }
+
+    /* ── セクション ── */
+    .section { margin-top: 56px; }
+    .section-header { display: flex; align-items: center; gap: 14px; margin-bottom: 22px; }
+    .section-num { font-family: 'Cinzel', serif; font-size: 9px; letter-spacing: 4px; color: var(--gold-soft); }
+    .section-title { font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 400; color: var(--text); letter-spacing: 0.04em; }
+    .section-line { flex:1; height:1px; background: var(--border); }
+
+    /* ── 比較マトリクス ── */
+    .matrix-wrap {
+      overflow-x: auto;
+      margin-bottom: 20px;
+    }
+    .matrix-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+      min-width: 640px;
+    }
+    .matrix-table th {
+      font-family: 'Cinzel', serif;
+      font-size: 9px; letter-spacing: 2px;
+      color: var(--text-sub);
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border);
+      text-align: left;
+      font-weight: 400;
+      background: var(--bg2);
+    }
+    .matrix-table th.ai-col { text-align: center; }
+    .matrix-table td {
+      padding: 9px 12px;
+      border-bottom: 1px solid var(--border);
+      color: var(--text-sub);
+      line-height: 1.7;
+      vertical-align: middle;
+    }
+    .matrix-table td.center { text-align: center; }
+    .matrix-table tr:last-child td { border-bottom: none; }
+    .matrix-table tr:hover td { background: var(--card-hover); }
+
+    .matrix-table .section-row td {
+      font-family: 'Cinzel', serif;
+      font-size: 8px; letter-spacing: 3px;
+      color: var(--gold-soft);
+      background: var(--bg2);
+      padding: 8px 12px 4px;
+    }
+
+    .cond-tag {
+      display: inline-block;
+      font-family: 'Cinzel', serif;
+      font-size: 8px; letter-spacing: 1px;
+      padding: 2px 8px; border-radius: 999px;
+      border: 1px solid;
+    }
+    .cond-tag.no  { color: var(--cond-no);  border-color: var(--cond-no);  background: rgba(138,80,80,0.05); }
+    .cond-tag.yes { color: var(--cond-yes); border-color: var(--cond-yes); background: rgba(74,124,89,0.05); }
+
+    .result-tag {
+      display: inline-block;
+      font-size: 10px;
+      padding: 2px 9px; border-radius: 999px;
+      border: 1px solid;
+      white-space: nowrap;
+    }
+    .result-tag.ok   { color: #4a7c59; border-color: #4a7c59; background: rgba(74,124,89,0.07); }
+    .result-tag.warn { color: #8a6030; border-color: #8a6030; background: rgba(138,96,48,0.07); }
+    .result-tag.ng   { color: #8a3030; border-color: #8a3030; background: rgba(138,48,48,0.07); }
+
+    /* ── スタイルカード ── */
+    .style-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+    .style-card {
+      border-radius: 12px;
+      padding: 20px 18px;
+      border: 1px solid;
+    }
+    .style-card.gpt    { border-color: var(--ai-gpt);    background: var(--ai-gpt-bg); }
+    .style-card.gemini { border-color: var(--ai-gemini); background: var(--ai-gemini-bg); }
+    .style-card.claude { border-color: var(--ai-claude); background: var(--ai-claude-bg); }
+    .style-ai-name {
+      font-family: 'Cinzel', serif;
+      font-size: 11px; letter-spacing: 2px;
+      margin-bottom: 8px;
+    }
+    .style-card.gpt    .style-ai-name { color: var(--ai-gpt); }
+    .style-card.gemini .style-ai-name { color: var(--ai-gemini); }
+    .style-card.claude .style-ai-name { color: var(--ai-claude); }
+    .style-type {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 17px; font-weight: 400;
+      margin-bottom: 10px; line-height: 1.3;
+    }
+    .style-card.gpt    .style-type { color: var(--ai-gpt); }
+    .style-card.gemini .style-type { color: var(--ai-gemini); }
+    .style-card.claude .style-type { color: var(--ai-claude); }
+    .style-label { font-size: 11px; color: var(--text-sub); line-height: 1.8; }
+
+    /* ── AI別詳細 ── */
+    .ai-block {
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+      margin-bottom: 16px;
+    }
+    .ai-header {
+      padding: 16px 22px;
+      display: flex; align-items: center; gap: 12px;
+      cursor: pointer;
+      user-select: none;
+    }
+    .ai-block.gpt    .ai-header { background: var(--ai-gpt-bg);    border-bottom: 1px solid rgba(16,163,127,0.15); }
+    .ai-block.gemini .ai-header { background: var(--ai-gemini-bg); border-bottom: 1px solid rgba(66,133,244,0.15); }
+    .ai-block.claude .ai-header { background: var(--ai-claude-bg); border-bottom: 1px solid rgba(201,122,58,0.15); }
+    .ai-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .ai-block.gpt    .ai-dot { background: var(--ai-gpt); }
+    .ai-block.gemini .ai-dot { background: var(--ai-gemini); }
+    .ai-block.claude .ai-dot { background: var(--ai-claude); }
+    .ai-header-name {
+      font-family: 'Cinzel', serif;
+      font-size: 11px; letter-spacing: 2px;
+    }
+    .ai-block.gpt    .ai-header-name { color: var(--ai-gpt); }
+    .ai-block.gemini .ai-header-name { color: var(--ai-gemini); }
+    .ai-block.claude .ai-header-name { color: var(--ai-claude); }
+    .ai-header-sub { font-size: 12px; color: var(--text-sub); flex:1; }
+    .ai-toggle {
+      font-size: 11px; color: var(--text-sub);
+      font-family: 'Cinzel', serif; letter-spacing: 1px;
+    }
+    .ai-body { display: none; padding: 22px 24px; }
+    .ai-block.open .ai-body { display: block; }
+
+    /* 条件比較パネル */
+    .cond-compare {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .cond-panel {
+      border-radius: 10px;
+      padding: 16px 16px;
+      border: 1px solid var(--border);
+    }
+    .cond-panel.no-data  { background: rgba(138,80,80,0.04); border-color: rgba(138,80,80,0.2); }
+    .cond-panel.yes-data { background: rgba(74,124,89,0.04); border-color: rgba(74,124,89,0.2); }
+    .cond-panel-label {
+      font-family: 'Cinzel', serif;
+      font-size: 8px; letter-spacing: 3px;
+      margin-bottom: 10px;
+    }
+    .cond-panel.no-data  .cond-panel-label { color: var(--cond-no); }
+    .cond-panel.yes-data .cond-panel-label { color: var(--cond-yes); }
+    .cond-panel p { font-size: 12px; color: var(--text-sub); line-height: 1.9; }
+    .cond-panel strong { color: var(--text); font-weight: 500; }
+
+    /* 評価タグ */
+    .eval-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px; }
+    .eval-tag {
+      font-size: 10px; font-family: 'Cinzel', serif; letter-spacing: 1px;
+      padding: 3px 10px; border-radius: 999px;
+      border: 1px solid;
+    }
+    .eval-tag.good  { color: #4a7c59; border-color: #4a7c59; background: rgba(74,124,89,0.07); }
+    .eval-tag.warn  { color: #8a6030; border-color: #8a6030; background: rgba(138,96,48,0.07); }
+    .eval-tag.bad   { color: #8a3030; border-color: #8a3030; background: rgba(138,48,48,0.07); }
+
+    .eval-body { font-size: 13px; color: var(--text-sub); line-height: 2; }
+    .eval-body strong { color: var(--text); font-weight: 500; }
+    .eval-body p + p { margin-top: 10px; }
+
+    /* 引用ブロック */
+    .quote-block {
+      margin: 14px 0;
+      padding: 12px 16px;
+      border-left: 2px solid var(--gold-pale);
+      background: var(--bg2);
+      border-radius: 0 8px 8px 0;
+    }
+    .quote-block p { font-size: 12px; color: var(--text-sub); line-height: 1.9; font-style: italic; }
+    .quote-label { font-family: 'Cinzel', serif; font-size: 9px; letter-spacing: 3px; color: var(--gold-soft); margin-bottom: 6px; }
+
+    /* ── 結論カード ── */
+    .conclusion-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 16px;
+    }
+    .conclusion-card {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px 18px;
+      background: var(--card);
+    }
+    .conclusion-card-title {
+      font-family: 'Cinzel', serif;
+      font-size: 9px; letter-spacing: 3px;
+      color: var(--gold-soft); margin-bottom: 10px;
+    }
+    .conclusion-card p { font-size: 12px; color: var(--text-sub); line-height: 1.9; }
+    .conclusion-card strong { color: var(--text); font-weight: 500; }
+
+    /* ── 全文折りたたみ ── */
+    .fulltext-toggle {
+      margin-top: 20px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+    }
+    .fulltext-btn {
+      font-family: 'Cinzel', serif;
+      font-size: 9px; letter-spacing: 3px;
+      color: var(--gold);
+      background: none; border: 1px solid var(--gold-pale);
+      border-radius: 999px;
+      padding: 6px 16px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .fulltext-btn:hover { background: var(--gold-pale); }
+    .fulltext-body {
+      display: none;
+      margin-top: 16px;
+      padding: 20px 20px;
+      background: var(--bg2);
+      border-radius: 10px;
+      border: 1px solid var(--border);
+    }
+    .fulltext-body.open { display: block; }
+    .fulltext-body h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 16px; font-weight: 400;
+      color: var(--text);
+      margin: 20px 0 6px;
+    }
+    .fulltext-body h3:first-child { margin-top: 0; }
+    .fulltext-body h4 {
+      font-family: 'Noto Serif JP', serif;
+      font-size: 13px; font-weight: 500;
+      color: var(--text);
+      margin: 14px 0 4px;
+    }
+    .fulltext-body p {
+      font-size: 12px; color: var(--text-sub);
+      line-height: 2; margin-bottom: 8px;
+    }
+    .fulltext-body ul { list-style: none; padding-left: 1em; }
+    .fulltext-body ul li {
+      font-size: 12px; color: var(--text-sub);
+      line-height: 1.9; position: relative;
+    }
+    .fulltext-body ul li::before { content: "・"; position: absolute; left: -1em; }
+    .fulltext-body table {
+      width: 100%; border-collapse: collapse;
+      font-size: 12px; margin: 10px 0;
+    }
+    .fulltext-body th {
+      font-family: 'Cinzel', serif;
+      font-size: 9px; letter-spacing: 2px;
+      color: var(--gold-soft);
+      border-bottom: 1px solid var(--border);
+      padding: 6px 8px; text-align: left; font-weight: 400;
+    }
+    .fulltext-body td {
+      padding: 6px 8px;
+      border-bottom: 1px solid var(--border);
+      color: var(--text-sub); line-height: 1.7;
+      vertical-align: top;
+    }
+    .fulltext-label {
+      font-family: 'Cinzel', serif;
+      font-size: 8px; letter-spacing: 4px;
+      color: var(--gold-soft); margin-bottom: 12px;
+    }
+    .fulltext-sublabel {
+      font-family: 'Cinzel', serif;
+      font-size: 8px; letter-spacing: 3px;
+      color: var(--cond-no); margin-bottom: 8px; margin-top: 20px;
+      padding: 3px 10px; border: 1px solid rgba(138,80,80,0.25);
+      border-radius: 999px; display: inline-block;
+    }
+    .fulltext-sublabel.yes {
+      color: var(--cond-yes); border-color: rgba(74,124,89,0.25);
+    }
+
+    /* ── フッター ── */
+    .page-footer {
+      margin-top: 72px; padding-top: 32px;
+      border-top: 1px solid var(--border);
+      text-align: center;
+    }
+    .page-footer p { font-size: 11px; color: var(--text-sub); line-height: 2.2; }
+    .page-footer a { color: var(--gold); text-decoration: none; }
+    footer {
+      text-align: center; padding: 28px 20px;
+      font-family: 'Cinzel', serif;
+      font-size: 9px; letter-spacing: 4px;
+      color: var(--text-sub);
+      border-top: 1px solid var(--border); margin-top: 20px;
+    }
+
+    @media (max-width: 660px) {
+      .style-grid { grid-template-columns: 1fr; }
+      .conclusion-grid { grid-template-columns: 1fr; }
+      .cond-compare { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="lang-bar">
+  <button class="lang-btn active" onclick="setLang('ja')" id="btn-ja">JA</button>
+  <button class="lang-btn" onclick="setLang('en')" id="btn-en">EN</button>
+</div>
+
+<div class="container">
+  <a href="https://guide.nanami-astro.com/" class="site-logo">NANAMI-ASTRO</a>
+
+  <div class="page-eyebrow" data-ja="公開実験レポート" data-en="EXPERIMENT REPORT">公開実験レポート</div>
+  <h1 class="page-title">
+    <span data-ja="計算データの有無で" data-en="How Chart Data Changes">計算データの有無で</span><br>
+    <em data-ja="AI占いは何が変わるか" data-en="AI Astrology Output">AI占いは何が変わるか</em>
+  </h1>
+  <div class="gold-rule"></div>
+  <p class="page-desc"
+     data-ja="同一の出生情報をAIに渡す際、「計算済みホロスコープデータ（Swiss Ephemeris）を渡す場合」と「出生情報のみを渡す場合」で出力がどう変わるかを比較した実験記録です。比較軸は「AIが正確な計算を行えるか」ではなく「渡すデータの質が出力品質を決めるか」です。"
+     data-en="This experiment compares how AI astrology output changes depending on whether pre-calculated chart data (Swiss Ephemeris) is provided alongside birth details, versus birth details alone. The axis is not 'can AI calculate accurately' but 'does the quality of input data determine output quality.'">
+    同一の出生情報をAIに渡す際、「計算済みホロスコープデータ（Swiss Ephemeris）を渡す場合」と「出生情報のみを渡す場合」で出力がどう変わるかを比較した実験記録です。
+  </p>
+
+  <!-- 実験概要 -->
+  <div class="exp-box">
+    <div class="exp-box-title" data-ja="実験条件" data-en="EXPERIMENT CONDITIONS">実験条件</div>
+    <p data-ja="対象AI：ChatGPT・Gemini・Claude の3モデル。各モデルに「計算なし（出生情報のみ）」と「計算あり（Swiss Ephemerisデータ付き）」の2条件でそれぞれ鑑定を依頼した。" data-en="Models tested: ChatGPT, Gemini, and Claude. Each model was given two conditions: birth details only (no calculation) vs. birth details plus pre-calculated Swiss Ephemeris data.">
+      対象AI：ChatGPT・Gemini・Claude の3モデル。各モデルに「計算なし（出生情報のみ）」と「計算あり（Swiss Ephemerisデータ付き）」の2条件でそれぞれ鑑定を依頼した。
+    </p>
+    <p data-ja="プロンプト指示：バーナム効果低減のための厳格なルールを含む同一プロンプトを使用。天体位置・ハウス・アスペクトを使う場合は根拠の明示を義務付け。計算不可な項目は「判断できません」とするよう指示。" data-en="Prompt: Identical prompt with strict Barnum Effect reduction rules. Any use of planet positions, houses, or aspects must cite the source. Items that cannot be calculated must be stated as 'cannot determine.'">
+      プロンプト指示：バーナム効果低減のための厳格な同一プロンプトを使用。根拠明示を義務付け、計算不可な項目は「判断できません」とするよう指示。
+    </p>
+    <p data-ja="目的：「どのAIが優れているか」ではなく、「AIに何を渡すか」が出力品質を決めるかどうかを確認する実験。" data-en="Goal: Not 'which AI is best' but whether 'what you give the AI' determines output quality.">
+      目的：「どのAIが優れているか」ではなく、「AIに何を渡すか」が出力品質を決めるかどうかを確認する実験。
+    </p>
+  </div>
+
+  <!-- マトリクス比較表 -->
+  <section class="section">
+    <div class="section-header">
+      <span class="section-num">01</span>
+      <h2 class="section-title" data-ja="3モデル × 2条件 比較表" data-en="3-Model × 2-Condition Comparison">3モデル × 2条件 比較表</h2>
+      <div class="section-line"></div>
+    </div>
+
+    <div class="matrix-wrap">
+      <table class="matrix-table">
+        <thead>
+          <tr>
+            <th style="width:22%;" data-ja="項目" data-en="Item">項目</th>
+            <th class="ai-col" style="width:13%;">ChatGPT<br><span class="cond-tag no" data-ja="計算なし" data-en="no data">計算なし</span></th>
+            <th class="ai-col" style="width:13%;">Gemini<br><span class="cond-tag no" data-ja="計算なし" data-en="no data">計算なし</span></th>
+            <th class="ai-col" style="width:13%;">Claude<br><span class="cond-tag no" data-ja="計算なし" data-en="no data">計算なし</span></th>
+            <th class="ai-col" style="width:13%;">ChatGPT<br><span class="cond-tag yes" data-ja="計算あり" data-en="with data">計算あり</span></th>
+            <th class="ai-col" style="width:13%;">Gemini<br><span class="cond-tag yes" data-ja="計算あり" data-en="with data">計算あり</span></th>
+            <th class="ai-col" style="width:13%;">Claude<br><span class="cond-tag yes" data-ja="計算あり" data-en="with data">計算あり</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="section-row"><td colspan="7" data-ja="計算精度・姿勢" data-en="CALCULATION ACCURACY">計算精度・姿勢</td></tr>
+          <tr>
+            <td data-ja="ASC・ハウス" data-en="ASC / Houses">ASC・ハウス</td>
+            <td class="center"><span class="result-tag ng" data-ja="判断不可" data-en="N/A">判断不可</span></td>
+            <td class="center"><span class="result-tag ng" data-ja="判断不可" data-en="N/A">判断不可</span></td>
+            <td class="center"><span class="result-tag warn" data-ja="推算（誤差大）" data-en="estimated (error)">推算（誤差大）</span></td>
+            <td class="center"><span class="result-tag ok" data-ja="データ参照" data-en="data referenced">データ参照</span></td>
+            <td class="center"><span class="result-tag ok" data-ja="データ参照" data-en="data referenced">データ参照</span></td>
+            <td class="center"><span class="result-tag ok" data-ja="データ参照" data-en="data referenced">データ参照</span></td>
+          </tr>
+          <tr>
+            <td data-ja="月・水星・金星・火星" data-en="Moon / Mercury / Venus / Mars">月・水星・金星・火星</td>
+            <td class="center"><span class="result-tag ng" data-ja="判断不可" data-en="N/A">判断不可</span></td>
+            <td class="center"><span class="result-tag ng" data-ja="判断不可" data-en="N/A">判断不可</span></td>
+            <td class="center"><span class="result-tag warn" data-ja="推算（実際と不一致）" data-en="estimated (mismatch)">推算（実際と不一致）</span></td>
+            <td class="center"><span class="result-tag ok" data-ja="データ参照" data-en="data referenced">データ参照</span></td>
+            <td class="center"><span class="result-tag ok" data-ja="データ参照" data-en="data referenced">データ参照</span></td>
+            <td class="center"><span class="result-tag ok" data-ja="データ参照" data-en="data referenced">データ参照</span></td>
+          </tr>
+          <tr>
+            <td data-ja="アスペクト（度数・オーブ）" data-en="Aspects (degree / orb)">アスペクト（度数・オーブ）</td>
+            <td class="center"><span class="result-tag ng" data-ja="判断不可" data-en="N/A">判断不可</span></td>
+            <td class="center"><span class="result-tag ng" data-ja="判断不可" data-en="N/A">判断不可</span></td>
+            <td class="center"><span class="result-tag warn" data-ja="推算のみ" data-en="estimated only">推算のみ</span></td>
+            <td class="center"><span class="result-tag ok" data-ja="度数明示" data-en="with orbs">度数明示</span></td>
+            <td class="center"><span class="result-tag ok" data-ja="度数明示" data-en="with orbs">度数明示</span></td>
+            <td class="center"><span class="result-tag ok" data-ja="度数明示" data-en="with orbs">度数明示</span></td>
+          </tr>
+          <tr>
+            <td data-ja="不明項目への姿勢" data-en="Stance on unknowns">不明項目への姿勢</td>
+            <td class="center"><span class="result-tag ok" data-ja="正直に判断不可" data-en="honest N/A">正直に判断不可</span></td>
+            <td class="center"><span class="result-tag ok" data-ja="最も保守的" data-en="most conservative">最も保守的</span></td>
+            <td class="center"><span class="result-tag warn" data-ja="推算で埋める" data-en="fills with estimates">推算で埋める</span></td>
+            <td class="center">—</td>
+            <td class="center">—</td>
+            <td class="center">—</td>
+          </tr>
+
+          <tr class="section-row"><td colspan="7" data-ja="コンテンツ出力" data-en="CONTENT OUTPUT">コンテンツ出力</td></tr>
+          <tr>
+            <td data-ja="才能・強み" data-en="Talents / Strengths">才能・強み</td>
+            <td class="center"><span class="result-tag ng" data-ja="判断不可" data-en="N/A">判断不可</span></td>
+            <td class="center"><span class="result-tag ng" data-ja="判断不可" data-en="N/A">判断不可</span></td>
+            <td class="center"><span class="result-tag warn" data-ja="推算ベース" data-en="estimate-based">推算ベース</span></td>
+            <td class="center"><span class="result-tag ok" data-ja="配置根拠あり" data-en="placement-based">配置根拠あり</span></td>
+            <td class="center"><span class="result-tag ok" data-ja="配置根拠あり" data-en="placement-based">配置根拠あり</span></td>
+            <td class="center"><span class="result-tag ok" data-ja="配置根拠あり" data-en="placement-based">配置根拠あり</span></td>
+          </tr>
+          <tr>
+            <td data-ja="つまずきパターン" data-en="Stumbling patterns">つまずきパターン</td>
+            <td class="center"><span class="result-tag ng" data-ja="判断不可" data-en="N/A">判断不可</span></td>
+            <td class="center"><span class="result-tag ng" data-ja="判断不可" data-en="N/A">判断不可</span></td>
+            <td class="center"><span class="result-tag warn" data-ja="推算ベース" data-en="estimate-based">推算ベース</span></td>
+            <td class="center"><span class="result-tag ok" data-ja="アスペクト明示" data-en="aspect-based">アスペクト明示</span></td>
+            <td class="center"><span class="result-tag ok" data-ja="アスペクト明示" data-en="aspect-based">アスペクト明示</span></td>
+            <td class="center"><span class="result-tag ok" data-ja="アスペクト明示" data-en="aspect-based">アスペクト明示</span></td>
+          </tr>
+          <tr>
+            <td data-ja="仕事・活動の向き" data-en="Career direction">仕事・活動の向き</td>
+            <td class="center"><span class="result-tag ng" data-ja="判断不可" data-en="N/A">判断不可</span></td>
+            <td class="center"><span class="result-tag ng" data-ja="判断不可" data-en="N/A">判断不可</span></td>
+            <td class="center"><span class="result-tag warn" data-ja="MC推算ベース" data-en="MC estimated">MC推算ベース</span></td>
+            <td class="center"><span class="result-tag ok" data-ja="MC山羊座根拠" data-en="MC Capricorn">MC山羊座根拠</span></td>
+            <td class="center"><span class="result-tag ok" data-ja="MC山羊座根拠" data-en="MC Capricorn">MC山羊座根拠</span></td>
+            <td class="center"><span class="result-tag ok" data-ja="MC山羊座根拠" data-en="MC Capricorn">MC山羊座根拠</span></td>
+          </tr>
+
+          <tr class="section-row"><td colspan="7" data-ja="トランジット・運勢" data-en="TRANSITS / FORECAST">トランジット・運勢</td></tr>
+          <tr>
+            <td data-ja="現在の流れ" data-en="Current transits">現在の流れ</td>
+            <td class="center"><span class="result-tag ng" data-ja="判断不可" data-en="N/A">判断不可</span></td>
+            <td class="center"><span class="result-tag ng" data-ja="判断不可" data-en="N/A">判断不可</span></td>
+            <td class="center"><span class="result-tag ng" data-ja="判断不可" data-en="N/A">判断不可</span></td>
+            <td class="center"><span class="result-tag ok" data-ja="オーブ値明示" data-en="with orbs">オーブ値明示</span></td>
+            <td class="center"><span class="result-tag ok" data-ja="オーブ値明示" data-en="with orbs">オーブ値明示</span></td>
+            <td class="center"><span class="result-tag ok" data-ja="オーブ値明示" data-en="with orbs">オーブ値明示</span></td>
+          </tr>
+          <tr>
+            <td data-ja="今日の使い方（朝昼夜）" data-en="Daily usage (morning / noon / evening)">今日の使い方（朝昼夜）</td>
+            <td class="center"><span class="result-tag ng" data-ja="判断不可" data-en="N/A">判断不可</span></td>
+            <td class="center"><span class="result-tag ng" data-ja="判断不可" data-en="N/A">判断不可</span></td>
+            <td class="center"><span class="result-tag ng" data-ja="判断不可" data-en="N/A">判断不可</span></td>
+            <td class="center"><span class="result-tag ok" data-ja="月運行で記述" data-en="Moon-based">月運行で記述</span></td>
+            <td class="center"><span class="result-tag ok" data-ja="月運行で記述" data-en="Moon-based">月運行で記述</span></td>
+            <td class="center"><span class="result-tag ok" data-ja="月運行で記述" data-en="Moon-based">月運行で記述</span></td>
+          </tr>
+          <tr>
+            <td data-ja="31日間の流れ・注意日" data-en="31-day forecast / attention days">31日間の流れ・注意日</td>
+            <td class="center"><span class="result-tag ng" data-ja="判断不可" data-en="N/A">判断不可</span></td>
+            <td class="center"><span class="result-tag ng" data-ja="判断不可" data-en="N/A">判断不可</span></td>
+            <td class="center"><span class="result-tag ng" data-ja="判断不可" data-en="N/A">判断不可</span></td>
+            <td class="center"><span class="result-tag ok" data-ja="日付・アスペクト明示" data-en="date + aspect">日付・アスペクト明示</span></td>
+            <td class="center"><span class="result-tag ok" data-ja="日付・アスペクト明示" data-en="date + aspect">日付・アスペクト明示</span></td>
+            <td class="center"><span class="result-tag ok" data-ja="日付・アスペクト明示" data-en="date + aspect">日付・アスペクト明示</span></td>
+          </tr>
+          <tr>
+            <td data-ja="小惑星（キロン・ジュノー等）" data-en="Asteroids (Chiron, Juno, etc.)">小惑星</td>
+            <td class="center"><span class="result-tag ng" data-ja="判断不可" data-en="N/A">判断不可</span></td>
+            <td class="center"><span class="result-tag ng" data-ja="判断不可" data-en="N/A">判断不可</span></td>
+            <td class="center"><span class="result-tag ng" data-ja="判断不可" data-en="N/A">判断不可</span></td>
+            <td class="center"><span class="result-tag ok" data-ja="データあり" data-en="available">データあり</span></td>
+            <td class="center"><span class="result-tag ok" data-ja="データあり" data-en="available">データあり</span></td>
+            <td class="center"><span class="result-tag ok" data-ja="データあり" data-en="available">データあり</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="font-size:12px;color:var(--text-sub);line-height:2;"
+       data-ja="※ 計算なし条件：出生年月日・時刻・出生地のみを渡した。計算あり条件：Swiss Ephemeris で計算済みの天体位置・ハウス・アスペクト・トランジット・小惑星データを含む。"
+       data-en="※ No-data condition: only birth date, time, and location provided. With-data condition: pre-calculated planet positions, houses, aspects, transits, and asteroids via Swiss Ephemeris.">
+      ※ 計算なし条件：出生年月日・時刻・出生地のみを渡した。計算あり条件：Swiss Ephemeris で計算済みの天体位置・ハウス・アスペクト・トランジット・小惑星データを含む。
+    </p>
+    <p style="font-size:12px;color:var(--text-sub);line-height:2;margin-top:8px;"
+       data-ja="※「データ参照」はAI自身が天体計算を行ったことを意味しません。渡されたYAML内の計算済みデータを正しく参照・反映できたことを示しています。"
+       data-en="※ 'Data referenced' does not mean the AI performed astrological calculations itself. It means the AI correctly referenced and reflected the pre-calculated data provided in the YAML.">
+      ※「データ参照」はAI自身が天体計算を行ったことを意味しません。渡されたYAML内の計算済みデータを正しく参照・反映できたことを示しています。
+    </p>
+  </section>
+
+  <!-- モデル別スタイル -->
+  <section class="section">
+    <div class="section-header">
+      <span class="section-num">02</span>
+      <h2 class="section-title" data-ja="計算なし条件でのAIの姿勢" data-en="AI Stance Without Calculation Data">計算なし条件でのAIの姿勢</h2>
+      <div class="section-line"></div>
+    </div>
+
+    <div class="style-grid">
+      <div class="style-card gpt">
+        <div class="style-ai-name">CHATGPT</div>
+        <div class="style-type" data-ja="正直な保留型" data-en="Honest Suspension">正直な保留型</div>
+        <div class="style-label"
+             data-ja="太陽・世代天体のみ明示し、ハウス・アスペクト・月は判断不可とした。明確な判断不可の宣言と根拠の列挙が整理されており、「計算できないものは計算できない」を一貫させた。"
+             data-en="Only stated Sun and generational planets. Declared houses, aspects, and Moon as indeterminate. Clearly listed what it could and could not determine — consistent and honest.">
+          太陽・世代天体のみ明示。ハウス・月・アスペクトは判断不可と宣言し、根拠を列挙して一貫させた。
+        </div>
+      </div>
+      <div class="style-card gemini">
+        <div class="style-ai-name">GEMINI</div>
+        <div class="style-type" data-ja="最小出力型" data-en="Minimal Output">最小出力型</div>
+        <div class="style-label"
+             data-ja="4条件中最も保守的。太陽獅子座以外の解釈をほぼ停止し、ハウス・アスペクト・適職・人間関係・トランジットすべてを根拠不足で判断保留した。不必要な推測を一切行わなかった。"
+             data-en="Most conservative of all conditions. Suspended nearly all interpretation beyond Sun in Leo. Held all other items as indeterminate due to lack of data. Made no unnecessary speculation.">
+          4条件中最も保守的。太陽獅子座以外は全て判断保留。不要な推測ゼロ。
+        </div>
+      </div>
+      <div class="style-card claude">
+        <div class="style-ai-name">CLAUDE</div>
+        <div class="style-type" data-ja="推算継続型" data-en="Estimation-Continuing">推算継続型</div>
+        <div class="style-label"
+             data-ja="ASCや月を推算し、全13項目を記述した。文章として最も完成度が高く読み応えがあった。ただし後に計算済みデータと照合したところ、ASC・月・金星・火星など主要配置が実際のホロスコープと一致しなかった。"
+             data-en="Estimated ASC and Moon and described all 13 sections. Most complete and readable output. However, cross-checking with actual chart data revealed that ASC, Moon, Venus, Mars, and other key placements did not match the real horoscope.">
+          推算でASC・月を算出し13項目全て記述。最も読み応えがあったが、実際のホロスコープとの照合で主要配置に不一致が確認された。
+        </div>
+      </div>
+    </div>
+
+    <p style="font-size:13px;color:var(--text-sub);line-height:2.1;"
+       data-ja="計算なし条件では、ChatGPTとGeminiは「計算できないものは計算できない」を貫いた。一方Claudeは推算で全項目を埋めにいったが、土台となる配置が実際のホロスコープと異なっていた。出力の完成度と正確さは別問題であることが、今回の実験で明確になった。"
+       data-en="Under the no-calculation condition, ChatGPT and Gemini consistently refused to speculate on items they couldn't calculate. Claude filled all sections with estimates — but the foundational placements differed from the actual chart. Output completeness and accuracy are separate issues, as this experiment made clear.">
+      計算なし条件では、ChatGPTとGeminiは「計算できないものは計算できない」を貫いた。Claudeは推算で全項目を埋めたが、基礎となる配置が実際のホロスコープと異なっていた。出力の完成度と正確さは別問題——これが今回の実験の核心です。
+    </p>
+  </section>
+
+  <!-- AI別詳細評価 -->
+  <section class="section">
+    <div class="section-header">
+      <span class="section-num">03</span>
+      <h2 class="section-title" data-ja="AI別 詳細評価" data-en="Per-AI Evaluation">AI別 詳細評価</h2>
+      <div class="section-line"></div>
+    </div>
+
+    <!-- ChatGPT -->
+    <div class="ai-block gpt open" id="block-gpt">
+      <div class="ai-header" onclick="toggleBlock('block-gpt')">
+        <div class="ai-dot"></div>
+        <div class="ai-header-name">CHATGPT</div>
+        <div class="ai-header-sub" data-ja="計算なし：正直な保留 ／ 計算あり：構造的・根拠明示" data-en="No-data: honest suspension / With-data: structured with clear basis">計算なし：正直な保留 ／ 計算あり：構造的・根拠明示</div>
+        <div class="ai-toggle">▲</div>
+      </div>
+      <div class="ai-body">
+        <div class="cond-compare">
+          <div class="cond-panel no-data">
+            <div class="cond-panel-label" data-ja="計算なし" data-en="NO DATA">計算なし</div>
+            <p data-ja="太陽獅子座・天王星蠍座世代・海王星射手座世代・冥王星天秤座世代の4点のみ確定とし、それ以外は全て判断不可とした。ハウス・月・アスペクト・トランジット・31日間の流れ・動きやすい日まで、根拠不足のすべての項目を正直に保留した。最後の根拠サマリーも整理されており、<strong>「計算できないものは計算できない」を最後まで崩さなかった</strong>唯一の条件でもある（GeminiはさらにGeminiとして保守的）。"
+                 data-en="Confirmed only four placements: Sun Leo, Uranus Scorpio generation, Neptune Sagittarius generation, Pluto Libra generation. All other items declared indeterminate. Maintained honest suspension across houses, Moon, aspects, transits, and 31-day forecasts. The final basis summary was well-organized — <strong>consistent to the end</strong>.">
+              太陽獅子座・世代天体4点のみ確定とし、ハウス・月・アスペクト・トランジット・31日間すべてを判断不可とした。根拠サマリーも整理されており、一貫して正直な姿勢を維持した。
+            </p>
+          </div>
+          <div class="cond-panel yes-data">
+            <div class="cond-panel-label" data-ja="計算あり" data-en="WITH DATA">計算あり</div>
+            <p data-ja="計算済みデータを渡すと一転、全13項目を精度高く記述した。オーブ値付きのアスペクト（水星□海王星 orb 0.52など）を根拠として使い、5H→6H→7Hのハウス構造を「地図として読む」スタイルが顕著。今後数日・31日間の動きも日付と配置名を明示して記述。<strong>計算なし条件と比べると、同一モデルとは思えない出力品質の差</strong>が生じた。"
+                 data-en="With calculated data, all 13 sections were described with high accuracy. Used orb-bearing aspects (Mercury square Neptune orb 0.52 etc.) as basis. Distinctive style of reading 5H→6H→7H as a house 'map.' Daily and 31-day forecasts explicitly cited dates and placement names. <strong>A remarkable output quality gap</strong> compared to the no-data condition from the same model.">
+              全13項目を精度高く記述。オーブ値明示のアスペクトを根拠として活用し、ハウス構造を地図として読むスタイルが顕著。計算なし条件と同一モデルとは思えない出力品質の差が生じた。
+            </p>
+          </div>
+        </div>
+        <div class="eval-tags">
+          <span class="eval-tag good" data-ja="計算なし：一貫した判断不可" data-en="No-data: consistent N/A">計算なし：一貫した判断不可</span>
+          <span class="eval-tag good" data-ja="計算あり：ハウス構造の把握" data-en="With-data: house structure grasp">計算あり：ハウス構造の把握</span>
+          <span class="eval-tag good" data-ja="計算あり：オーブ値明示" data-en="With-data: orbs cited">計算あり：オーブ値明示</span>
+          <span class="eval-tag warn" data-ja="計算あり：補完的な表現が残る箇所あり" data-en="With-data: some supplementation remains">計算あり：補完的な表現が残る箇所あり</span>
+        </div>
+        <div class="eval-body">
+          <p data-ja="計算なし→計算ありの変化が最も劇的なモデル。計算なし条件では全判断不可に近かったが、計算済みデータを渡すと「整理された分析文書」として機能し始める。ChatGPTはデータを渡すほど「監査員」に近い読み方をする——これはnanami-productsのデータを使う上で重要な特性。"
+               data-en="The most dramatic improvement from no-data to with-data. Under no-data it produced near-total N/A; with calculated data it functions as an organized analytical document. ChatGPT reads more like an 'auditor' as more data is provided — an important characteristic for nanami-products users.">
+            計算なし→計算ありの変化が最も劇的。計算済みデータを渡すと「整理された分析文書」として機能し始める。ChatGPTはデータを渡すほど「監査員」に近い読み方をするモデル。
+          </p>
+          <div class="quote-block">
+            <div class="quote-label" data-ja="計算あり出力から" data-en="FROM WITH-DATA OUTPUT">計算あり出力から</div>
+            <p data-ja="「水星□海王星（オーブ0.52）——情報過多・理想化・相手を良く見すぎる・イメージ先行が起きやすい。アイデア段階では素晴らしくても、実務確認を飛ばすと誤差が出ます。」" data-en="'Mercury square Neptune (orb 0.52) — prone to information overload, idealization, seeing others too favorably, leading with imagination. Ideas may be excellent, but skipping practical verification produces errors.'">
+              「水星□海王星（オーブ0.52）——情報過多・理想化・相手を良く見すぎる・イメージ先行が起きやすい。アイデア段階では素晴らしくても、実務確認を飛ばすと誤差が出ます。」
+            </p>
+          </div>
+        </div>
+        <div class="fulltext-toggle">
+          <button class="fulltext-btn" onclick="toggleFull('full-gpt')">全文を見る ▾</button>
+          <div class="fulltext-body" id="full-gpt"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Gemini -->
+    <div class="ai-block gemini" id="block-gemini">
+      <div class="ai-header" onclick="toggleBlock('block-gemini')">
+        <div class="ai-dot"></div>
+        <div class="ai-header-name">GEMINI</div>
+        <div class="ai-header-sub" data-ja="計算なし：全条件中最も保守的 ／ 計算あり：詳細かつ丁寧" data-en="No-data: most conservative / With-data: detailed and careful">計算なし：全条件中最も保守的 ／ 計算あり：詳細かつ丁寧</div>
+        <div class="ai-toggle">▼</div>
+      </div>
+      <div class="ai-body">
+        <div class="cond-compare">
+          <div class="cond-panel no-data">
+            <div class="cond-panel-label" data-ja="計算なし" data-en="NO DATA">計算なし</div>
+            <p data-ja="6条件中最も保守的な出力。太陽獅子座以外の解釈をほぼ全停止し、才能・強みから人間関係・小惑星・トランジット・31日間・今後の活かし方まで全て「正確な計算データがないため判断できません」と回答した。推測を一切行わず、根拠のない解釈を出力しなかった点は最高評価に値する。<strong>「計算できないものは何も言わない」という原則の最も純粋な実装</strong>。"
+                 data-en="Most conservative output across all 6 conditions. Suspended nearly all interpretation beyond Sun Leo. Responded 'cannot determine without accurate calculation data' for all items from strengths to transits to 31-day forecasts. Zero speculation. <strong>The purest implementation of 'say nothing without basis.'</strong>">
+              6条件中最も保守的。太陽獅子座以外は全て「正確な計算データがないため判断できません」と回答。推測ゼロ。根拠なし解釈ゼロ。
+            </p>
+          </div>
+          <div class="cond-panel yes-data">
+            <div class="cond-panel-label" data-ja="計算あり" data-en="WITH DATA">計算あり</div>
+            <p data-ja="計算済みデータを渡すと、6H乙女座集中・7H天王星冥王星・2H木星牡牛座など固有配置を根拠とした詳細な記述が可能になった。小惑星（ジュノー・キロン等）まで活用し、今日の使い方（朝昼夜）・今後数日・31日間の流れも日付と配置を明示して出力。計算なし条件の「ほぼ沈黙」から、<strong>配置根拠がある範囲で最大限のコンテンツを出力する</strong>モデルであることが確認された。"
+                 data-en="With calculated data, produced detailed descriptions citing specific placements: Virgo 6H cluster, 7H Uranus/Pluto, Jupiter 2H Taurus. Used asteroids (Juno, Chiron etc.), and explicitly described daily usage and 31-day forecast with dates. Confirmed as a model that <strong>maximizes output within the bounds of available placement data</strong>.">
+              計算済みデータで、6H乙女座集中・7H天王星冥王星・小惑星まで活用した詳細出力に転換。計算なし条件の「ほぼ沈黙」からの落差が最大。
+            </p>
+          </div>
+        </div>
+        <div class="eval-tags">
+          <span class="eval-tag good" data-ja="計算なし：全条件最高の保守姿勢" data-en="No-data: most conservative">計算なし：全条件最高の保守姿勢</span>
+          <span class="eval-tag good" data-ja="計算あり：小惑星まで活用" data-en="With-data: asteroids used">計算あり：小惑星まで活用</span>
+          <span class="eval-tag warn" data-ja="計算あり：一部バーナム表現が残る" data-en="With-data: minor Barnum phrasing remains">計算あり：一部バーナム表現が残る</span>
+        </div>
+        <div class="eval-body">
+          <p data-ja="計算なし→計算ありの「落差」がChatGPTと並んで最も大きいモデル。計算なし条件では事実上ゼロ出力に近く、計算済みデータを渡すと一転して詳細・根拠付きの出力が生まれる。これは「Geminiが苦手なのではなく、渡すデータが全てを決める」ことを最も明確に示したモデル。"
+               data-en="One of the largest performance gaps between no-data and with-data conditions (alongside ChatGPT). Near-zero output without data; richly detailed output with calculation data. This most clearly demonstrates that 'it is not Gemini that is limited — the input data determines everything.'">
+            計算なし→計算ありの落差がChatGPTと並んで最大。「AIが苦手なのではなく、渡すデータが全てを決める」を最も明確に示したモデル。
+          </p>
+          <div class="quote-block">
+            <div class="quote-label" data-ja="計算なし出力から" data-en="FROM NO-DATA OUTPUT">計算なし出力から</div>
+            <p data-ja="「正確な計算データがないため判断できません。（※占星術的に才能や強みを特定するには、第2ハウス、MC、第10ハウスの支配星、および太陽や水星に対する正確なアスペクトの計算が必須となるため。）」" data-en="'Cannot determine without accurate calculation data. (Astrologically, identifying talents and strengths requires the 2nd house, MC, ruler of the 10th house, and precise aspects to the Sun and Mercury.)'">
+              「正確な計算データがないため判断できません。（第2ハウス・MC・10ハウス支配星・太陽や水星への正確なアスペクト計算が必須となるため。）」
+            </p>
+          </div>
+        </div>
+        <div class="fulltext-toggle">
+          <button class="fulltext-btn" onclick="toggleFull('full-gemini')">全文を見る ▾</button>
+          <div class="fulltext-body" id="full-gemini"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Claude -->
+    <div class="ai-block claude" id="block-claude">
+      <div class="ai-header" onclick="toggleBlock('block-claude')">
+        <div class="ai-dot"></div>
+        <div class="ai-header-name">CLAUDE</div>
+        <div class="ai-header-sub" data-ja="計算なし：推算継続型（土台に誤差） ／ 計算あり：小惑星まで活用した深掘り" data-en="No-data: estimation-continuing (with errors) / With-data: deep reading including asteroids">計算なし：推算継続型（土台に誤差） ／ 計算あり：小惑星まで活用した深掘り</div>
+        <div class="ai-toggle">▼</div>
+      </div>
+      <div class="ai-body">
+        <div class="cond-compare">
+          <div class="cond-panel no-data">
+            <div class="cond-panel-label" data-ja="計算なし" data-en="NO DATA">計算なし</div>
+            <p data-ja="他の2モデルとは異なり、ASCや月を推算しながら全13項目を記述した。文章としての完成度は6条件中最も高く、占星術レポートとして成立している。しかし後に計算済みデータと照合したところ、<strong>ASC（山羊座と推算→実際は牡羊座）・月（射手座〜山羊座と推算→実際は水瓶座）・金星・火星の位置が実際のホロスコープと一致しなかった</strong>。出力の完成度と土台の正確さは全くの別問題。"
+                 data-en="Unlike the other two models, estimated ASC and Moon to describe all 13 sections. Highest output completeness of the 6 conditions — reads as a finished astrology report. However, cross-checking against actual chart data revealed that <strong>ASC (estimated Capricorn, actual Aries), Moon (estimated Sagittarius–Capricorn, actual Aquarius), Venus, and Mars did not match the real horoscope.</strong> Output completeness and underlying accuracy are entirely different things.">
+              全13項目を推算ベースで記述し、6条件中最も完成度の高い出力。しかし計算済みデータとの照合で、ASC・月・金星・火星など主要配置が実際のホロスコープと一致しなかった。
+            </p>
+          </div>
+          <div class="cond-panel yes-data">
+            <div class="cond-panel-label" data-ja="計算あり" data-en="WITH DATA">計算あり</div>
+            <p data-ja="計算済みデータを渡すと、小惑星まで積極的に活用した深掘り読みになった。「水星とリリスのトライン」「金星とキロン・MCのトライン」「土星と北ノードのスクエア」など、他モデルが言及しなかった配置を複数拾い、それぞれを解釈の文脈に組み込んだ。<strong>占い師っぽい語り口で最も「読ませる文章」として機能する</strong>一方で、解釈が配置から一歩踏み込む傾向もある。"
+                 data-en="With calculation data, actively used asteroids for deep reading. Referenced placements others missed: Mercury trine Lilith, Venus trine Chiron and MC, Saturn square North Node. Integrated each into interpretive context. <strong>Functions best as a compelling reading in an 'astrologer voice'</strong>, while tending to step one step beyond the data in interpretation.">
+              計算済みデータで小惑星まで活用した深掘り読みに。他モデルが言及しない配置を複数拾い、解釈の文脈に組み込む。「読ませる文章」として最も機能するが、解釈が一歩踏み込みすぎる傾向も。
+            </p>
+          </div>
+        </div>
+        <div class="eval-tags">
+          <span class="eval-tag warn" data-ja="計算なし：文章完成度は高いが土台が異なる" data-en="No-data: complete text, wrong foundation">計算なし：文章完成度は高いが土台が異なる</span>
+          <span class="eval-tag good" data-ja="計算あり：小惑星活用が最も積極的" data-en="With-data: most active asteroid usage">計算あり：小惑星活用が最も積極的</span>
+          <span class="eval-tag warn" data-ja="計算あり：解釈が一歩踏み込みすぎる箇所" data-en="With-data: interpretation occasionally overreaches">計算あり：解釈が一歩踏み込みすぎる箇所</span>
+        </div>
+        <div class="eval-body">
+          <p data-ja="計算なし条件での「見た目の完成度と実際の正確さの乖離」が最も際立ったモデル。推算で全項目を埋められるが、その推算が実際のホロスコープと一致しない以上、どれほど文章が自然でも占星術的な根拠としては機能しない。計算済みデータを渡した場合は、解釈の深さ・小惑星活用・読み応えで6条件中最も高い出力品質を発揮する。"
+               data-en="This model most clearly highlighted the gap between 'perceived completeness' and 'actual accuracy' under the no-data condition. Estimation fills all sections, but since those estimates didn't match the real chart, even the most natural-sounding text lacks astrological validity. With calculation data, it achieves the highest output quality of all 6 conditions in depth, asteroid use, and reading experience.">
+            計算なし条件で「見た目の完成度と実際の正確さの乖離」が最も際立った。計算済みデータを渡すと、6条件中最も読み応えのある出力を生む。
+          </p>
+          <div class="quote-block">
+            <div class="quote-label" data-ja="計算なし出力から（推算ASC山羊座を前提に記述）" data-en="FROM NO-DATA OUTPUT (based on estimated Capricorn ASC)">計算なし出力から（推算ASC山羊座を前提に記述）</div>
+            <p data-ja="「太陽獅子座18° ／ ASC 山羊座付近という組み合わせが、このチャートの骨格です。太陽は人生全体で意識的に発揮しようとする原理を表します。……ASCが山羊座付近であれば、外界への接触様式は構造・責任・実用性を経由します。」（※ 実際のASCは牡羊座）" data-en="'The combination of Sun Leo 18° / ASC near Capricorn forms the skeleton of this chart… If ASC is near Capricorn, contact with the outer world passes through structure, responsibility, and practicality.' (※ Actual ASC is Aries)">
+              「太陽獅子座18° ／ ASC 山羊座付近という組み合わせが、このチャートの骨格です。……ASCが山羊座付近であれば、外界への接触様式は構造・責任・実用性を経由します。」（※ 実際のASCは牡羊座）
+            </p>
+          </div>
+        </div>
+        <div class="fulltext-toggle">
+          <button class="fulltext-btn" onclick="toggleFull('full-claude')">全文を見る ▾</button>
+          <div class="fulltext-body" id="full-claude"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 実験から見えたこと -->
+  <section class="section">
+    <div class="section-header">
+      <span class="section-num">04</span>
+      <h2 class="section-title" data-ja="実験から見えたこと" data-en="Key Findings">実験から見えたこと</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="conclusion-grid">
+      <div class="conclusion-card">
+        <div class="conclusion-card-title" data-ja="FINDING 01" data-en="FINDING 01">FINDING 01</div>
+        <p data-ja="<strong>渡すデータの質が出力品質を決める</strong><br>計算なし→計算ありへの変化は、モデルの能力差ではなく入力データの差によって生じた。どのモデルも計算済みデータがあれば精度高く動作する。「AIが占えるかどうか」ではなく「AIに何を渡すか」が問題の本質。"
+           data-en="<strong>Input data quality determines output quality</strong><br>The gap between no-data and with-data conditions was caused by input data quality, not model capability differences. All models perform accurately when given calculated data. The real question is not 'can AI do astrology' but 'what are you giving the AI.'">
+          <strong>渡すデータの質が出力品質を決める</strong><br>計算なし→計算ありの変化はモデルの能力差ではなく入力データの差。「AIに何を渡すか」が本質。
+        </p>
+      </div>
+      <div class="conclusion-card">
+        <div class="conclusion-card-title" data-ja="FINDING 02" data-en="FINDING 02">FINDING 02</div>
+        <p data-ja="<strong>文章の完成度と土台の正確さは別問題</strong><br>計算なし条件でのClaude出力は読み応えがあり、占星術レポートとして完成している。しかし土台となる天体配置が実際のホロスコープと異なっていた。一見正確そうな文章でも、入力データなしでは占星術的根拠として機能しない。"
+           data-en="<strong>Output completeness and foundation accuracy are separate issues</strong><br>Claude's no-data output was readable and complete as an astrology report — but the underlying placements didn't match the real chart. Even plausible-looking text cannot function as astrological evidence without accurate input data.">
+          <strong>文章の完成度と土台の正確さは別問題</strong><br>読み応えのある文章でも、入力データなしでは占星術的根拠として機能しない。
+        </p>
+      </div>
+      <div class="conclusion-card">
+        <div class="conclusion-card-title" data-ja="FINDING 03" data-en="FINDING 03">FINDING 03</div>
+        <p data-ja="<strong>慎重なAIほど計算なし条件で判断を保留する</strong><br>ChatGPTとGeminiは計算なし条件で正直に判断を保留した。これは「弱さ」ではなく「正確さへの誠実さ」。占星術において正確な計算データがない場合、「わからない」と言えることは正しい姿勢。"
+           data-en="<strong>More cautious AIs suspend judgment without calculation data</strong><br>ChatGPT and Gemini honestly suspended judgment under no-data conditions. This is not weakness — it is honesty about accuracy. In astrology, being able to say 'I cannot determine this' without calculation data is the correct stance.">
+          <strong>慎重なAIほど計算なし条件で判断を保留する</strong><br>「わからない」と言えることは弱さではなく、正確さへの誠実さ。
+        </p>
+      </div>
+      <div class="conclusion-card">
+        <div class="conclusion-card-title" data-ja="FINDING 04" data-en="FINDING 04">FINDING 04</div>
+        <p data-ja="<strong>計算済みデータがあれば、どのモデルも機能する</strong><br>計算あり条件では、3モデルとも根拠ある配置を使って全13項目を精度高く記述できた。AI間の差はモデルの得意分野（ChatGPT：構造把握、Gemini：保守的誠実さ、Claude：深掘り解釈）にとどまり、精度という意味では等しく機能した。"
+           data-en="<strong>All models function well when given calculated data</strong><br>Under with-data conditions, all three models accurately described all 13 sections using valid placements. Differences between models reflect specialization (ChatGPT: structure, Gemini: honest conservatism, Claude: deep interpretation), not accuracy gaps.">
+          <strong>計算済みデータがあれば、どのモデルも機能する</strong><br>計算あり条件での差はモデルの得意分野の違いにとどまり、精度という意味では3モデルとも等しく機能した。
+        </p>
+      </div>
+    </div>
+
+    <!-- 用途マップ -->
+    <div style="margin-top:32px;border:1px solid var(--border);border-radius:14px;padding:24px 28px;background:var(--bg2);">
+      <div style="font-family:'Cinzel',serif;font-size:9px;letter-spacing:4px;color:var(--gold-soft);margin-bottom:16px;"
+           data-ja="計算あり条件での使い分けガイド" data-en="USE CASE GUIDE (with calculation data)">計算あり条件での使い分けガイド</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+        <div style="display:flex;align-items:baseline;gap:10px;">
+          <span style="font-family:'Cinzel',serif;font-size:9px;letter-spacing:2px;color:var(--ai-claude);white-space:nowrap;" data-ja="深掘り・読み応え重視" data-en="Deep interpretation">深掘り・読み応え重視</span>
+          <span style="font-size:11px;color:var(--text-sub);">→ Claude</span>
+        </div>
+        <div style="display:flex;align-items:baseline;gap:10px;">
+          <span style="font-family:'Cinzel',serif;font-size:9px;letter-spacing:2px;color:var(--ai-gpt);white-space:nowrap;" data-ja="構造的・根拠明示重視" data-en="Structure + evidence">構造的・根拠明示重視</span>
+          <span style="font-size:11px;color:var(--text-sub);">→ ChatGPT</span>
+        </div>
+        <div style="display:flex;align-items:baseline;gap:10px;">
+          <span style="font-family:'Cinzel',serif;font-size:9px;letter-spacing:2px;color:var(--ai-gemini);white-space:nowrap;" data-ja="慎重・誠実さ重視" data-en="Cautious accuracy">慎重・誠実さ重視</span>
+          <span style="font-size:11px;color:var(--text-sub);">→ Gemini</span>
+        </div>
+        <div style="display:flex;align-items:baseline;gap:10px;">
+          <span style="font-family:'Cinzel',serif;font-size:9px;letter-spacing:2px;color:var(--gold);white-space:nowrap;" data-ja="計算なし条件で占いたい場合" data-en="If you must use no-data">計算なし条件で占いたい場合</span>
+          <span style="font-size:11px;color:var(--text-sub);" data-ja="→ 太陽星座の範囲に限定して使う" data-en="→ limit to Sun sign only">→ 太陽星座の範囲に限定して使う</span>
+        </div>
+      </div>
+      <p style="font-size:11px;color:var(--text-sub);margin-top:16px;line-height:1.9;border-top:1px solid var(--border);padding-top:14px;"
+         data-ja="※ 計算あり条件での差はモデルの得意分野の違いであり、優劣ではありません。計算なし条件での「判断不可」は弱さではなく正確さへの誠実さです。"
+         data-en="※ Differences in with-data conditions reflect model specializations, not quality rankings. 'Cannot determine' in no-data conditions reflects honesty about accuracy, not weakness.">
+        ※ 計算あり条件での差はモデルの得意分野の違いであり、優劣ではありません。計算なし条件での「判断不可」は弱さではなく正確さへの誠実さです。
+      </p>
+      <p style="font-size:11px;color:var(--text-sub);margin-top:10px;line-height:1.9;padding-top:10px;border-top:1px solid var(--border);"
+         data-ja="本実験は「どのAIが優秀か」を判定するものではありません。同じAIでも、渡すデータによって出力品質が大きく変化することを確認するための実験です。"
+         data-en="This experiment is not intended to determine which AI is superior. Its purpose is to confirm that the same AI produces significantly different output quality depending on what data is provided.">
+        本実験は「どのAIが優秀か」を判定するものではありません。同じAIでも、渡すデータによって出力品質が大きく変化することを確認するための実験です。
+      </p>
+    </div>
+  </section>
+
+  <div class="page-footer">
+    <p style="margin-bottom: 6px;">
+      <span style="font-size:11px;color:var(--text-sub);"
+            data-ja="興味を持った方はこちら" data-en="Want to know more?">興味を持った方はこちら</span>
+    </p>
+    <a href="https://lit.link/rhayamaZ4X?utm_source=threads&utm_medium=social&utm_content=link_in_bio"
+       target="_blank" rel="noopener"
+       style="display:inline-flex;align-items:center;gap:8px;
+              font-family:'Cinzel',serif;font-size:11px;letter-spacing:2px;
+              color:#fff;background:var(--gold);
+              border-radius:999px;padding:10px 24px;text-decoration:none;
+              transition:background 0.2s;"
+       onmouseover="this.style.background='var(--gold-dark)'"
+       onmouseout="this.style.background='var(--gold)'">
+      ▶︎ nanami-astro Links
+    </a>
+
+    <div style="margin-top:36px;text-align:left;max-width:480px;margin-left:auto;margin-right:auto;">
+      <p style="font-family:'Cinzel',serif;font-size:9px;letter-spacing:4px;color:var(--gold-soft);margin-bottom:4px;"
+         data-ja="関連実験レポート" data-en="RELATED EXPERIMENTS">関連実験レポート</p>
+      <ul style="list-style:none;padding:0;">
+        <li style="border-top:1px solid var(--border);padding:12px 0;">
+          <a href="https://guide.nanami-astro.com/barnumtest.html" target="_blank" rel="noopener"
+             style="font-size:13px;color:var(--text);text-decoration:none;line-height:1.8;display:block;"
+             onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='var(--text)'">
+            <span data-ja="バーナム効果低減テスト（4モデル版）→" data-en="Barnum Effect Reduction Test (4-model) →">バーナム効果低減テスト（4モデル版）→</span>
+          </a>
+        </li>
+        <li style="border-top:1px solid var(--border);padding:12px 0;border-bottom:1px solid var(--border);">
+          <a href="https://guide.nanami-astro.com/samples.html" target="_blank" rel="noopener"
+             style="font-size:13px;color:var(--text);text-decoration:none;line-height:1.8;display:block;"
+             onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='var(--text)'">
+            <span data-ja="ホロスコープサンプル集（一覧）→" data-en="Horoscope Sample Collection →">ホロスコープサンプル集（一覧）→</span>
+          </a>
+        </li>
+      </ul>
+      <p style="margin-top:20px;">
+        <a href="https://nanami-astro.stores.jp/" target="_blank" rel="noopener"
+           style="font-size:11px;color:var(--text-sub);text-decoration:none;"
+           data-ja="計算データを注文する →" data-en="Order chart data →">計算データを注文する →</a>
+      </p>
+    </div>
+  </div>
+</div>
+
+<footer>© nanami-astro</footer>
+
+<script>
+const FULL_CONTENT = {
+  'full-gpt': {
+    ja: `<div class="fulltext-label">CHATGPT · 計算なし条件 FULL OUTPUT</div>
+<h3>全体像</h3>
+<p>出生日から確実に判断できるのは太陽：獅子座、天王星：蠍座世代、海王星：射手座世代、冥王星：天秤座世代。ハウス配置・月サイン・アスペクトは計算データがないため断定しない。</p>
+<h3>才能・強み</h3>
+<p>正確な月・水星・金星・火星・ハウス配置が不明なため、才能を具体的に特定することはできません。太陽獅子座が示す自己表現・創造行為・主体的選択というテーマとの関連は考えられますが、どの分野に向くかは判断できません。</p>
+<h3>つまずきやすいパターン</h3>
+<p>正確なアスペクトが不明なため判断できません。</p>
+<h3>仕事・活動の向き</h3>
+<p>MCおよび10ハウスが不明のため判断できません。</p>
+<h3>人間関係の傾向</h3>
+<p>7ハウスおよび金星・月の状態が不明なため判断できません。</p>
+<h3>小惑星</h3>
+<p>判断不可。正確な位置計算ができないため。</p>
+<h3>現在の流れ / 今日の使い方 / 今後数日 / 今後31日間 / 動きやすい日 / 注意したい日</h3>
+<p>正確なトランジットデータがないため、すべて判断不可。</p>
+<hr style="border:none;border-top:1px solid var(--border);margin:16px 0;">
+<div class="fulltext-sublabel yes">CHATGPT · 計算あり条件 FULL OUTPUT</div>
+<h3>全体像</h3>
+<p>5ハウス獅子座の太陽と土星、11ハウス水瓶座の月、乙女座6ハウスに水星・金星・火星が集中。「感覚で動く人」というより、改善・整理・実務・分析を通じて価値を作る人。派手な自己主張より「きちんと整えることで信頼を得る」方向に才能が向いています。</p>
+<h3>才能・強み</h3>
+<h4>問題発見と改善能力</h4>
+<p>乙女座水星・火星の力が強く、どこに無駄があるか、何を改善すべきか、どう整理すれば機能するかを見つける力があります。実務改善・業務設計・品質管理・分析との相性が良好。</p>
+<h4>継続力</h4>
+<p>元素配分で地4・火3が強め。固定宮が5。一度決めたことを継続する力があります。短距離走よりも長距離型。</p>
+<h4>独自視点</h4>
+<p>7ハウスの天王星と冥王星。対人関係や社会との関わりを通じて人とは少し違う視点を持ちます。常識を疑う力があり、新しいやり方を提案できる人です。</p>
+<h3>つまずきやすいパターン</h3>
+<h4>完璧主義</h4>
+<p>乙女座集中配置は行き過ぎると「まだ足りない」「もっと良くできる」となります。</p>
+<h4>考え過ぎ</h4>
+<p>水星□海王星（オーブ0.52）があります。情報過多・考え過ぎ・相手の真意を読み過ぎるにもつながります。事実確認を挟むほどズレが少なくなります。</p>
+<h3>仕事・活動の向き</h3>
+<p>教育・コーチング・事務管理・品質管理・編集・ライティング・リサーチ・データ整理・サービス改善・健康支援・コミュニティ運営。MC山羊座なので、長期的な信頼形成が仕事運の鍵になります。</p>
+<h3>人間関係の傾向</h3>
+<p>7ハウスに天王星・冥王星・ドラゴンヘッドがあります。強い影響を受ける相手・人生を変える相手・学びの大きい相手が現れやすい傾向があります。浅い付き合いより本音で向き合える関係の方が合います。</p>
+<h3>現在の流れ（6/2）</h3>
+<p>トランジット火星△出生水星（オーブ0.13）：考えたことを実行へ移しやすい時期。連絡・提案・発信・学習開始などに向いています。</p>
+<p>トランジット太陽□出生水星、太陽☍出生海王星：アイデアは出るが情報の取り違え・思い込みも起きやすい時。行動前の確認が重要。</p>
+<p>土星△出生海王星：夢や理想を現実の形に落とし込みやすい流れ。計画化・習慣化が進みやすい時期。</p>
+<h3>今後数日</h3>
+<p>6/2：火星△出生水星。思いついたことを形にしやすい日。<br>6/3：水星✶出生金星（オーブ0.08）。会話・交渉・文章作成に向きます。<br>6/4：天王星□出生金星（オーブ0.38）。予定変更・関係性の変化が起きやすい。</p>`,
+    en: `<div class="fulltext-label">CHATGPT · NO-DATA CONDITION FULL OUTPUT</div>
+<h3>Overall Picture</h3>
+<p>From the birth date, only Sun Leo, Uranus Scorpio generation, Neptune Sagittarius generation, and Pluto Libra generation can be confirmed. House placements, Moon sign, and aspects cannot be determined without calculation data.</p>
+<h3>Talents / Stumbling Patterns / Career / Relationships</h3>
+<p>All: Cannot determine without accurate Moon, Mercury, Venus, Mars, and house placement data.</p>
+<h3>Asteroids / Current Transits / Daily Usage / 31-Day Forecast / Favorable Days</h3>
+<p>All: Cannot determine without accurate transit calculation data.</p>
+<hr style="border:none;border-top:1px solid var(--border);margin:16px 0;">
+<div class="fulltext-sublabel yes">CHATGPT · WITH-DATA CONDITION FULL OUTPUT</div>
+<h3>Overall Picture</h3>
+<p>Sun and Saturn in 5th house Leo, Moon in 11th house Aquarius, Mercury / Venus / Mars concentrated in Virgo 6th house. Rather than someone who moves by intuition, this is someone who creates value through improvement, organization, practical work, and analysis. Talent tends toward "earning trust by getting things right" rather than flashy self-assertion.</p>
+<h3>Mercury Square Neptune (orb 0.52)</h3>
+<p>One of the most important aspects in this chart. Prone to information overload, idealization, seeing others too favorably, leading with imagination. Ideas may be excellent, but skipping practical verification produces errors.</p>
+<h3>Current Transits (6/2)</h3>
+<p>Transit Mars trine natal Mercury (orb 0.13): Easy to move thoughts into action. Well-suited for outreach, proposals, publishing, starting study.</p>
+<p>Saturn trine natal Neptune: Favorable period for converting dreams and ideals into concrete form. Planning and habit-building tend to progress.</p>`
+  },
+  'full-gemini': {
+    ja: `<div class="fulltext-label">GEMINI · 計算なし条件 FULL OUTPUT</div>
+<h3>全体像</h3>
+<p>出生情報の年月日（1976年8月10日）より、太陽が獅子座に位置していることは確認できます。しかし出生時刻および出生地から導出されるべきASC・MC・ハウス分割・月の正確な度数・各天体間の正確なアスペクトについて、正確な計算データがないため判断できません。</p>
+<h3>才能・強み / つまずきやすいパターン / 仕事・活動の向き / 人間関係の傾向</h3>
+<p>すべて：正確な計算データがないため判断できません。（各項目ごとに必要な計算根拠を明示：第2ハウス・MC・第10ハウス支配星・ハードアスペクトの計算が必須となるため。）</p>
+<h3>小惑星 / 現在の流れ / 今日の使い方 / 今後数日 / 今後31日間 / 動きやすい日 / 注意したい日 / 今後の活かし方</h3>
+<p>すべて：正確な計算データがないため判断できません。</p>
+<hr style="border:none;border-top:1px solid var(--border);margin:16px 0;">
+<div class="fulltext-sublabel yes">GEMINI · 計算あり条件 FULL OUTPUT</div>
+<h3>全体像</h3>
+<p>牡羊座ASC・獅子座太陽・水瓶座月という組み合わせが骨格になっています。6ハウスに水星・金星・火星が集中しているため、何かを「きちんと仕上げる」ことへの欲求が強く、日々の積み重ねの中にやりがいを見つけるタイプです。全体的に固定サイン（5個）が多く、一度決めたことへの粘り強さと方向転換の難しさが同居しています。</p>
+<h3>才能・強み</h3>
+<p>乙女座に水星・金星・火星が揃うため、情報を整理・分析し精度高くアウトプットする力があります。獅子座の太陽・土星が5ハウスにあり、表現することへの誇りと責任感が重なっています。</p>
+<h3>つまずきやすいパターン</h3>
+<p>水星と海王星のスクエア（乙女座×射手座）：細かく考えすぎるほど大きなビジョンとの折り合いがつかなくなります。6ハウス集中は「働きすぎ・完璧主義からの消耗」に向かいやすいため、「十分やった」と区切りをつける練習が活きてきます。</p>
+<h3>今後31日間の流れ（抜粋）</h3>
+<p>5月中旬（5月12〜14日）：太陽が出生火星にトライン、金星が出生月にトライン、木星が出生火星にセクスタイルと複数の動きやすい配置が重なります。自己表現や対人コミュニケーションを前に進めるのに使いやすい時期です。</p>
+<h3>現在の流れ（6/2）</h3>
+<p>火星と出生水星のトライン（オーブ0.13）：言葉・思考・コミュニケーションに勢いが乗りやすいです。太陽と出生海王星のオポジション（オーブ0.38）：輪郭がぼやけやすく思い込みが生じやすい面があります。重要な判断をする前に確認を一枚はさむと安心です。</p>`,
+    en: `<div class="fulltext-label">GEMINI · NO-DATA CONDITION FULL OUTPUT</div>
+<h3>All 13 Sections</h3>
+<p>Cannot determine without accurate calculation data. (Each section notes the specific missing calculation: 2nd house, MC, 10th house ruler, hard aspects, transit data, etc.)</p>
+<p>Only confirmed: Sun in Leo based on birth date 1976-08-10.</p>
+<hr style="border:none;border-top:1px solid var(--border);margin:16px 0;">
+<div class="fulltext-sublabel yes">GEMINI · WITH-DATA CONDITION FULL OUTPUT</div>
+<h3>Overall Picture</h3>
+<p>The framework is Aries ASC, Leo Sun, Aquarius Moon. With Mercury, Venus, and Mars concentrated in the 6th house, there is a strong desire to "properly finish" things, finding meaning in daily accumulation. Five fixed signs means strong persistence alongside difficulty changing direction.</p>
+<h3>Mercury Square Neptune</h3>
+<p>The more fine-grained the thinking becomes, the harder it is to reconcile with a larger vision. The 6th house concentration tends toward "overwork and perfectionism-driven exhaustion" — learning to draw the line at "enough done" becomes valuable practice.</p>
+<h3>Current Transits (6/2)</h3>
+<p>Mars trine natal Mercury (orb 0.13): Words, thought, and communication carry momentum. Sun opposite natal Neptune (orb 0.38): Outlines blur; misunderstandings and preconceptions arise more easily. Insert a verification step before important decisions.</p>`
+  },
+  'full-claude': {
+    ja: `<div class="fulltext-label">CLAUDE · 計算なし条件 FULL OUTPUT</div>
+<h3>推算根拠</h3>
+<p>東京（北緯約36°）、20:41 JST（= 11:41 UTC）、8月10日の条件から恒星時を推算すると、ASCは山羊座10°〜20°付近と推算される。ただし正確な恒星時計算ではないため±5°程度の誤差を含む。（※ 実際のASCは牡羊座）</p>
+<h3>全体像（推算ベース）</h3>
+<p>太陽 獅子座18° ／ ASC 山羊座付近という組み合わせが、このチャートの骨格です。太陽の「輝こうとする衝動」と、ASCの「抑制・形式を通じて動く外的態度」は、内側と外側でベクトルが異なります。（※ 実際のASCは牡羊座であるため、この記述は実際のホロスコープとは異なる）</p>
+<h3>才能・強み（推算ベース）</h3>
+<p>ASC山羊座で推算すると、太陽は第7〜8ハウス付近に位置します。金星・火星・冥王星が天秤座付近にある場合、天秤座ステリウムに近い状態。対人関係・調整・審美的判断の領域に強い集中があります。（※ 実際の金星・火星は乙女座6ハウス）</p>
+<h3>小惑星 / 現在の流れ / 今日の使い方 / 今後数日 / 今後31日間 / 動きやすい日 / 注意したい日</h3>
+<p>すべて：正確なトランジットデータがないため判断不可。</p>
+<hr style="border:none;border-top:1px solid var(--border);margin:16px 0;">
+<div class="fulltext-sublabel yes">CLAUDE · 計算あり条件 FULL OUTPUT</div>
+<h3>全体像</h3>
+<p>牡羊座ASC・獅子座太陽（5ハウス）・水瓶座月（11ハウス）という構造が、この星図の軸です。「自分が主役として表現する」衝動と、「個人を超えた集合・社会の中に居場所を見つける」欲求が、同一人物の中で綱引きをしています。乙女座に水星・金星・火星が集中（6ハウス）しており、地の要素が最多。</p>
+<h3>才能・強み</h3>
+<h4>水星とリリスのトライン</h4>
+<p>言ってはいけないとされていることをことばにする力。タブーに触れる表現や、場を揺らすような問いかけが、実は才能の核心にある。</p>
+<h4>金星とキロン・MCのトライン</h4>
+<p>自分自身の傷やコンプレックスを昇華した独自の美学・価値観を、仕事や社会的な成果へ直接的に繋げることができる。</p>
+<h3>つまずきやすいパターン</h3>
+<h4>土星と北ノードのスクエア</h4>
+<p>社会的な「正しい生き方」への圧力を内側から感じやすく、自由な表現や関係性への踏み出しにブレーキをかけます。自分で自分を審査しているような感覚が慢性的にある場合、ここが原因です。</p>
+<h3>現在の流れ（6/2・計算あり）</h3>
+<table>
+  <tr><th>トランジット</th><th>出生天体</th><th>アスペクト</th><th>読み方</th></tr>
+  <tr><td>火星</td><td>出生水星</td><td>トライン（orb 0.13）</td><td>言葉・発信・連絡に勢いが乗りやすい</td></tr>
+  <tr><td>太陽</td><td>出生海王星</td><td>オポジション（orb 0.38）</td><td>輪郭がぼやけやすい。確認を一枚はさむ</td></tr>
+  <tr><td>土星</td><td>出生海王星</td><td>トライン（継続）</td><td>理想を具体的な形に落とし込みやすい</td></tr>
+  <tr><td>天王星</td><td>出生金星</td><td>スクエア（orb 0.49）</td><td>価値観・関係性に小さな揺さぶりが入りやすい</td></tr>
+</table>`,
+    en: `<div class="fulltext-label">CLAUDE · NO-DATA CONDITION FULL OUTPUT</div>
+<h3>Estimated Basis</h3>
+<p>Estimating sidereal time for Tokyo (latitude ~36°N), 20:41 JST (= 11:41 UTC), August 10: ASC estimated near Capricorn 10°–20°. Includes approximately ±5° error. (※ Actual ASC is Aries)</p>
+<h3>Overall Picture (estimate-based)</h3>
+<p>Sun Leo 18° / ASC near Capricorn forms the skeleton of this chart. The Sun's impulse to 'radiate' and the ASC's 'restrained, formal outer contact mode' point in different directions internally and externally. (※ Since actual ASC is Aries, this description does not match the real horoscope)</p>
+<h3>Strengths / Career / Relationships (estimate-based)</h3>
+<p>All described based on estimated Capricorn ASC and estimated Libra stellium (Venus, Mars, Pluto). (※ Actual Venus and Mars are in Virgo 6th house — significant mismatch)</p>
+<h3>Asteroids / Transits / Daily Usage / 31 Days / Favorable Days</h3>
+<p>All: Cannot determine without accurate transit data.</p>
+<hr style="border:none;border-top:1px solid var(--border);margin:16px 0;">
+<div class="fulltext-sublabel yes">CLAUDE · WITH-DATA CONDITION FULL OUTPUT</div>
+<h3>Overall Picture</h3>
+<p>The structural axis is Aries ASC, Leo Sun (5th house), Aquarius Moon (11th house). The impulse to "express oneself as protagonist" and the desire to "find a place in the collective beyond the individual" are in constant tension within the same person. Mercury, Venus, and Mars concentrate in Virgo (6th house), making earth the dominant element.</p>
+<h3>Mercury Trine Lilith</h3>
+<p>The ability to put into words what is considered unspeakable. Expressions that touch taboo, questions that unsettle a room — these are at the core of the talent.</p>
+<h3>Current Transits (6/2)</h3>
+<table>
+  <tr><th>Transit</th><th>Natal</th><th>Aspect</th><th>Reading</th></tr>
+  <tr><td>Mars</td><td>Natal Mercury</td><td>Trine (orb 0.13)</td><td>Words and communication carry momentum</td></tr>
+  <tr><td>Sun</td><td>Natal Neptune</td><td>Opposition (orb 0.38)</td><td>Outlines blur; add a verification step</td></tr>
+  <tr><td>Saturn</td><td>Natal Neptune</td><td>Trine (ongoing)</td><td>Ideal-to-concrete conversion flows well</td></tr>
+</table>`
+  }
+};
+
+let currentLang = 'ja';
+const fulltextOpenState = {};
+
+function toggleBlock(id) {
+  const el = document.getElementById(id);
+  el.classList.toggle('open');
+  const toggle = el.querySelector('.ai-toggle');
+  toggle.textContent = el.classList.contains('open') ? '▲' : '▼';
+}
+
+function toggleFull(id) {
+  const body = document.getElementById(id);
+  const isOpen = body.classList.toggle('open');
+  fulltextOpenState[id] = isOpen;
+  const btn = body.previousElementSibling;
+  btn.textContent = isOpen
+    ? (currentLang === 'en' ? 'Close full text ▴' : '全文を閉じる ▴')
+    : (currentLang === 'en' ? 'Read full output ▾' : '全文を見る ▾');
+}
+
+function renderFulltexts(lang) {
+  Object.keys(FULL_CONTENT).forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.innerHTML = FULL_CONTENT[id][lang] || FULL_CONTENT[id]['ja'];
+  });
+  document.querySelectorAll('.fulltext-btn').forEach(btn => {
+    const bodyId = btn.nextElementSibling && btn.nextElementSibling.id;
+    if (!bodyId) return;
+    const isOpen = fulltextOpenState[bodyId];
+    btn.textContent = isOpen
+      ? (lang === 'en' ? 'Close full text ▴' : '全文を閉じる ▴')
+      : (lang === 'en' ? 'Read full output ▾' : '全文を見る ▾');
+  });
+}
+
+function setLang(lang) {
+  currentLang = lang;
+  document.documentElement.lang = lang === 'en' ? 'en' : 'ja';
+  document.querySelectorAll('[data-ja]').forEach(el => {
+    el.innerHTML = lang === 'en' ? el.dataset.en : el.dataset.ja;
+  });
+  renderFulltexts(lang);
+  document.getElementById('btn-ja').classList.toggle('active', lang === 'ja');
+  document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+  localStorage.setItem('na-lang', lang);
+}
+
+(function() {
+  renderFulltexts('ja');
+  const saved = localStorage.getItem('na-lang');
+  if (saved === 'en') setLang('en');
+})();
+</script>
+</body>
+</html>
