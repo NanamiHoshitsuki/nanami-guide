@@ -3172,7 +3172,9 @@
         const constellation = makeConstellationSprite(asterism);
         constellation.name = signs[i];
         constellation.position.copy(longitudeToVector(i * 30 + 15, SPHERE_RADIUS * 0.72));
-        constellation.scale.set(22, 22, 1);
+        // スマホでは少し大きくして、細い星座線が点状ノイズに潰れないようにする。
+        const cs = isMobileLayout() ? 30 : 22;
+        constellation.scale.set(cs, cs, 1);
         layers.constellations.add(constellation);
       });
     }
@@ -4236,6 +4238,8 @@
 
     // スマホ/PC を跨いだときに記号サイズを作り直すための記録。
     let wasMobileLayout = isMobileLayout();
+    // 背景星の濃さ係数（スマホのホロスコープでは控えめにする）。
+    let bgIntensity = 1;
 
     function applyModeCamera(name) {
       controls.maxDistance = isMobileLayout() ? 760 : 390;
@@ -4272,6 +4276,21 @@
       }
       controls.update();
       applyLayers();
+
+      // 背景星・星座線のモード別調整（スマホ）。
+      const mobile = isMobileLayout();
+      bgIntensity = (mobile && name === "horoscope") ? 0.6 : 1;
+      if (mobile && name === "horoscope") {
+        // ホロスコープでは星座線は控えめに非表示（背景は柔らかい星のみ）。
+        layers.constellations.visible = false;
+      }
+      if (prefersReducedMotion) {
+        // 瞬きアニメが無いので、ここで濃さを反映しておく。
+        starLayers.forEach((layer) => {
+          layer.material.opacity = layer.userData.baseOpacity * bgIntensity;
+        });
+      }
+
       syncControls();
       updateTransitControls();
     }
@@ -4585,16 +4604,44 @@
       return ring;
     }
 
+    /* 柔らかい円形の星テクスチャ（点をにじませて「白点ノイズ」を避ける）。 */
+    function makeStarTexture() {
+      if (makeStarTexture.tex) return makeStarTexture.tex;
+      const canvas = document.createElement("canvas");
+      canvas.width = canvas.height = 64;
+      const ctx = canvas.getContext("2d");
+      const g = ctx.createRadialGradient(32, 32, 0, 32, 32, 32);
+      g.addColorStop(0, "rgba(255,255,255,1)");
+      g.addColorStop(0.28, "rgba(255,255,255,0.82)");
+      g.addColorStop(0.55, "rgba(255,255,255,0.28)");
+      g.addColorStop(1, "rgba(255,255,255,0)");
+      ctx.fillStyle = g;
+      ctx.fillRect(0, 0, 64, 64);
+      const tex = new THREE.CanvasTexture(canvas);
+      tex.minFilter = THREE.LinearFilter;
+      tex.generateMipmaps = false;
+      makeStarTexture.tex = tex;
+      return tex;
+    }
+
     function createStarField() {
-      // 微光星を複数層に分け、遠近で奥行きを出す。低スペックでは数を減らす。
-      const scale = lowPower ? 0.5 : 1;
-      const layerConfigs = [
-        // 最奥のごく淡い層（奥行き感）。
-        { count: Math.round(1200 * scale), near: 620, far: 1100, size: 0.8, color: 0x9fb4e6, opacity: 0.32, speed: 0.4, amp: 0.1 },
-        { count: Math.round(900 * scale), near: 300, far: 700, size: 1.1, color: 0xdbe6ff, opacity: 0.5, speed: 0.6, amp: 0.16 },
-        // 手前の明るい層（瞬き強め）。
-        { count: Math.round(280 * scale), near: 230, far: 520, size: 1.9, color: 0xfff0c4, opacity: 0.72, speed: 0.95, amp: 0.22 }
-      ];
+      const mobile = isMobileLayout();
+      // スマホ: 細かい点を減らし、少数の「柔らかく光る星」にしてノイズ感を消す。
+      //         最奥のごく淡い層は丸ごと省く（薄すぎてゴミに見える層）。
+      // PC: 従来どおり（雰囲気を維持）。
+      const pcScale = lowPower ? 0.6 : 1;
+      const layerConfigs = mobile
+        ? [
+            { count: 230, near: 300, far: 760, size: 2.6, color: 0xcfe0ff, opacity: 0.55, speed: 0.6, amp: 0.12 },
+            { count: 72, near: 220, far: 520, size: 4.6, color: 0xfff1c8, opacity: 0.85, speed: 0.95, amp: 0.18 }
+          ]
+        : [
+            { count: Math.round(1200 * pcScale), near: 620, far: 1100, size: 0.8, color: 0x9fb4e6, opacity: 0.32, speed: 0.4, amp: 0.1 },
+            { count: Math.round(900 * pcScale), near: 300, far: 700, size: 1.1, color: 0xdbe6ff, opacity: 0.5, speed: 0.6, amp: 0.16 },
+            { count: Math.round(280 * pcScale), near: 230, far: 520, size: 1.9, color: 0xfff0c4, opacity: 0.72, speed: 0.95, amp: 0.22 }
+          ];
+      // スマホだけ柔らかい円形テクスチャを使う（PC は従来の見た目を維持）。
+      const starTexture = mobile ? makeStarTexture() : null;
 
       layerConfigs.forEach((config) => {
         const geometry = new THREE.BufferGeometry();
@@ -4611,18 +4658,18 @@
         }
         geometry.setAttribute("position", new THREE.Float32BufferAttribute(vertices, 3));
 
-        const points = new THREE.Points(
-          geometry,
-          new THREE.PointsMaterial({
-            color: config.color,
-            size: config.size,
-            transparent: true,
-            opacity: config.opacity,
-            sizeAttenuation: true,
-            depthWrite: false,
-            blending: THREE.AdditiveBlending
-          })
-        );
+        const material = new THREE.PointsMaterial({
+          color: config.color,
+          size: config.size,
+          transparent: true,
+          opacity: config.opacity,
+          sizeAttenuation: true,
+          depthWrite: false,
+          blending: THREE.AdditiveBlending
+        });
+        if (starTexture) material.map = starTexture;
+
+        const points = new THREE.Points(geometry, material);
         points.userData = { baseOpacity: config.opacity, speed: config.speed, amp: config.amp };
         starLayers.push(points);
         layers.starfield.add(points);
@@ -4690,6 +4737,12 @@
         wasMobileLayout = nowMobile;
         clearGroup(layers.signs);
         createSigns();
+        // 背景星・星座線はスマホ/PCで作り分けているので作り直す。
+        clearGroup(layers.starfield);
+        starLayers.length = 0;
+        createStarField();
+        clearGroup(layers.constellations);
+        createConstellations();
         renderChart();
         applyMode(currentMode);
         // スマホへ切り替わったらタイムスライダーは閉じた状態に戻す。
@@ -4703,7 +4756,7 @@
         const seconds = (time || 0) * 0.001;
         starLayers.forEach((layer, index) => {
           const { baseOpacity, speed, amp } = layer.userData;
-          layer.material.opacity = baseOpacity + Math.sin(seconds * speed + index * 1.7) * amp;
+          layer.material.opacity = (baseOpacity + Math.sin(seconds * speed + index * 1.7) * amp) * bgIntensity;
         });
 
         // トランジット天体の軽い発光。スライダー/再生操作時だけ一瞬強くパルスさせる。
