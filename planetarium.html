@@ -900,6 +900,10 @@
         pointer-events: auto;
       }
 
+      .ui-stack .yaml-panel textarea {
+        min-height: 140px;
+      }
+
       /* メニュー内の天体詳細は通常カードに戻す（空でも案内を表示）。 */
       .ui-stack .detail-panel,
       .ui-stack .detail-panel.is-empty,
@@ -3185,6 +3189,7 @@
       北を上・東を左に取り、相対的な形を保ったまま正方形へ自動フィットさせる。
     */
     function makeConstellationSprite(asterism) {
+      const mobile = isMobileLayout();
       const size = 256;
       const canvas = document.createElement("canvas");
       canvas.width = size;
@@ -3224,9 +3229,11 @@
       const offsetY = (size - spanY * scale) / 2 - minY * scale;
       const points = projected.map(([x, y]) => [x * scale + offsetX, y * scale + offsetY]);
 
-      // 星座線（淡い金）。背景演出なのでさらに控えめに。
-      context.strokeStyle = "rgba(232, 198, 120, 0.24)";
-      context.lineWidth = 1.3;
+      // 星座線（青白の細線）。参考画像くらいはっきり見える濃さにする。
+      context.strokeStyle = mobile ? "rgba(196, 212, 246, 0.34)" : "rgba(198, 214, 246, 0.5)";
+      context.lineWidth = mobile ? 1.3 : 1.5;
+      context.lineCap = "round";
+      context.lineJoin = "round";
       asterism.lines.forEach(([a, b]) => {
         context.beginPath();
         context.moveTo(points[a][0], points[a][1]);
@@ -3238,17 +3245,17 @@
       stars.forEach((star, i) => {
         const cx = points[i][0];
         const cy = points[i][1];
-        const core = Math.max(1.1, (6.2 - star[2]) * 0.95);
-        const halo = core * 3.4;
+        const core = Math.max(mobile ? 1.6 : 1.1, (6.2 - star[2]) * (mobile ? 1.05 : 0.95));
+        const halo = core * (mobile ? 4.6 : 3.4);
         const gradient = context.createRadialGradient(cx, cy, 0, cx, cy, halo);
-        gradient.addColorStop(0, "rgba(255, 250, 232, 0.95)");
-        gradient.addColorStop(0.3, "rgba(255, 226, 150, 0.55)");
-        gradient.addColorStop(1, "rgba(255, 210, 120, 0)");
+        gradient.addColorStop(0, mobile ? "rgba(255, 251, 236, 0.92)" : "rgba(255, 251, 236, 0.98)");
+        gradient.addColorStop(0.34, mobile ? "rgba(210, 224, 255, 0.5)" : "rgba(214, 228, 255, 0.6)");
+        gradient.addColorStop(1, "rgba(190, 210, 245, 0)");
         context.fillStyle = gradient;
         context.beginPath();
         context.arc(cx, cy, halo, 0, Math.PI * 2);
         context.fill();
-        context.fillStyle = "rgba(255, 252, 240, 0.98)";
+        context.fillStyle = mobile ? "rgba(255, 253, 244, 0.96)" : "rgba(255, 253, 244, 0.99)";
         context.beginPath();
         context.arc(cx, cy, core, 0, Math.PI * 2);
         context.fill();
@@ -3262,7 +3269,7 @@
         transparent: true,
         depthWrite: false,
         blending: THREE.AdditiveBlending,
-        opacity: 0.22
+        opacity: mobile ? 0.5 : 0.72
       }));
     }
 
@@ -4611,9 +4618,9 @@
       canvas.width = canvas.height = 64;
       const ctx = canvas.getContext("2d");
       const g = ctx.createRadialGradient(32, 32, 0, 32, 32, 32);
-      g.addColorStop(0, "rgba(255,255,255,1)");
-      g.addColorStop(0.28, "rgba(255,255,255,0.82)");
-      g.addColorStop(0.55, "rgba(255,255,255,0.28)");
+      g.addColorStop(0, "rgba(255,255,255,0.94)");
+      g.addColorStop(0.22, "rgba(255,255,255,0.48)");
+      g.addColorStop(0.58, "rgba(180,205,255,0.13)");
       g.addColorStop(1, "rgba(255,255,255,0)");
       ctx.fillStyle = g;
       ctx.fillRect(0, 0, 64, 64);
@@ -4632,8 +4639,9 @@
       const pcScale = lowPower ? 0.6 : 1;
       const layerConfigs = mobile
         ? [
-            { count: 230, near: 300, far: 760, size: 2.6, color: 0xcfe0ff, opacity: 0.55, speed: 0.6, amp: 0.12 },
-            { count: 72, near: 220, far: 520, size: 4.6, color: 0xfff1c8, opacity: 0.85, speed: 0.95, amp: 0.18 }
+            { count: 115, near: 340, far: 760, size: 3.2, color: 0xc8dcff, opacity: 0.38, speed: 0.42, amp: 0.06 },
+            { count: 34, near: 240, far: 520, size: 5.4, color: 0xffefc7, opacity: 0.62, speed: 0.72, amp: 0.10 },
+            { count: 10, near: 220, far: 430, size: 7.4, color: 0xffffff, opacity: 0.48, speed: 0.58, amp: 0.07 }
           ]
         : [
             { count: Math.round(1200 * pcScale), near: 620, far: 1100, size: 0.8, color: 0x9fb4e6, opacity: 0.32, speed: 0.4, amp: 0.1 },
