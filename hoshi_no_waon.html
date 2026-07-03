@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>星の和音 — 出生図ソニフィケーション試作</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;600;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --sora:#0E1220;       /* 宙 */
+  --fukai:#080B14;      /* 深い */
+  --hoshi:#EAE4D3;      /* 星明かり */
+  --kasumi:#8E8A7C;     /* 霞 */
+  --kin:#C9A15A;        /* 真鍮 */
+  --rin:#8FB8C9;        /* 燐光（協和） */
+  --shu:#C05248;        /* 朱（不協和） */
+  --line:rgba(234,228,211,.14);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+  background:radial-gradient(130% 80% at 50% -20%, #182036 0%, var(--sora) 55%, var(--fukai) 100%);
+  color:var(--hoshi);
+  font-family:"Shippori Mincho",serif;
+  min-height:100vh;
+  display:flex;flex-direction:column;align-items:center;
+  padding:max(20px, env(safe-area-inset-top)) 14px 60px;
+}
+.mono{font-family:"IBM Plex Mono",monospace}
+header{width:100%;max-width:560px;border-bottom:1px solid var(--line);padding-bottom:14px;margin-bottom:20px;
+  display:flex;justify-content:space-between;align-items:flex-end}
+h1{font-size:25px;font-weight:800;letter-spacing:.3em}
+.sub{font-size:12.5px;color:var(--kasumi);letter-spacing:.15em;margin-top:8px}
+.badge{font-size:11.5px;color:var(--kin);border:1px solid var(--kin);padding:3px 8px;letter-spacing:.2em}
+
+/* ── 円環 ── */
+.wheel-wrap{width:100%;max-width:560px;display:flex;justify-content:center;margin-bottom:8px}
+svg{width:min(92vw,420px);height:auto;display:block}
+.zring{fill:none;stroke:var(--line);stroke-width:1}
+.tick{stroke:var(--line);stroke-width:1}
+.planet-dot{cursor:pointer}
+.planet-dot circle{fill:#1A2233;stroke:var(--kasumi);stroke-width:1;transition:all .2s}
+.planet-dot text{fill:var(--hoshi);font-size:15px;text-anchor:middle;dominant-baseline:central;pointer-events:none;font-family:"Shippori Mincho",serif}
+.planet-dot.on circle{fill:#2A3550;stroke:var(--kin);filter:drop-shadow(0 0 6px rgba(201,161,90,.5))}
+.aline{stroke-width:1;opacity:.55}
+.aline.c{stroke:var(--rin)} .aline.d{stroke:var(--shu)}
+
+/* ── 操作 ── */
+.controls{width:100%;max-width:560px;display:flex;gap:10px;margin:6px 0 18px}
+button{
+  font-family:"Shippori Mincho",serif;letter-spacing:.2em;font-weight:600;
+  background:linear-gradient(180deg,#232D44,#161D2E);
+  color:var(--hoshi);border:1px solid rgba(234,228,211,.25);
+  padding:14px 0;flex:1;font-size:16px;cursor:pointer;
+  -webkit-tap-highlight-color:transparent;transition:transform .1s;
+}
+button:active{transform:scale(.97)}
+button:focus-visible{outline:2px solid var(--kin);outline-offset:2px}
+button.gold{border-color:var(--kin);color:var(--kin)}
+.hint{width:100%;max-width:560px;font-size:13px;color:var(--kasumi);letter-spacing:.06em;line-height:1.8;margin-bottom:22px;text-align:center}
+
+/* ── 区画 ── */
+section{width:100%;max-width:560px;margin-bottom:26px}
+h2{font-size:14px;letter-spacing:.3em;color:var(--kasumi);font-weight:600;
+  border-bottom:1px solid var(--line);padding-bottom:8px;margin-bottom:10px}
+
+/* 不協和度 */
+.dscore{display:flex;align-items:baseline;gap:12px;margin-bottom:10px}
+.dscore .num{font-size:38px;font-weight:600;color:var(--kin)}
+.dscore .lbl{font-size:12.5px;color:var(--kasumi);letter-spacing:.1em}
+.dbar{height:5px;background:rgba(234,228,211,.08);margin-bottom:14px;position:relative;overflow:hidden}
+.dbar i{position:absolute;inset:0 auto 0 0;background:linear-gradient(90deg,var(--rin),var(--kin),var(--shu));width:0%;transition:width .6s ease}
+.pairs{list-style:none}
+.pairs li{display:flex;justify-content:space-between;align-items:center;gap:8px;
+  font-size:15px;padding:11px 2px;border-bottom:1px dashed var(--line)}
+.pairs .nm{letter-spacing:.1em}
+.pairs .asp{font-size:12.5px;color:var(--kasumi)}
+.pairs .val{color:var(--shu)}
+.pairs button{flex:0 0 auto;padding:7px 14px;font-size:13px;letter-spacing:.15em}
+
+/* アスペクト表 */
+.asp-list{list-style:none}
+.asp-list li{display:flex;justify-content:space-between;align-items:center;gap:8px;
+  font-size:15px;padding:11px 2px;border-bottom:1px dashed var(--line)}
+.asp-list .ratio{font-size:12.5px;color:var(--kasumi)}
+.asp-list button{flex:0 0 auto;padding:7px 14px;font-size:13px;letter-spacing:.15em}
+.tag{font-size:12px;padding:2px 6px;border:1px solid var(--line);color:var(--kasumi);letter-spacing:.1em}
+.tag.c{color:var(--rin);border-color:rgba(143,184,201,.5)}
+.tag.d{color:var(--shu);border-color:rgba(192,82,72,.5)}
+
+/* 入力 */
+details{border:1px solid var(--line);padding:0 14px}
+summary{cursor:pointer;font-size:14px;letter-spacing:.2em;color:var(--kasumi);padding:12px 0;list-style:none}
+summary::before{content:"▸ ";color:var(--kin)}
+details[open] summary::before{content:"▾ "}
+.inrow{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-top:1px dashed var(--line)}
+.inrow label{font-size:15px;letter-spacing:.15em}
+.inrow input{
+  width:110px;background:#0B0F19;border:1px solid var(--line);color:var(--hoshi);
+  font-family:"IBM Plex Mono",monospace;font-size:16px;padding:9px 10px;text-align:right;
+}
+.inrow input:focus-visible{outline:2px solid var(--kin);outline-offset:1px}
+.inrow .hz{font-size:12px;color:var(--kasumi);width:70px;text-align:right}
+
+/* YAML 読み込み */
+textarea{
+  width:100%;min-height:150px;background:#0B0F19;border:1px solid var(--line);
+  color:var(--hoshi);font-family:"IBM Plex Mono",monospace;font-size:13px;
+  padding:10px;line-height:1.6;resize:vertical;margin:4px 0 10px;
+}
+textarea:focus-visible{outline:2px solid var(--kin);outline-offset:1px}
+.yaml-actions{display:flex;gap:10px;margin-bottom:10px}
+.status{font-size:13.5px;line-height:1.9;letter-spacing:.05em;color:var(--kasumi);padding-bottom:12px}
+.status.ok{color:var(--rin)}
+.status.err{color:var(--shu)}
+
+footer{width:100%;max-width:560px;font-size:12.5px;line-height:2;color:var(--kasumi);
+  border-top:1px solid var(--line);padding-top:14px;letter-spacing:.04em}
+footer b{color:var(--hoshi);font-weight:600}
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>星の和音</h1>
+    <div class="sub">出生図ソニフィケーション・試作一号</div>
+  </div>
+  <div class="badge">試作</div>
+</header>
+
+<div class="wheel-wrap">
+  <svg id="wheel" viewBox="0 0 340 340" role="img" aria-label="出生図の円環。天体をタップで発音の入切"></svg>
+</div>
+
+<div class="controls">
+  <button class="gold" id="playAll">和音を鳴らす</button>
+  <button id="stopAll">止める</button>
+</div>
+<div class="hint">円環の天体をタップすると、その星を和音に入れたり外したりできます。<br>黄経 λ を音高 220Hz × 2<sup>λ/360</sup> に写像しています。</div>
+
+<section>
+  <h2>不協和度（Plomp–Levelt）</h2>
+  <div class="dscore"><span class="num mono" id="dnum">–</span><span class="lbl">相対スコア（0=純粋な協和）</span></div>
+  <div class="dbar"><i id="dfill"></i></div>
+  <ul class="pairs" id="pairList"></ul>
+</section>
+
+<section>
+  <h2>アスペクト → 音程</h2>
+  <ul class="asp-list" id="aspList"></ul>
+</section>
+
+<section>
+  <details open>
+    <summary>YAMLを貼って読み込む</summary>
+    <textarea id="yamlIn" placeholder="nanami-products のチャートYAMLをここに貼り付け。&#10;natal セクションの天体黄経を自動で拾います。&#10;（transit が混在していても natal を優先します）" aria-label="チャートYAMLの貼り付け欄"></textarea>
+    <div class="yaml-actions">
+      <button class="gold" id="yamlLoad">読み込んで鳴らせる状態にする</button>
+    </div>
+    <div class="status" id="yamlStatus">まだ読み込んでいません。下の手入力でも使えます。</div>
+  </details>
+</section>
+
+<section>
+  <details>
+    <summary>黄経の手入力（微調整用）</summary>
+    <div id="inputs"></div>
+  </details>
+</section>
+
+<footer>
+  写像規則: 黄経 λ° → 周波数 220×2^(λ/360) Hz（黄道一周＝1オクターブ）。二天体の離角 Δ° → 音程比 2^(Δ/180)（衝＝オクターブ、スクエア＝三全音、トライン≒短六度、セクスタイル≒長三度）。音色は基音＋倍音5次のカスタム波形。不協和度は <b>Plomp–Levelt（1965）</b>の感覚的不協和度曲線を倍音対ごとに合算した相対値です。着想の系譜は <b>ケプラー『世界の調和』（1619）</b>、<b>H.クスト『The Cosmic Octave』</b>、<b>J.アディのハーモニクス占星術</b>。これはあなたのチャートの音響変換であり、聴取による効能は主張しません。
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js"></script>
+<script>
+(function(){
+  const $=id=>document.getElementById(id);
+
+  /* ── 天体データ（サンプル配置。YAMLの黄経で差し替え可） ── */
+  const PLANETS=[
+    {k:"sun", g:"☉", n:"太陽", lon:132.5},
+    {k:"moon",g:"☽", n:"月",   lon:315.2},
+    {k:"mer", g:"☿", n:"水星", lon:155.8},
+    {k:"ven", g:"♀", n:"金星", lon:162.4},
+    {k:"mar", g:"♂", n:"火星", lon:170.1},
+    {k:"jup", g:"♃", n:"木星", lon:63.7},
+    {k:"sat", g:"♄", n:"土星", lon:260.9},
+    {k:"ura", g:"♅", n:"天王星",lon:38.3},
+    {k:"nep", g:"♆", n:"海王星",lon:353.6},
+    {k:"plu", g:"♇", n:"冥王星",lon:222.0},
+  ];
+  PLANETS.forEach(p=>p.on=true);
+
+  const ASPECTS=[
+    {a:0,  n:"合",        orb:6, cons:true },
+    {a:60, n:"セクスタイル", orb:4, cons:true },
+    {a:90, n:"スクエア",    orb:6, cons:false},
+    {a:120,n:"トライン",    orb:6, cons:true },
+    {a:180,n:"衝",        orb:6, cons:false},
+  ];
+
+  const freqOf=lon=>220*Math.pow(2,(((lon%360)+360)%360)/360);
+  const sep=(a,b)=>{let d=Math.abs(a-b)%360;return d>180?360-d:d};
+
+  /* ── 音 ── */
+  const NH=5, HARM=[1,.55,.35,.22,.14];
+  let ctx=null, master=null, voices=[];
+  function audio(){
+    if(!ctx){
+      ctx=new (window.AudioContext||window.webkitAudioContext)();
+      master=ctx.createGain(); master.gain.value=.14; master.connect(ctx.destination);
+    }
+    if(ctx.state==="suspended")ctx.resume();
+    return ctx;
+  }
+  let wave=null;
+  function periodic(){
+    if(wave)return wave;
+    const re=new Float32Array(NH+1), im=new Float32Array(NH+1);
+    for(let i=1;i<=NH;i++)im[i]=HARM[i-1];
+    wave=ctx.createPeriodicWave(re,im,{disableNormalization:false});
+    return wave;
+  }
+  function stopAll(fade=.25){
+    voices.forEach(v=>{
+      try{
+        v.g.gain.cancelScheduledValues(ctx.currentTime);
+        v.g.gain.setTargetAtTime(0,ctx.currentTime,fade/3);
+        v.o.stop(ctx.currentTime+fade+0.1);
+      }catch(e){}
+    });
+    voices=[];
+  }
+  function playFreqs(freqs,dur=4){
+    audio(); stopAll(.1);
+    const t=ctx.currentTime;
+    freqs.forEach(f=>{
+      const o=ctx.createOscillator(), g=ctx.createGain();
+      o.setPeriodicWave(periodic());
+      o.frequency.value=f;
+      g.gain.setValueAtTime(0,t);
+      g.gain.linearRampToValueAtTime(1/Math.max(2,freqs.length),t+.4);
+      g.gain.setTargetAtTime(0,t+dur-0.8,.35);
+      o.connect(g); g.connect(master);
+      o.start(t); o.stop(t+dur+0.5);
+      voices.push({o,g});
+    });
+  }
+
+  /* ── Plomp–Levelt 不協和度 ── */
+  function plDiss(f1,f2,a1,a2){
+    const fmin=Math.min(f1,f2), df=Math.abs(f1-f2);
+    const s=0.24/(0.021*fmin+19);
+    return a1*a2*(Math.exp(-3.5*s*df)-Math.exp(-5.75*s*df));
+  }
+  function pairDiss(fa,fb){
+    let d=0;
+    for(let i=0;i<NH;i++)for(let j=0;j<NH;j++)
+      d+=plDiss(fa*(i+1),fb*(j+1),HARM[i],HARM[j]);
+    return d;
+  }
+
+  /* ── 円環描画 ── */
+  const SVG_NS="http://www.w3.org/2000/svg";
+  const svg=$("wheel"), C=170, R=138, RP=118;
+  function pos(lon,r){
+    const th=(180-lon)*Math.PI/180;
+    return [C+r*Math.cos(th), C-r*Math.sin(th)];
+  }
+  function el(tag,attrs,parent){
+    const e=document.createElementNS(SVG_NS,tag);
+    for(const k in attrs)e.setAttribute(k,attrs[k]);
+    (parent||svg).appendChild(e);return e;
+  }
+  function drawWheel(){
+    svg.innerHTML="";
+    el("circle",{cx:C,cy:C,r:R,class:"zring"});
+    el("circle",{cx:C,cy:C,r:R-24,class:"zring"});
+    for(let i=0;i<12;i++){
+      const [x1,y1]=pos(i*30,R),[x2,y2]=pos(i*30,R-24);
+      el("line",{x1,y1,x2,y2,class:"tick"});
+    }
+    /* アスペクト線 */
+    const act=PLANETS.filter(p=>p.on);
+    for(let i=0;i<act.length;i++)for(let j=i+1;j<act.length;j++){
+      const d=sep(act[i].lon,act[j].lon);
+      const asp=ASPECTS.find(A=>Math.abs(d-A.a)<=A.orb);
+      if(!asp||asp.a===0)continue;
+      const [x1,y1]=pos(act[i].lon,RP-14),[x2,y2]=pos(act[j].lon,RP-14);
+      el("line",{x1,y1,x2,y2,class:"aline "+(asp.cons?"c":"d")});
+    }
+    /* 天体 */
+    PLANETS.forEach(p=>{
+      const [x,y]=pos(p.lon,RP);
+      const g=el("g",{class:"planet-dot"+(p.on?" on":""),role:"button",tabindex:0,
+        "aria-label":p.n+"を"+(p.on?"外す":"入れる")});
+      el("circle",{cx:x,cy:y,r:15},g);
+      const t=el("text",{x,y},g); t.textContent=p.g;
+      const toggle=()=>{p.on=!p.on;render()};
+      g.addEventListener("click",toggle);
+      g.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();toggle()}});
+    });
+  }
+
+  /* ── 表とスコア ── */
+  function nameBtn(label,fn){
+    const b=document.createElement("button");
+    b.textContent=label;b.addEventListener("click",fn);return b;
+  }
+  function render(){
+    drawWheel();
+    const act=PLANETS.filter(p=>p.on);
+
+    /* 不協和度 */
+    let total=0; const pd=[];
+    for(let i=0;i<act.length;i++)for(let j=i+1;j<act.length;j++){
+      const d=pairDiss(freqOf(act[i].lon),freqOf(act[j].lon));
+      total+=d; pd.push({a:act[i],b:act[j],d});
+    }
+    const norm=pd.length?total/pd.length:0;
+    $("dnum").textContent=pd.length?(norm*100).toFixed(1):"–";
+    $("dfill").style.width=Math.min(100,norm*100*1.4)+"%";
+    pd.sort((x,y)=>y.d-x.d);
+    const pl=$("pairList"); pl.innerHTML="";
+    pd.slice(0,3).forEach(p=>{
+      const li=document.createElement("li");
+      const nm=document.createElement("span");nm.className="nm";
+      nm.textContent=p.a.g+" "+p.a.n+" × "+p.b.g+" "+p.b.n;
+      const val=document.createElement("span");val.className="val mono";
+      val.textContent=(p.d*100).toFixed(1);
+      li.append(nm,val,nameBtn("聴く",()=>playFreqs([freqOf(p.a.lon),freqOf(p.b.lon)],3.2)));
+      pl.appendChild(li);
+    });
+
+    /* アスペクト表 */
+    const al=$("aspList"); al.innerHTML="";
+    let found=false;
+    for(let i=0;i<act.length;i++)for(let j=i+1;j<act.length;j++){
+      const d=sep(act[i].lon,act[j].lon);
+      const asp=ASPECTS.find(A=>Math.abs(d-A.a)<=A.orb);
+      if(!asp)continue; found=true;
+      const ratio=Math.pow(2,d/180);
+      const li=document.createElement("li");
+      const nm=document.createElement("span");nm.className="nm";
+      nm.textContent=act[i].g+"–"+act[j].g+" "+asp.n;
+      const tag=document.createElement("span");
+      tag.className="tag "+(asp.cons?"c":"d");
+      tag.textContent=asp.cons?"協和":"不協和";
+      const rt=document.createElement("span");rt.className="ratio mono";
+      rt.textContent=d.toFixed(1)+"° → ×"+ratio.toFixed(3);
+      const f=261.63;
+      li.append(nm,tag,rt,nameBtn("聴く",()=>playFreqs([f,f*ratio],3.2)));
+      al.appendChild(li);
+    }
+    if(!found){
+      const li=document.createElement("li");
+      li.innerHTML='<span class="ratio">オーブ内のアスペクトはありません</span>';
+      al.appendChild(li);
+    }
+
+    /* 入力欄の Hz 表示更新 */
+    PLANETS.forEach(p=>{
+      const hz=document.querySelector('[data-hz="'+p.k+'"]');
+      if(hz)hz.textContent=freqOf(p.lon).toFixed(1)+" Hz";
+    });
+  }
+
+  /* ── 入力欄 ── */
+  const inWrap=$("inputs");
+  PLANETS.forEach(p=>{
+    const row=document.createElement("div");row.className="inrow";
+    const lab=document.createElement("label");
+    lab.textContent=p.g+" "+p.n; lab.setAttribute("for","in_"+p.k);
+    const inp=document.createElement("input");
+    inp.type="number";inp.step="0.01";inp.min="0";inp.max="359.99";
+    inp.value=p.lon;inp.id="in_"+p.k;inp.inputMode="decimal";
+    inp.addEventListener("change",()=>{
+      let v=parseFloat(inp.value);
+      if(isNaN(v))v=0; v=((v%360)+360)%360;
+      inp.value=v.toFixed(2); p.lon=v; render();
+    });
+    const hz=document.createElement("span");hz.className="hz mono";
+    hz.dataset.hz=p.k;
+    row.append(lab,inp,hz);
+    inWrap.appendChild(row);
+  });
+
+  /* ── YAML 読み込み ── */
+  const ALIAS={
+    sun:["sun","太陽"], moon:["moon","月"], mer:["mercury","水星"],
+    ven:["venus","金星"], mar:["mars","火星"], jup:["jupiter","木星"],
+    sat:["saturn","土星"], ura:["uranus","天王星"], nep:["neptune","海王星"],
+    plu:["pluto","冥王星"]
+  };
+  const SIGNS=[
+    ["aries","牡羊","おひつじ"],["taurus","牡牛","おうし"],["gemini","双子","ふたご"],
+    ["cancer","蟹","かに"],["leo","獅子","しし"],["virgo","乙女","おとめ"],
+    ["libra","天秤","てんびん"],["scorpio","蠍","さそり"],["sagittarius","射手","いて"],
+    ["capricorn","山羊","やぎ"],["aquarius","水瓶","みずがめ"],["pisces","魚","うお"]
+  ];
+  const LON_KEYS=["longitude","ecliptic_longitude","abs_longitude","absolute_longitude","lon","黄経"];
+  const DEG_KEYS=["degree","degrees","deg","度数","sign_degree"];
+  const SIGN_KEYS=["sign","zodiac","星座","サイン"];
+
+  const norm=s=>String(s).toLowerCase().replace(/[\s_「」座]/g,"");
+  function planetKeyOf(str){
+    const n=norm(str);
+    for(const k in ALIAS)
+      if(ALIAS[k].some(a=>n===norm(a)||n.startsWith(norm(a))))return k;
+    return null;
+  }
+  function signIndexOf(str){
+    const n=norm(str);
+    for(let i=0;i<12;i++)
+      if(SIGNS[i].some(a=>n.includes(norm(a))))return i;
+    return -1;
+  }
+  function lonFromNode(v){
+    if(typeof v==="number")return (v>=0&&v<360)?v:null;
+    if(typeof v==="string"){const f=parseFloat(v);return(!isNaN(f)&&f>=0&&f<360)?f:null}
+    if(v&&typeof v==="object"&&!Array.isArray(v)){
+      for(const k of LON_KEYS){
+        for(const kk in v)if(norm(kk)===norm(k)){
+          const f=parseFloat(v[kk]);
+          if(!isNaN(f)&&f>=0&&f<360)return f;
+        }
+      }
+      /* サイン＋度数 */
+      let si=-1,dg=null;
+      for(const kk in v){
+        if(SIGN_KEYS.some(k=>norm(kk)===norm(k)))si=signIndexOf(v[kk]);
+        if(DEG_KEYS.some(k=>norm(kk)===norm(k))){
+          const f=parseFloat(v[kk]); if(!isNaN(f))dg=f;
+        }
+      }
+      if(si>=0&&dg!==null&&dg>=0&&dg<30)return si*30+dg;
+    }
+    return null;
+  }
+  function walk(node,found){
+    if(!node||typeof node!=="object")return;
+    if(Array.isArray(node)){
+      node.forEach(item=>{
+        if(item&&typeof item==="object"){
+          const nameField=item.name||item.planet||item.body||item.天体;
+          if(nameField){
+            const pk=planetKeyOf(nameField);
+            if(pk&&!(pk in found)){
+              const lon=lonFromNode(item);
+              if(lon!==null)found[pk]=lon;
+            }
+          }
+        }
+        walk(item,found);
+      });
+      return;
+    }
+    for(const key in node){
+      const pk=planetKeyOf(key);
+      if(pk&&!(pk in found)){
+        const lon=lonFromNode(node[key]);
+        if(lon!==null){found[pk]=lon;continue}
+      }
+      walk(node[key],found);
+    }
+  }
+  function regexFallback(text,found){
+    for(const k in ALIAS){
+      if(k in found)continue;
+      for(const a of ALIAS[k]){
+        const re=new RegExp(a+"[\\s\\S]{0,140}?(?:longitude|黄経|lon)\\s*[:=]\\s*([0-9.]+)","i");
+        const m=text.match(re);
+        if(m){const f=parseFloat(m[1]);if(!isNaN(f)&&f>=0&&f<360){found[k]=f;break}}
+      }
+    }
+  }
+  function loadYaml(){
+    const st=$("yamlStatus");
+    const text=$("yamlIn").value;
+    if(!text.trim()){st.className="status err";st.textContent="YAMLが空です。";return}
+    const found={};
+    try{
+      if(window.jsyaml){
+        const docs=[]; jsyaml.loadAll(text,d=>docs.push(d));
+        /* natal 優先 */
+        docs.forEach(doc=>{
+          if(!doc||typeof doc!=="object")return;
+          const natal=doc.natal||doc.natal_chart||(doc.chart&&doc.chart.natal);
+          if(natal)walk(natal,found);
+        });
+        if(Object.keys(found).length===0)docs.forEach(doc=>walk(doc,found));
+      }
+    }catch(e){/* パース失敗 → フォールバックへ */}
+    regexFallback(text,found);
+    const keys=Object.keys(found);
+    if(keys.length===0){
+      st.className="status err";
+      st.textContent="天体の黄経を見つけられませんでした。YAML内に 太陽/sun 等の天体名と longitude / 黄経（または サイン＋度数）が必要です。";
+      return;
+    }
+    keys.forEach(k=>{
+      const p=PLANETS.find(x=>x.k===k);
+      p.lon=found[k];
+      const inp=document.getElementById("in_"+k);
+      if(inp)inp.value=found[k].toFixed(2);
+    });
+    const got=PLANETS.filter(p=>keys.includes(p.k)).map(p=>p.g).join(" ");
+    const miss=PLANETS.filter(p=>!keys.includes(p.k)).map(p=>p.g).join(" ");
+    st.className="status ok";
+    st.textContent="読み込み完了: "+got+(miss?"（未検出: "+miss+" は手入力かサンプル値のまま）":"　全10天体");
+    render();
+  }
+  $("yamlLoad").addEventListener("click",loadYaml);
+
+  $("playAll").addEventListener("click",()=>{
+    const act=PLANETS.filter(p=>p.on);
+    if(!act.length)return;
+    playFreqs(act.map(p=>freqOf(p.lon)),5);
+  });
+  $("stopAll").addEventListener("click",()=>{audio();stopAll()});
+
+  render();
+})();
+</script>
+</body>
+</html>
