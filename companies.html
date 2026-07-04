@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Companies · Chart Data | nanami-astro</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Noto+Serif+JP:wght@300;400;500&family=Cinzel:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:#faf8f4; --bg2:#f3ede4; --card:#ffffff; --card-hover:#fdf9f3;
+      --border:rgba(160,120,70,0.18); --border-hover:rgba(160,120,70,0.5);
+      --gold:#a07840; --gold-dark:#7a5c2a; --gold-soft:#c9a96e; --gold-pale:#e8d5b0;
+      --text:#2a1f10; --text-sub:#8a7860;
+      --shadow:0 2px 16px rgba(100,70,30,0.10);
+      --shadow-hover:0 6px 28px rgba(100,70,30,0.16);
+    }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Noto Serif JP',serif; background:var(--bg); color:var(--text); min-height:100vh; }
+
+    .lang-bar {
+      position:fixed; top:0; right:0; left:0; z-index:100;
+      display:flex; justify-content:flex-end; padding:10px 24px;
+      background:rgba(250,248,244,0.92); backdrop-filter:blur(8px);
+      border-bottom:1px solid var(--border);
+    }
+    .lang-btn {
+      font-family:'Cinzel',serif; font-size:10px; letter-spacing:2px;
+      border:1px solid var(--border); background:transparent; color:var(--text-sub);
+      border-radius:999px; padding:4px 14px; cursor:pointer; transition:all 0.2s;
+    }
+    .lang-btn.active { background:var(--gold); border-color:var(--gold); color:#fff; }
+    .lang-btn+.lang-btn { margin-left:6px; }
+
+    .container { max-width:900px; margin:0 auto; padding:88px 24px 80px; }
+
+    .breadcrumb { font-family:'Cinzel',serif; font-size:10px; letter-spacing:3px; color:var(--text-sub); margin-bottom:36px; }
+    .breadcrumb a { color:var(--gold); text-decoration:none; } .breadcrumb a:hover { color:var(--gold-dark); }
+    .breadcrumb span { margin:0 8px; opacity:0.4; }
+
+    .page-eyebrow { font-family:'Cinzel',serif; font-size:9px; letter-spacing:5px; color:var(--gold-soft); margin-bottom:14px; }
+    .page-title { font-family:'Cormorant Garamond',serif; font-size:clamp(30px,6vw,50px); font-weight:300; color:var(--text); line-height:1.15; margin-bottom:8px; letter-spacing:0.03em; }
+    .page-title em { font-style:italic; color:var(--gold); }
+    .gold-rule { width:48px; height:1px; background:linear-gradient(90deg,var(--gold),transparent); margin:18px 0 16px; }
+    .page-sub { font-size:12px; color:var(--text-sub); line-height:2; max-width:520px; }
+
+    .notice { background:rgba(160,120,70,0.07); border:1px solid rgba(160,120,70,0.2); border-radius:10px; padding:14px 16px; margin:28px 0; font-size:12px; color:var(--text-sub); line-height:1.9; }
+
+    .sub-section { margin-top:52px; }
+    .sub-header { display:flex; align-items:center; gap:14px; margin-bottom:20px; }
+    .sub-label { font-family:'Cinzel',serif; font-size:9px; letter-spacing:4px; color:var(--gold-soft); }
+    .sub-title { font-family:'Cormorant Garamond',serif; font-size:20px; font-weight:400; color:var(--text); letter-spacing:0.04em; }
+    .sub-line { flex:1; height:1px; background:var(--border); }
+
+    .member-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:14px; }
+
+    .member-card {
+      background:var(--card); border:1px solid var(--border); border-radius:14px;
+      padding:22px 20px; text-decoration:none; color:inherit;
+      display:flex; flex-direction:column; gap:8px;
+      box-shadow:var(--shadow); transition:all 0.22s;
+    }
+    .member-card:hover { border-color:var(--border-hover); box-shadow:var(--shadow-hover); transform:translateY(-2px); background:var(--card-hover); }
+    .member-card.coming { opacity:0.42; pointer-events:none; box-shadow:none; }
+
+    .member-num { font-family:'Cinzel',serif; font-size:9px; letter-spacing:3px; color:var(--gold-soft); }
+    .member-name { font-family:'Cormorant Garamond',serif; font-size:26px; font-weight:400; letter-spacing:0.04em; color:var(--text); line-height:1.15; }
+    .member-name-en { font-family:'Cormorant Garamond',serif; font-size:11px; font-style:italic; color:var(--text-sub); }
+    .member-birth { font-size:11px; color:var(--text-sub); margin-top:2px; }
+    .member-signs { display:flex; flex-wrap:wrap; gap:5px; margin-top:4px; }
+    .sign-badge { font-size:10px; color:var(--gold-dark); border:1px solid rgba(160,120,70,0.3); border-radius:999px; padding:2px 9px; }
+    .member-link { font-family:'Cinzel',serif; font-size:10px; letter-spacing:2px; color:var(--gold); margin-top:auto; padding-top:10px; }
+    .member-link::after { content:' →'; }
+    .coming-badge { font-family:'Cinzel',serif; font-size:9px; letter-spacing:3px; color:var(--text-sub); border:1px solid var(--border); border-radius:999px; padding:3px 12px; display:inline-block; margin-top:auto; }
+
+    .data-note { margin-top:14px; padding:12px 16px; border-left:2px solid rgba(160,120,70,0.3); font-size:11px; color:var(--text-sub); line-height:1.9; }
+
+    hr.divider { border:none; border-top:1px solid var(--border); margin:48px 0; }
+
+    .footer-note { text-align:center; }
+    .footer-note p { font-size:11px; color:var(--text-sub); line-height:2.2; }
+    .footer-note a { color:var(--gold); text-decoration:none; }
+    .footer-note a:hover { color:var(--gold-dark); }
+    footer { text-align:center; padding:28px 20px; font-family:'Cinzel',serif; font-size:9px; letter-spacing:4px; color:var(--text-sub); border-top:1px solid var(--border); margin-top:20px; }
+
+    @media (max-width:600px) { .container{padding:80px 16px 60px;} .member-grid{grid-template-columns:1fr 1fr;} }
+    @media (max-width:380px) { .member-grid{grid-template-columns:1fr;} }
+  </style>
+</head>
+<body>
+
+<div class="lang-bar">
+  <button class="lang-btn active" onclick="setLang('ja')" id="btn-ja">JA</button>
+  <button class="lang-btn" onclick="setLang('en')" id="btn-en">EN</button>
+</div>
+
+<div class="container">
+
+  <nav class="breadcrumb">
+    <a href="samples.html" data-ja="サンプル一覧" data-en="Samples">サンプル一覧</a>
+    <span>›</span>
+    <span data-ja="企業・法人" data-en="Companies">企業・法人</span>
+  </nav>
+
+  <div class="page-eyebrow" data-ja="企業・法人" data-en="COMPANIES">企業・法人</div>
+  <h1 class="page-title">
+    <span data-ja="企業設立" data-en="Corporate Foundation">企業設立</span><br>
+    <em data-ja="星図データ" data-en="Chart Archive">星図データ</em>
+  </h1>
+  <div class="gold-rule"></div>
+  <p class="page-sub"
+     data-ja="企業・法人の「設立日」を出生日とみなして計算した星図データです。人物と同じく Swiss Ephemeris で計算しています。設立時刻の記録がない場合は正午（12:00）で代用しており、ASC・MC・ハウスは参考値です。会社の「らしさ」がどんな配置に現れるかを、業種ごとに見比べていく実験アーカイブです。"
+     data-en="Chart data calculated by treating a company's founding date as its birth date. Calculated via Swiss Ephemeris, just like personal charts. When the founding time is unrecorded, 12:00 is used — ASC, MC, and house positions are indicative only. An ongoing experiment in reading corporate character by sector.">
+    企業・法人の「設立日」を出生日とみなして計算した星図データです。人物と同じく Swiss Ephemeris で計算しています。設立時刻の記録がない場合は正午（12:00）で代用しており、ASC・MC・ハウスは参考値です。会社の「らしさ」がどんな配置に現れるかを、業種ごとに見比べていく実験アーカイブです。
+  </p>
+
+  <!-- 製造業 -->
+  <section class="sub-section">
+    <div class="sub-header">
+      <span class="sub-label">SECTOR 01</span>
+      <h2 class="sub-title" data-ja="製造業" data-en="Manufacturing">製造業</h2>
+      <div class="sub-line"></div>
+    </div>
+    <div class="member-grid">
+
+      <a href="https://chart.nanami-astro.com/chart/BpofUyuWNGopa1kBZkNrbmy-" class="member-card" target="_blank" rel="noopener">
+        <div class="member-num">COMPANY 01</div>
+        <div class="member-name" data-ja="トヨタ自動車" data-en="Toyota Motor">トヨタ自動車</div>
+        <div class="member-name-en" data-ja="Toyota Motor Co., Ltd." data-en="トヨタ自動車工業株式会社">Toyota Motor Co., Ltd.</div>
+        <div class="member-birth" data-ja="1937-08-28 · 愛知県豊田市" data-en="28 Aug 1937 · Toyota, Aichi">1937-08-28 · 愛知県豊田市</div>
+        <div class="member-signs">
+          <span class="sign-badge">♍ Virgo ☉</span>
+          <span class="sign-badge">♏ Scorpio ASC</span>
+          <span class="sign-badge">♍ Virgo MC</span>
+        </div>
+        <div class="member-link" data-ja="鑑定データを見る" data-en="View Chart Data">鑑定データを見る</div>
+      </a>
+
+    </div>
+    <div class="data-note"
+         data-ja="⚠️ 企業チャートは「設立日」を出生日とみなして計算した参考データです。設立時刻の記録がない場合は正午（12:00）で代用しており、ASC・MC・ハウスは参考値となります。合併・改称・持株会社化などにより、どの日付を「設立」とするかで配置は変わります。<br>ここでは有名企業を教育・比較用のサンプルとして掲載しています。"
+         data-en="⚠️ Company charts are reference data calculated by treating the founding date as a birth date. When the founding time is unrecorded, 12:00 is used — ASC, MC, and houses are indicative only. Mergers, renamings, and holding-company restructurings mean the chosen 'founding date' changes the placements.<br>Well-known companies are shown here as educational, comparative samples.">
+      ⚠️ 企業チャートは「設立日」を出生日とみなして計算した参考データです。設立時刻の記録がない場合は正午（12:00）で代用しており、ASC・MC・ハウスは参考値となります。合併・改称・持株会社化などにより、どの日付を「設立」とするかで配置は変わります。<br>ここでは有名企業を教育・比較用のサンプルとして掲載しています。
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <div class="footer-note">
+    <p>
+      <span data-ja="鑑定データページは有効期限内のみ開けます。データの二次利用・転載はご遠慮ください。" data-en="Chart data pages are accessible during the validity period only. Please do not redistribute or repost the data.">鑑定データページは有効期限内のみ開けます。データの二次利用・転載はご遠慮ください。</span><br>
+      <a href="samples.html" data-ja="← サンプル一覧に戻る" data-en="← Back to Sample Archive">← サンプル一覧に戻る</a>
+      &nbsp;／&nbsp;
+      <a href="https://nanami-astro.stores.jp/" target="_blank" rel="noopener" data-ja="あなた自身のデータを注文する →" data-en="Order your own chart data →">あなた自身のデータを注文する →</a>
+    </p>
+  </div>
+</div>
+
+<footer>© nanami-astro</footer>
+
+<script>
+function setLang(lang) {
+  document.documentElement.lang = lang==='en'?'en':'ja';
+  document.querySelectorAll('[data-ja]').forEach(el => {
+    el.innerHTML = lang==='en' ? el.dataset.en : el.dataset.ja;
+  });
+  document.getElementById('btn-ja').classList.toggle('active', lang==='ja');
+  document.getElementById('btn-en').classList.toggle('active', lang==='en');
+  localStorage.setItem('na-lang', lang);
+}
+(function(){ const s=localStorage.getItem('na-lang'); if(s==='en') setLang('en'); })();
+</script>
+</body>
+</html>
