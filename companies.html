@@ -167,9 +167,9 @@ function setLang(lang) {
   });
   document.getElementById('btn-ja').classList.toggle('active', lang==='ja');
   document.getElementById('btn-en').classList.toggle('active', lang==='en');
-  localStorage.setItem('na-lang', lang);
+  try { localStorage.setItem('na-lang', lang); } catch(e) {}
 }
-(function(){ const s=localStorage.getItem('na-lang'); if(s==='en') setLang('en'); })();
+(function(){ try { const s=localStorage.getItem('na-lang'); if(s==='en') setLang('en'); } catch(e) {} })();
 </script>
 </body>
 </html>
