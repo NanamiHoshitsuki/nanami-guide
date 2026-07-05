@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>星の和音 — 出生図ソニフィケーション試作</title>
+<title>星の和音 — 出生図ソニフィケーション</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;600;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
@@ -16,97 +16,237 @@
   --rin:#8FB8C9;        /* 燐光（協和） */
   --shu:#C05248;        /* 朱（不協和） */
   --line:rgba(234,228,211,.14);
+  --surface:rgba(14,18,32,.76);
+  --surface-strong:rgba(20,27,45,.88);
+  --radius:18px;
+  --shadow:0 18px 60px rgba(0,0,0,.34);
 }
 *{margin:0;padding:0;box-sizing:border-box}
 body{
-  background:radial-gradient(130% 80% at 50% -20%, #182036 0%, var(--sora) 55%, var(--fukai) 100%);
+  position:relative;
+  overflow-x:hidden;
+  background:
+    radial-gradient(circle at 50% -8%, rgba(201,161,90,.16), transparent 32%),
+    radial-gradient(circle at 85% 12%, rgba(143,184,201,.12), transparent 30%),
+    radial-gradient(130% 80% at 50% -20%, #182036 0%, var(--sora) 55%, var(--fukai) 100%);
   color:var(--hoshi);
   font-family:"Shippori Mincho",serif;
   min-height:100vh;
   display:flex;flex-direction:column;align-items:center;
-  padding:max(20px, env(safe-area-inset-top)) 14px 60px;
+  padding:max(24px, env(safe-area-inset-top)) 16px 64px;
+  text-rendering:optimizeLegibility;
+}
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  background-image:
+    radial-gradient(circle, rgba(234,228,211,.28) 0 1px, transparent 1.5px),
+    radial-gradient(circle, rgba(201,161,90,.18) 0 1px, transparent 1.7px);
+  background-size:72px 72px,118px 118px;
+  background-position:12px 18px,54px 36px;
+  opacity:.42;
+  mask-image:linear-gradient(to bottom, #000 0%, rgba(0,0,0,.78) 45%, transparent 100%);
+}
+body::after{
+  content:"";
+  position:fixed;
+  inset:auto -20% -25% -20%;
+  height:42vh;
+  pointer-events:none;
+  background:radial-gradient(ellipse at center, rgba(201,161,90,.12), transparent 62%);
+  filter:blur(10px);
+}
+body > *{
+  position:relative;
+  z-index:1;
 }
 .mono{font-family:"IBM Plex Mono",monospace}
-header{width:100%;max-width:560px;border-bottom:1px solid var(--line);padding-bottom:14px;margin-bottom:20px;
-  display:flex;justify-content:space-between;align-items:flex-end}
-h1{font-size:25px;font-weight:800;letter-spacing:.3em}
-.sub{font-size:12.5px;color:var(--kasumi);letter-spacing:.15em;margin-top:8px}
-.badge{font-size:11.5px;color:var(--kin);border:1px solid var(--kin);padding:3px 8px;letter-spacing:.2em}
+header{
+  width:100%;max-width:600px;
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  padding:18px 18px 16px;
+  margin-bottom:20px;
+  background:linear-gradient(180deg,rgba(234,228,211,.045),rgba(234,228,211,.015));
+  box-shadow:var(--shadow);
+  display:flex;justify-content:space-between;align-items:flex-end;gap:16px;
+}
+h1{font-size:clamp(24px,6.8vw,34px);font-weight:800;letter-spacing:.24em;line-height:1.15}
+.sub{font-size:12.5px;color:var(--kasumi);letter-spacing:.12em;margin-top:10px;line-height:1.6}
+.badge{font-size:11.5px;color:var(--kin);border:1px solid rgba(201,161,90,.58);border-radius:999px;padding:5px 10px;letter-spacing:.18em;white-space:nowrap;background:rgba(201,161,90,.08)}
 
 /* ── 円環 ── */
-.wheel-wrap{width:100%;max-width:560px;display:flex;justify-content:center;margin-bottom:8px}
+.wheel-wrap{
+  width:100%;max-width:600px;
+  display:flex;justify-content:center;
+  margin-bottom:12px;
+  padding:14px 10px 8px;
+}
 svg{width:min(92vw,420px);height:auto;display:block}
 .zring{fill:none;stroke:var(--line);stroke-width:1}
 .tick{stroke:var(--line);stroke-width:1}
 .planet-dot{cursor:pointer}
-.planet-dot circle{fill:#1A2233;stroke:var(--kasumi);stroke-width:1;transition:all .2s}
+.planet-dot circle{fill:#1A2233;stroke:var(--kasumi);stroke-width:1;transition:fill .18s ease,stroke .18s ease,filter .18s ease,transform .18s ease}
 .planet-dot text{fill:var(--hoshi);font-size:15px;text-anchor:middle;dominant-baseline:central;pointer-events:none;font-family:"Shippori Mincho",serif}
 .planet-dot.on circle{fill:#2A3550;stroke:var(--kin);filter:drop-shadow(0 0 6px rgba(201,161,90,.5))}
+.planet-dot:hover circle,.planet-dot:focus-visible circle{stroke:var(--kin);filter:drop-shadow(0 0 8px rgba(201,161,90,.44))}
 .aline{stroke-width:1;opacity:.55}
 .aline.c{stroke:var(--rin)} .aline.d{stroke:var(--shu)}
 
 /* ── 操作 ── */
-.controls{width:100%;max-width:560px;display:flex;gap:10px;margin:6px 0 18px}
+.controls{width:100%;max-width:600px;display:flex;gap:12px;margin:6px 0 16px}
 button{
-  font-family:"Shippori Mincho",serif;letter-spacing:.2em;font-weight:600;
-  background:linear-gradient(180deg,#232D44,#161D2E);
-  color:var(--hoshi);border:1px solid rgba(234,228,211,.25);
-  padding:14px 0;flex:1;font-size:16px;cursor:pointer;
-  -webkit-tap-highlight-color:transparent;transition:transform .1s;
+  font-family:"Shippori Mincho",serif;letter-spacing:.14em;font-weight:600;
+  background:linear-gradient(180deg,#242E45,#151C2D);
+  color:var(--hoshi);border:1px solid rgba(234,228,211,.22);
+  border-radius:12px;
+  padding:13px 16px;flex:1;font-size:15px;line-height:1.25;cursor:pointer;
+  box-shadow:0 10px 24px rgba(0,0,0,.22), inset 0 1px 0 rgba(255,255,255,.04);
+  -webkit-tap-highlight-color:transparent;transition:transform .12s ease,border-color .18s ease,background .18s ease,box-shadow .18s ease;
 }
-button:active{transform:scale(.97)}
+button:hover{border-color:rgba(201,161,90,.48);background:linear-gradient(180deg,#293550,#171F33)}
+button:active{transform:scale(.98)}
+button:disabled{
+  cursor:not-allowed;
+  opacity:.45;
+  transform:none;
+  box-shadow:none;
+}
+button:disabled:hover{border-color:rgba(234,228,211,.22);background:linear-gradient(180deg,#242E45,#151C2D)}
 button:focus-visible{outline:2px solid var(--kin);outline-offset:2px}
-button.gold{border-color:var(--kin);color:var(--kin)}
-.hint{width:100%;max-width:560px;font-size:13px;color:var(--kasumi);letter-spacing:.06em;line-height:1.8;margin-bottom:22px;text-align:center}
+button.gold{border-color:rgba(201,161,90,.8);color:var(--kin);background:linear-gradient(180deg,rgba(201,161,90,.18),rgba(201,161,90,.06))}
+.timbre-panel{
+  width:100%;max-width:600px;
+  display:flex;align-items:center;gap:12px;
+  margin:-2px 0 16px;
+  padding:10px;
+  border:1px solid rgba(234,228,211,.12);
+  border-radius:14px;
+  background:rgba(8,11,20,.34);
+}
+.timbre-label{
+  flex:0 0 auto;
+  color:var(--kasumi);
+  font-size:12px;
+  letter-spacing:.2em;
+}
+.timbre-options{
+  flex:1;
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:6px;
+}
+.timbre-options button{
+  min-width:0;
+  padding:9px 8px;
+  font-size:12px;
+  letter-spacing:.08em;
+  border-radius:10px;
+  box-shadow:none;
+}
+.timbre-options button.active{
+  color:var(--kin);
+  border-color:rgba(201,161,90,.78);
+  background:linear-gradient(180deg,rgba(201,161,90,.2),rgba(201,161,90,.07));
+}
+.timbre-options button:disabled{
+  color:rgba(234,228,211,.42);
+  border-color:rgba(234,228,211,.1);
+  background:rgba(8,11,20,.42);
+}
+.timbre-options button.active:disabled{
+  color:rgba(201,161,90,.72);
+  border-color:rgba(201,161,90,.32);
+  background:rgba(201,161,90,.08);
+}
+.volume-panel{
+  width:100%;max-width:600px;
+  display:flex;align-items:center;gap:12px;
+  margin:-8px 0 18px;
+  padding:0 4px;
+}
+.volume-panel label{
+  color:var(--kasumi);
+  font-size:12px;
+  letter-spacing:.2em;
+  white-space:nowrap;
+}
+.volume-panel input{
+  flex:1;
+  min-width:0;
+  accent-color:var(--kin);
+}
+.volume-value{
+  width:42px;
+  color:var(--kin);
+  font-size:12px;
+  text-align:right;
+}
+.hint{width:100%;max-width:600px;font-size:13px;color:var(--kasumi);letter-spacing:.04em;line-height:1.85;margin-bottom:20px;text-align:center}
 
 /* ── 区画 ── */
-section{width:100%;max-width:560px;margin-bottom:26px}
-h2{font-size:14px;letter-spacing:.3em;color:var(--kasumi);font-weight:600;
-  border-bottom:1px solid var(--line);padding-bottom:8px;margin-bottom:10px}
+section{
+  width:100%;max-width:600px;
+  margin-bottom:18px;
+  padding:18px;
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  background:linear-gradient(180deg,var(--surface-strong),var(--surface));
+  box-shadow:0 14px 42px rgba(0,0,0,.26), inset 0 1px 0 rgba(255,255,255,.035);
+  backdrop-filter:blur(8px);
+}
+h2{font-size:13px;letter-spacing:.24em;color:var(--kin);font-weight:600;
+  border-bottom:1px solid var(--line);padding-bottom:10px;margin-bottom:14px;line-height:1.7}
 
 /* 不協和度 */
 .dscore{display:flex;align-items:baseline;gap:12px;margin-bottom:10px}
-.dscore .num{font-size:38px;font-weight:600;color:var(--kin)}
+.dscore .num{font-size:42px;font-weight:600;color:var(--kin);line-height:1}
 .dscore .lbl{font-size:12.5px;color:var(--kasumi);letter-spacing:.1em}
-.dbar{height:5px;background:rgba(234,228,211,.08);margin-bottom:14px;position:relative;overflow:hidden}
+.dbar{height:7px;background:rgba(234,228,211,.08);border-radius:999px;margin-bottom:14px;position:relative;overflow:hidden}
 .dbar i{position:absolute;inset:0 auto 0 0;background:linear-gradient(90deg,var(--rin),var(--kin),var(--shu));width:0%;transition:width .6s ease}
 .pairs{list-style:none}
 .pairs li{display:flex;justify-content:space-between;align-items:center;gap:8px;
-  font-size:15px;padding:11px 2px;border-bottom:1px dashed var(--line)}
+  font-size:15px;padding:12px 0;border-bottom:1px dashed var(--line)}
 .pairs .nm{letter-spacing:.1em}
 .pairs .asp{font-size:12.5px;color:var(--kasumi)}
 .pairs .val{color:var(--shu)}
-.pairs button{flex:0 0 auto;padding:7px 14px;font-size:13px;letter-spacing:.15em}
+.pairs button{flex:0 0 auto;padding:8px 14px;font-size:13px;letter-spacing:.12em;min-width:64px}
 
 /* アスペクト表 */
 .asp-list{list-style:none}
 .asp-list li{display:flex;justify-content:space-between;align-items:center;gap:8px;
-  font-size:15px;padding:11px 2px;border-bottom:1px dashed var(--line)}
+  font-size:15px;padding:12px 0;border-bottom:1px dashed var(--line)}
 .asp-list .ratio{font-size:12.5px;color:var(--kasumi)}
-.asp-list button{flex:0 0 auto;padding:7px 14px;font-size:13px;letter-spacing:.15em}
-.tag{font-size:12px;padding:2px 6px;border:1px solid var(--line);color:var(--kasumi);letter-spacing:.1em}
+.asp-list button{flex:0 0 auto;padding:8px 14px;font-size:13px;letter-spacing:.12em;min-width:64px}
+.tag{font-size:12px;padding:3px 7px;border:1px solid var(--line);border-radius:999px;color:var(--kasumi);letter-spacing:.08em;white-space:nowrap}
 .tag.c{color:var(--rin);border-color:rgba(143,184,201,.5)}
 .tag.d{color:var(--shu);border-color:rgba(192,82,72,.5)}
 
 /* 入力 */
-details{border:1px solid var(--line);padding:0 14px}
-summary{cursor:pointer;font-size:14px;letter-spacing:.2em;color:var(--kasumi);padding:12px 0;list-style:none}
+details{border:0;padding:0}
+summary{cursor:pointer;font-size:14px;letter-spacing:.18em;color:var(--kin);padding:2px 0 14px;list-style:none}
+summary::-webkit-details-marker{display:none}
 summary::before{content:"▸ ";color:var(--kin)}
 details[open] summary::before{content:"▾ "}
-.inrow{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-top:1px dashed var(--line)}
+.inrow{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 0;border-top:1px dashed var(--line)}
 .inrow label{font-size:15px;letter-spacing:.15em}
 .inrow input{
-  width:110px;background:#0B0F19;border:1px solid var(--line);color:var(--hoshi);
-  font-family:"IBM Plex Mono",monospace;font-size:16px;padding:9px 10px;text-align:right;
+  width:118px;background:#0B0F19;border:1px solid var(--line);border-radius:10px;color:var(--hoshi);
+  font-family:"IBM Plex Mono",monospace;font-size:16px;padding:10px 11px;text-align:right;
+  transition:border-color .18s ease,box-shadow .18s ease,background .18s ease;
 }
+.inrow input:hover,textarea:hover{border-color:rgba(234,228,211,.28)}
 .inrow input:focus-visible{outline:2px solid var(--kin);outline-offset:1px}
 .inrow .hz{font-size:12px;color:var(--kasumi);width:70px;text-align:right}
 
 /* YAML 読み込み */
 textarea{
-  width:100%;min-height:150px;background:#0B0F19;border:1px solid var(--line);
+  width:100%;min-height:160px;background:#0B0F19;border:1px solid var(--line);border-radius:12px;
   color:var(--hoshi);font-family:"IBM Plex Mono",monospace;font-size:13px;
-  padding:10px;line-height:1.6;resize:vertical;margin:4px 0 10px;
+  padding:12px;line-height:1.65;resize:vertical;margin:2px 0 12px;
+  transition:border-color .18s ease,box-shadow .18s ease,background .18s ease;
 }
 textarea:focus-visible{outline:2px solid var(--kin);outline-offset:1px}
 .yaml-actions{display:flex;gap:10px;margin-bottom:10px}
@@ -114,19 +254,49 @@ textarea:focus-visible{outline:2px solid var(--kin);outline-offset:1px}
 .status.ok{color:var(--rin)}
 .status.err{color:var(--shu)}
 
-footer{width:100%;max-width:560px;font-size:12.5px;line-height:2;color:var(--kasumi);
-  border-top:1px solid var(--line);padding-top:14px;letter-spacing:.04em}
+footer{width:100%;max-width:600px;font-size:12.5px;line-height:2;color:var(--kasumi);
+  border-top:1px solid var(--line);padding-top:16px;margin-top:6px;letter-spacing:.04em}
 footer b{color:var(--hoshi);font-weight:600}
+
+@media (max-width:520px){
+  body{padding:max(18px, env(safe-area-inset-top)) 12px 44px}
+  header{padding:16px 14px 14px;border-radius:15px}
+  h1{letter-spacing:.2em}
+  .sub{font-size:12px}
+  .badge{font-size:11px;padding:4px 8px}
+  .wheel-wrap{padding-top:6px}
+  .controls{gap:9px}
+  button{padding:12px 10px;font-size:14px;letter-spacing:.1em;border-radius:10px}
+  .timbre-panel{align-items:flex-start;gap:8px;flex-direction:column;padding:9px}
+  .timbre-options{width:100%;grid-template-columns:repeat(2,minmax(0,1fr))}
+  .timbre-options button{font-size:12px;padding:10px 8px}
+  .volume-panel{padding:0 2px}
+  section{padding:15px;border-radius:15px}
+  .dscore{flex-direction:column;gap:5px;align-items:flex-start}
+  .dscore .num{font-size:36px}
+  .pairs li,.asp-list li{gap:7px;flex-wrap:wrap}
+  .pairs .nm,.asp-list .nm{width:100%}
+  .pairs button,.asp-list button{margin-left:auto}
+  .inrow{align-items:flex-start;flex-wrap:wrap}
+  .inrow label{width:100%}
+  .inrow input{flex:1 1 140px;width:auto;text-align:left}
+  .inrow .hz{width:auto;padding-top:11px}
+  .yaml-actions{display:block}
+  .yaml-actions button{width:100%}
+}
 </style>
+<link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
+<link rel="shortcut icon" href="/static/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/static/favicon.svg">
+<meta name="theme-color" content="#0A1128">
 </head>
 <body>
 
 <header>
   <div>
     <h1>星の和音</h1>
-    <div class="sub">出生図ソニフィケーション・試作一号</div>
+    <div class="sub">出生図ソニフィケーション</div>
   </div>
-  <div class="badge">試作</div>
 </header>
 
 <div class="wheel-wrap">
@@ -136,6 +306,20 @@ footer b{color:var(--hoshi);font-weight:600}
 <div class="controls">
   <button class="gold" id="playAll">和音を鳴らす</button>
   <button id="stopAll">止める</button>
+</div>
+<div class="timbre-panel">
+  <span class="timbre-label">音色</span>
+  <div class="timbre-options" role="radiogroup" aria-label="音色">
+    <button class="active" type="button" data-timbre="pure" role="radio" aria-checked="true">Pure / 純音</button>
+    <button type="button" data-timbre="cosmic" role="radio" aria-checked="false">Cosmic / 宇宙</button>
+    <button type="button" data-timbre="bell" role="radio" aria-checked="false">Bell / 鐘</button>
+    <button type="button" data-timbre="deep" role="radio" aria-checked="false">Deep / 深音</button>
+  </div>
+</div>
+<div class="volume-panel">
+  <label for="volumeControl">音量</label>
+  <input id="volumeControl" type="range" min="0" max="100" value="70" aria-label="音量">
+  <span class="volume-value mono" id="volumeValue">70%</span>
 </div>
 <div class="hint">円環の天体をタップすると、その星を和音に入れたり外したりできます。<br>黄経 λ を音高 220Hz × 2<sup>λ/360</sup> に写像しています。</div>
 
@@ -170,7 +354,7 @@ footer b{color:var(--hoshi);font-weight:600}
 </section>
 
 <footer>
-  写像規則: 黄経 λ° → 周波数 220×2^(λ/360) Hz（黄道一周＝1オクターブ）。二天体の離角 Δ° → 音程比 2^(Δ/180)（衝＝オクターブ、スクエア＝三全音、トライン≒短六度、セクスタイル≒長三度）。音色は基音＋倍音5次のカスタム波形。不協和度は <b>Plomp–Levelt（1965）</b>の感覚的不協和度曲線を倍音対ごとに合算した相対値です。着想の系譜は <b>ケプラー『世界の調和』（1619）</b>、<b>H.クスト『The Cosmic Octave』</b>、<b>J.アディのハーモニクス占星術</b>。これはあなたのチャートの音響変換であり、聴取による効能は主張しません。
+  写像規則: 黄経 λ° → 周波数 220×2^(λ/360) Hz（黄道一周＝1オクターブ）。二天体の離角 Δ° → 音程比 2^(Δ/180)（衝＝オクターブ、スクエア＝三全音、トライン≒短六度、セクスタイル≒長三度）。Pure音色は基音＋倍音5次のカスタム波形。不協和度は <b>Plomp–Levelt（1965）</b>の感覚的不協和度曲線を倍音対ごとに合算した相対値です。着想の系譜は <b>ケプラー『世界の調和』（1619）</b>、<b>H.クスト『The Cosmic Octave』</b>、<b>J.アディのハーモニクス占星術</b>。これはあなたのチャートの音響変換であり、聴取による効能は主張しません。
 </footer>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js"></script>
@@ -206,48 +390,322 @@ footer b{color:var(--hoshi);font-weight:600}
 
   /* ── 音 ── */
   const NH=5, HARM=[1,.55,.35,.22,.14];
-  let ctx=null, master=null, voices=[];
-  function audio(){
-    if(!ctx){
-      ctx=new (window.AudioContext||window.webkitAudioContext)();
-      master=ctx.createGain(); master.gain.value=.14; master.connect(ctx.destination);
+  const TIMBRES={
+    pure:{wave:"periodic",level:1,output:1,attack:.4,release:.35,tail:.5},
+    cosmic:{type:"sine",level:1,output:1.28,attack:1,release:3,tail:3.4,delay:.5,feedback:.34,wet:.34,filterFreq:1500,vibrato:.9,vibratoDepth:1.8},
+    bell:{type:"sine",level:1.08,output:1.38,attack:.018,decay:1,sustain:.18,release:1.6,tail:2,bell:true,delay:.2,feedback:.14,wet:.16},
+    deep:{type:"triangle",level:1,output:1.18,attack:.75,release:3.4,tail:3.8,filter:"lowpass",filterFreq:560,octaveGain:.28}
+  };
+  const AudioEngine=(()=>{
+    let ctx=null, master=null, wave=null, timbreState="pure";
+    let masterVolume=.7;
+    let isPlaying=false, activeFreqs=[], activeGroup=null, transitionId=0;
+    let oneShotGroups=[];
+    let playingListener=()=>{};
+
+    function setPlaying(next){
+      if(isPlaying===next)return;
+      isPlaying=next;
+      playingListener(isPlaying);
     }
-    if(ctx.state==="suspended")ctx.resume();
-    return ctx;
-  }
-  let wave=null;
-  function periodic(){
-    if(wave)return wave;
-    const re=new Float32Array(NH+1), im=new Float32Array(NH+1);
-    for(let i=1;i<=NH;i++)im[i]=HARM[i-1];
-    wave=ctx.createPeriodicWave(re,im,{disableNormalization:false});
-    return wave;
-  }
-  function stopAll(fade=.25){
-    voices.forEach(v=>{
+
+    async function ensureContext(){
+      if(!ctx){
+        ctx=new (window.AudioContext||window.webkitAudioContext)();
+        master=ctx.createGain();
+        master.gain.value=masterVolume;
+        master.connect(ctx.destination);
+      }
+      if(ctx.state==="suspended"){
+        await ctx.resume();
+      }
+      return ctx;
+    }
+    function periodic(){
+      if(wave)return wave;
+      const re=new Float32Array(NH+1), im=new Float32Array(NH+1);
+      for(let i=1;i<=NH;i++)im[i]=HARM[i-1];
+      wave=ctx.createPeriodicWave(re,im,{disableNormalization:false});
+      return wave;
+    }
+
+    function disposeGroup(group){
+      if(!group||group.disposed)return;
+      group.disposed=true;
+      if(group.timer)window.clearTimeout(group.timer);
+      group.oscillators.forEach(o=>{try{o.stop()}catch(e){}});
+      group.nodes.forEach(n=>{try{n.disconnect()}catch(e){}});
+      if(activeGroup===group)activeGroup=null;
+      oneShotGroups=oneShotGroups.filter(g=>g!==group);
+    }
+
+    function stopGroup(group,fade=.25){
+      if(!ctx||!group||group.disposed)return;
+      const t=ctx.currentTime;
       try{
-        v.g.gain.cancelScheduledValues(ctx.currentTime);
-        v.g.gain.setTargetAtTime(0,ctx.currentTime,fade/3);
-        v.o.stop(ctx.currentTime+fade+0.1);
+        group.out.gain.cancelScheduledValues(t);
+        group.out.gain.setValueAtTime(group.out.gain.value,t);
+        group.out.gain.linearRampToValueAtTime(0,t+fade);
       }catch(e){}
-    });
-    voices=[];
+      group.oscillators.forEach(o=>{try{o.stop(t+fade+.05)}catch(e){}});
+      group.timer=window.setTimeout(()=>disposeGroup(group),(fade+1)*1000);
+    }
+
+    function stopAllNodes(fade=.25,{markStopped=true}={}){
+      if(activeGroup)stopGroup(activeGroup,fade);
+      oneShotGroups.slice().forEach(group=>stopGroup(group,fade));
+      activeGroup=null;
+      if(markStopped){
+        activeFreqs=[];
+        setPlaying(false);
+      }
+    }
+
+    function startTone(frequency,timbre,level,groupOut,{sustain=false,dur=4}={},nodes,oscillators){
+      const mode=TIMBRES[timbre]||TIMBRES.pure;
+      const t=ctx.currentTime;
+      const o=ctx.createOscillator();
+      const toneGain=ctx.createGain();
+      if(mode.wave==="periodic")o.setPeriodicWave(periodic());
+      else o.type=mode.type||"sine";
+      o.frequency.value=frequency;
+      if(sustain){
+        toneGain.gain.setValueAtTime(timbre==="bell"?level*(mode.sustain||.2):level,t);
+      }else if(mode.bell){
+        toneGain.gain.setValueAtTime(.0001,t);
+        toneGain.gain.linearRampToValueAtTime(level,t+mode.attack);
+        toneGain.gain.exponentialRampToValueAtTime(Math.max(.0008,level*(mode.sustain||.2)),t+mode.decay);
+        toneGain.gain.setTargetAtTime(0,t+Math.min(dur,mode.decay),mode.release/3);
+      }else{
+        toneGain.gain.setValueAtTime(0,t);
+        toneGain.gain.linearRampToValueAtTime(level,t+mode.attack);
+        toneGain.gain.setTargetAtTime(0,t+Math.max(mode.attack,dur-mode.release),mode.release/3);
+      }
+      o.connect(toneGain);
+      toneGain.connect(groupOut);
+      nodes.push(o,toneGain);
+
+      /* Effects are additive. Dry sound above always reaches destination. */
+      try{
+        if(timbre==="cosmic"){
+          [-7,7].forEach((cents,idx)=>{
+            const pad=ctx.createOscillator(), padGain=ctx.createGain();
+            pad.type=idx===0?"triangle":"sine";
+            pad.frequency.value=frequency*Math.pow(2,cents/1200);
+            padGain.gain.value=level*.28;
+            pad.connect(padGain);
+            if(ctx.createStereoPanner){
+              const pan=ctx.createStereoPanner();
+              pan.pan.value=idx===0?-.34:.34;
+              padGain.connect(pan);
+              pan.connect(groupOut);
+              nodes.push(pan);
+            }else{
+              padGain.connect(groupOut);
+            }
+            pad.start(t);
+            oscillators.push(pad);
+            if(!sustain)try{pad.stop(t+dur+mode.tail)}catch(e){}
+            nodes.push(pad,padGain);
+          });
+
+          if(ctx.createStereoPanner){
+            const spread=ctx.createStereoPanner(), spreadGain=ctx.createGain();
+            spread.pan.value=(Math.sin(frequency)*.35);
+            spreadGain.gain.value=level*.22;
+            toneGain.connect(spread);
+            spread.connect(spreadGain);
+            spreadGain.connect(groupOut);
+            nodes.push(spread,spreadGain);
+          }
+
+          const lfo=ctx.createOscillator(), lfoGain=ctx.createGain();
+          lfo.type="sine";
+          lfo.frequency.value=mode.vibrato;
+          lfoGain.gain.value=mode.vibratoDepth;
+          lfo.connect(lfoGain);
+          lfoGain.connect(o.frequency);
+          lfo.start(t);
+          oscillators.push(lfo);
+          if(!sustain)try{lfo.stop(t+dur+mode.tail)}catch(e){}
+          nodes.push(lfo,lfoGain);
+
+          const filter=ctx.createBiquadFilter(), smooth=ctx.createGain();
+          filter.type="lowpass";
+          filter.frequency.value=mode.filterFreq;
+          filter.Q.value=.45;
+          smooth.gain.value=.18;
+          toneGain.connect(filter);
+          filter.connect(smooth);
+          smooth.connect(groupOut);
+          nodes.push(filter,smooth);
+        }
+        if(timbre==="bell"){
+          [2,3,4.2].forEach((mul,idx)=>{
+            const h=ctx.createOscillator(), hg=ctx.createGain();
+            h.type=idx===1?"triangle":"sine";
+            h.frequency.value=frequency*mul;
+            hg.gain.setValueAtTime(.0001,t);
+            hg.gain.linearRampToValueAtTime(level*([.52,.34,.2][idx]),t+.015);
+            hg.gain.exponentialRampToValueAtTime(.0008,t+([1.25,.85,.55][idx]));
+            h.connect(hg);
+            hg.connect(groupOut);
+            h.start(t);
+            oscillators.push(h);
+            if(!sustain)try{h.stop(t+mode.tail)}catch(e){}
+            nodes.push(h,hg);
+          });
+        }
+        if(timbre==="deep"){
+          [
+            {div:2,gain:mode.octaveGain||.28,type:"triangle"},
+            {div:4,gain:.12,type:"sine"}
+          ].forEach(layer=>{
+            const sub=ctx.createOscillator(), subGain=ctx.createGain(), subFilter=ctx.createBiquadFilter();
+            sub.type=layer.type;
+            sub.frequency.value=Math.max(22,frequency/layer.div);
+            subFilter.type="lowpass";
+            subFilter.frequency.value=mode.filterFreq;
+            subFilter.Q.value=.5;
+            subGain.gain.value=level*layer.gain;
+            sub.connect(subFilter);
+            subFilter.connect(subGain);
+            subGain.connect(groupOut);
+            sub.start(t);
+            oscillators.push(sub);
+            if(!sustain)try{sub.stop(t+dur+mode.tail)}catch(e){}
+            nodes.push(sub,subFilter,subGain);
+          });
+        }
+        if(mode.filter){
+          const filter=ctx.createBiquadFilter(), wet=ctx.createGain();
+          filter.type=mode.filter;
+          filter.frequency.value=mode.filterFreq;
+          filter.Q.value=.7;
+          wet.gain.value=mode.delay ? .18 : .22;
+          toneGain.connect(filter);
+          filter.connect(wet);
+          wet.connect(groupOut);
+          nodes.push(filter,wet);
+        }
+        if(mode.delay){
+          const delay=ctx.createDelay(.8), feedback=ctx.createGain(), wetDelay=ctx.createGain();
+          delay.delayTime.value=mode.delay;
+          feedback.gain.value=mode.feedback;
+          wetDelay.gain.value=mode.wet;
+          toneGain.connect(delay);
+          delay.connect(wetDelay);
+          wetDelay.connect(groupOut);
+          delay.connect(feedback);
+          feedback.connect(delay);
+          nodes.push(delay,feedback,wetDelay);
+        }
+      }catch(e){}
+      o.start(t);
+      if(!sustain){
+        try{o.stop(t+dur+mode.tail)}catch(e){}
+      }
+      return o;
+    }
+
+    function createGroup(freqs,timbre,{sustain=false,dur=4,fadeIn=.25}={}){
+      const mode=TIMBRES[timbre]||TIMBRES.pure;
+      const t=ctx.currentTime;
+      const groupOut=ctx.createGain();
+      groupOut.gain.setValueAtTime(0,t);
+      groupOut.gain.linearRampToValueAtTime(mode.output||1,t+fadeIn);
+      groupOut.connect(master);
+      const group={out:groupOut,nodes:[groupOut],oscillators:[],timer:null,disposed:false};
+      try{
+        freqs.forEach(f=>{
+          const level=Math.min(.14,Math.max(.1,(mode.level*.5)/Math.max(3,freqs.length)));
+          const o=startTone(f,timbre,level,groupOut,{sustain,dur},group.nodes,group.oscillators);
+          group.oscillators.push(o);
+        });
+        if(!sustain){
+          group.timer=window.setTimeout(()=>disposeGroup(group),(dur+mode.tail+1)*1000);
+        }
+      }catch(e){
+        disposeGroup(group);
+        throw e;
+      }
+      return group;
+    }
+
+    async function startChord(freqs){
+      const token=++transitionId;
+      stopAllNodes(.08,{markStopped:false});
+      setPlaying(true);
+      try{
+        await ensureContext();
+        if(token!==transitionId)return;
+        const nextFreqs=freqs.slice();
+        const group=createGroup(nextFreqs,timbreState,{sustain:true,fadeIn:.28});
+        if(token!==transitionId){disposeGroup(group);return}
+        activeGroup=group;
+        activeFreqs=nextFreqs;
+        setPlaying(true);
+      }catch(e){
+        stopAllNodes(0,{markStopped:true});
+      }
+    }
+
+    async function playOnce(freqs,dur=4){
+      try{
+        await ensureContext();
+        const group=createGroup(freqs.slice(),timbreState,{sustain:false,dur,fadeIn:.08});
+        oneShotGroups.push(group);
+      }catch(e){}
+    }
+
+    return {
+      playSustain(freqs){
+        if(!freqs.length){this.stop();return}
+        startChord(freqs);
+      },
+      playOnce,
+      stop(fade=.45){
+        transitionId++;
+        if(!ctx&&!activeGroup&&!oneShotGroups.length){setPlaying(false);activeFreqs=[];return}
+        stopAllNodes(fade,{markStopped:true});
+      },
+      setVolume(value){
+        const next=Math.max(0,Math.min(1,value));
+        masterVolume=next;
+        if(master)master.gain.value=next;
+      },
+      setTimbre(next){
+        if(!TIMBRES[next])return;
+        if(isPlaying)return;
+        timbreState=next;
+      },
+      testTimbres(){
+        Object.keys(TIMBRES).forEach((key,i)=>{
+          window.setTimeout(()=>{
+            this.setTimbre(key);
+            this.playOnce([330],.75);
+          },i*950);
+        });
+      },
+      updateSustain(freqs){
+        if(!isPlaying)return;
+        if(!freqs.length){this.stop();return}
+        startChord(freqs);
+      },
+      onPlayingChange(fn){
+        playingListener=typeof fn==="function"?fn:()=>{};
+        playingListener(isPlaying);
+      }
+    };
+  })();
+  function playFreqs(freqs,dur=4){AudioEngine.playOnce(freqs,dur)}
+  function playSustain(freqs){AudioEngine.playSustain(freqs)}
+  function updateSustainFromActive(){
+    const act=PLANETS.filter(p=>p.on);
+    AudioEngine.updateSustain(act.map(p=>freqOf(p.lon)));
   }
-  function playFreqs(freqs,dur=4){
-    audio(); stopAll(.1);
-    const t=ctx.currentTime;
-    freqs.forEach(f=>{
-      const o=ctx.createOscillator(), g=ctx.createGain();
-      o.setPeriodicWave(periodic());
-      o.frequency.value=f;
-      g.gain.setValueAtTime(0,t);
-      g.gain.linearRampToValueAtTime(1/Math.max(2,freqs.length),t+.4);
-      g.gain.setTargetAtTime(0,t+dur-0.8,.35);
-      o.connect(g); g.connect(master);
-      o.start(t); o.stop(t+dur+0.5);
-      voices.push({o,g});
-    });
-  }
+  function stopSustain(fade=.45){AudioEngine.stop(fade)}
+  window.hoshiNoWaonTestTimbres=()=>AudioEngine.testTimbres();
 
   /* ── Plomp–Levelt 不協和度 ── */
   function plDiss(f1,f2,a1,a2){
@@ -298,7 +756,7 @@ footer b{color:var(--hoshi);font-weight:600}
         "aria-label":p.n+"を"+(p.on?"外す":"入れる")});
       el("circle",{cx:x,cy:y,r:15},g);
       const t=el("text",{x,y},g); t.textContent=p.g;
-      const toggle=()=>{p.on=!p.on;render()};
+      const toggle=()=>{p.on=!p.on;render();updateSustainFromActive()};
       g.addEventListener("click",toggle);
       g.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();toggle()}});
     });
@@ -379,12 +837,35 @@ footer b{color:var(--hoshi);font-weight:600}
     inp.addEventListener("change",()=>{
       let v=parseFloat(inp.value);
       if(isNaN(v))v=0; v=((v%360)+360)%360;
-      inp.value=v.toFixed(2); p.lon=v; render();
+      inp.value=v.toFixed(2); p.lon=v; render();updateSustainFromActive();
     });
     const hz=document.createElement("span");hz.className="hz mono";
     hz.dataset.hz=p.k;
     row.append(lab,inp,hz);
     inWrap.appendChild(row);
+  });
+
+  const timbreButtons=[...document.querySelectorAll("[data-timbre]")];
+  function setTimbreButtonsDisabled(disabled){
+    timbreButtons.forEach(btn=>{btn.disabled=disabled});
+  }
+  AudioEngine.onPlayingChange(setTimbreButtonsDisabled);
+  const volumeControl=$("volumeControl"), volumeValue=$("volumeValue");
+  volumeControl.addEventListener("input",()=>{
+    const pct=parseInt(volumeControl.value,10)||0;
+    volumeValue.textContent=pct+"%";
+    AudioEngine.setVolume(pct/100);
+  });
+  timbreButtons.forEach(btn=>{
+    btn.addEventListener("click",()=>{
+      if(btn.disabled)return;
+      AudioEngine.setTimbre(btn.dataset.timbre);
+      timbreButtons.forEach(b=>{
+        const active=b===btn;
+        b.classList.toggle("active",active);
+        b.setAttribute("aria-checked",active?"true":"false");
+      });
+    });
   });
 
   /* ── YAML 読み込み ── */
@@ -511,15 +992,21 @@ footer b{color:var(--hoshi);font-weight:600}
     st.className="status ok";
     st.textContent="読み込み完了: "+got+(miss?"（未検出: "+miss+" は手入力かサンプル値のまま）":"　全10天体");
     render();
+    updateSustainFromActive();
   }
   $("yamlLoad").addEventListener("click",loadYaml);
 
   $("playAll").addEventListener("click",()=>{
     const act=PLANETS.filter(p=>p.on);
     if(!act.length)return;
-    playFreqs(act.map(p=>freqOf(p.lon)),5);
+    setTimbreButtonsDisabled(true);
+    playSustain(act.map(p=>freqOf(p.lon)));
   });
-  $("stopAll").addEventListener("click",()=>{audio();stopAll()});
+  $("stopAll").addEventListener("click",()=>stopSustain());
+  document.addEventListener("visibilitychange",()=>{
+    if(document.hidden)stopSustain(.25);
+  });
+  window.addEventListener("pagehide",()=>stopSustain(.2));
 
   render();
 })();
