@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>体験アプリ一覧 | nanami-astro</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=Noto+Serif+JP:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #fafaf8; --surface: #ffffff; --border: #e8e4dc;
+    --text: #2c2a27; --text-sub: #7a7670;
+    --accent: #c9a84c; --accent-light: #f5edd6; --accent-dark: #9a7830;
+    --radius: 12px; --shadow: 0 2px 16px rgba(0,0,0,0.06);
+  }
+  body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: var(--text); line-height: 1.8; font-weight: 300; }
+
+  header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 20px 24px; text-align: center; }
+  header .logo { font-family: 'Noto Serif JP', serif; font-size: 13px; letter-spacing: 0.2em; color: var(--accent-dark); }
+  header h1 { font-size: 20px; font-weight: 400; margin-top: 6px; }
+
+  .container { max-width: 720px; margin: 0 auto; padding: 40px 20px 80px; }
+
+  .breadcrumb { font-size: 12px; color: var(--text-sub); margin-bottom: 28px; }
+  .breadcrumb a { color: var(--accent-dark); text-decoration: none; }
+  .breadcrumb a:hover { text-decoration: underline; }
+  .breadcrumb span { margin: 0 6px; opacity: 0.5; }
+
+  .intro { font-size: 13px; color: var(--text-sub); line-height: 1.9; margin-bottom: 40px; }
+
+  .section { margin-bottom: 48px; }
+  .section-label { font-size: 11px; letter-spacing: 0.2em; color: var(--accent-dark); text-transform: uppercase; margin-bottom: 8px; font-weight: 500; }
+  .section-title { font-size: 20px; font-weight: 500; margin-bottom: 8px; }
+  .section-desc { font-size: 13px; color: var(--text-sub); margin-bottom: 20px; }
+
+  /* アプリカード */
+  .app-cards { display: flex; flex-direction: column; gap: 14px; }
+  .app-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; box-shadow: var(--shadow); display: flex; flex-direction: column; gap: 12px; transition: box-shadow 0.2s, border-color 0.2s; }
+  .app-card:hover { box-shadow: 0 4px 24px rgba(0,0,0,0.1); border-color: var(--accent); }
+  .app-card-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  .app-title-wrap { display: flex; align-items: center; gap: 12px; }
+  .app-icon { font-size: 28px; line-height: 1; }
+  .app-card h3 { font-size: 17px; font-weight: 500; }
+  .app-badge { font-size: 11px; background: var(--accent-light); color: var(--accent-dark); padding: 3px 10px; border-radius: 20px; font-weight: 500; white-space: nowrap; }
+  .app-badge.web { background: #e8f0ff; color: #3a5ca8; }
+  .app-badge.soon { background: #f0ece8; color: #7a5c3a; }
+  .app-card p { font-size: 13px; color: var(--text-sub); line-height: 1.7; }
+  .app-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .app-tag { font-size: 11px; background: var(--bg); border: 1px solid var(--border); border-radius: 20px; padding: 2px 10px; color: var(--text-sub); }
+  .app-links { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 4px; }
+  .app-link { font-size: 13px; font-weight: 500; text-decoration: none; padding: 8px 16px; border-radius: 8px; display: inline-flex; align-items: center; gap: 6px; transition: background 0.2s, border-color 0.2s; }
+  .app-link.primary { background: var(--accent); color: #fff; }
+  .app-link.primary:hover { background: var(--accent-dark); }
+  .app-link.secondary { background: transparent; color: var(--accent-dark); border: 1px solid var(--border); }
+  .app-link.secondary:hover { border-color: var(--accent); }
+
+  /* アプリカード右下の note 記事リンク */
+  .app-note-row { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; margin-top: 2px; }
+  .app-note-link { font-size: 12px; color: var(--text-sub); text-decoration: none; display: inline-flex; align-items: center; gap: 5px; transition: color 0.2s; }
+  .app-note-link:hover { color: var(--accent-dark); }
+  .app-note-link .note-mark { font-weight: 700; font-size: 11px; letter-spacing: 0.05em; border: 1px solid var(--border); border-radius: 4px; padding: 1px 6px; color: var(--text-sub); }
+  .app-note-link:hover .note-mark { border-color: var(--accent); color: var(--accent-dark); }
+  .app-note-link::after { content: '→'; }
+
+  /* データを使うアプリ向けの案内 */
+  .app-datahint { margin-top: 4px; background: var(--accent-light); border-left: 3px solid var(--accent); padding: 10px 14px; font-size: 12px; color: var(--accent-dark); border-radius: 0 6px 6px 0; line-height: 1.7; }
+
+  /* Coming soon カード */
+  .app-card.coming { opacity: 0.6; }
+  .app-card.coming:hover { box-shadow: var(--shadow); border-color: var(--border); }
+
+  /* 関連読みもの */
+  .read-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px 24px; box-shadow: var(--shadow); text-decoration: none; color: inherit; display: flex; flex-direction: column; gap: 8px; transition: box-shadow 0.2s, border-color 0.2s; }
+  .read-card:hover { box-shadow: 0 4px 24px rgba(0,0,0,0.1); border-color: var(--accent); }
+  .read-card h3 { font-size: 15px; font-weight: 500; }
+  .read-card p { font-size: 12px; color: var(--text-sub); }
+  .read-link { font-size: 12px; color: var(--accent-dark); font-weight: 500; }
+  .read-link::after { content: ' →'; }
+
+  .divider { border: none; border-top: 1px solid var(--border); margin: 48px 0; }
+  .note { background: #f7f4ee; border-radius: var(--radius); padding: 16px 20px; font-size: 12px; color: var(--text-sub); line-height: 1.8; }
+  footer { text-align: center; padding: 32px; font-size: 12px; color: var(--text-sub); border-top: 1px solid var(--border); }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">nanami-astro</div>
+  <h1>体験アプリ一覧</h1>
+</header>
+
+<div class="container">
+
+  <nav class="breadcrumb">
+    <a href="index.html">使い方ガイド</a>
+    <span>›</span>
+    <span>体験アプリ一覧</span>
+  </nav>
+
+  <p class="intro">
+    nanami-astro の計算データを使って遊べる体験アプリと、データをAIにつなぐ仕組みを集めました。<strong>いずれのアプリも鑑定データ（YAML）に対応しています。</strong>鑑定データページの「<strong>選んだ版のYAMLをコピー</strong>」で書き出したデータを読み込ませると、あなた専用の内容で楽しめます。Claude をお使いの方は、URLを直接つなぐ MCP連携（下記）も便利です。
+  </p>
+
+  <!-- ============================================ -->
+  <!-- SECTION 0: データ連携（最重要）                 -->
+  <!-- 鑑定データをAIに直接つなぐ仕組み。               -->
+  <!-- 将来ChatGPT等が対応したらバッジ/リンクを追加。   -->
+  <!-- ============================================ -->
+  <div class="section">
+    <div class="section-label">Connect</div>
+    <div class="section-title">鑑定データをAIにつなぐ</div>
+    <div class="section-desc">コピー＆貼り付けだけでなく、鑑定データページのURLをAIに直接つないで鑑定する仕組みです。</div>
+    <div class="app-cards">
+
+      <!-- MCP連携 -->
+      <div class="app-card">
+        <div class="app-card-header">
+          <div class="app-title-wrap">
+            <span class="app-icon">🔗</span>
+            <h3>占術データ MCP連携</h3>
+          </div>
+          <span class="app-badge">Claude対応</span>
+        </div>
+        <p>鑑定データページのURL（Chart URL）を Claude に直接つなぎ、リアルタイムでデータを読み込ませて鑑定する仕組みです。毎回コピー＆貼り付けをしなくても、URLひとつでその都度いちばん新しいデータを参照できます。</p>
+        <div class="app-tags">
+          <span class="app-tag">Chart URL</span>
+          <span class="app-tag">Claude MCP</span>
+          <span class="app-tag">リアルタイム参照</span>
+          <!-- 将来対応: <span class="app-tag">ChatGPT対応</span> 等をここに追加 -->
+        </div>
+        <div class="app-datahint">
+          🔗 設定の手順は note 記事にまとめています。Claude 側でコネクタを登録すると、Chart URL をそのまま渡せるようになります。
+        </div>
+        <div class="app-note-row">
+          <a href="https://note.com/unique_r_haya_ma/n/n7b0c724c1bc5" class="app-note-link" target="_blank" rel="noopener"><span class="note-mark">note</span>連携の手順を読む</a>
+        </div>
+      </div>
+
+      <!-- ▼▼▼ ChatGPT等の連携に対応したら、下に .app-card を追加 ▼▼▼ -->
+      <!-- ▲▲▲ 追加位置ここまで ▲▲▲ -->
+
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ============================================ -->
+  <!-- SECTION 1: 星のアプリ                          -->
+  <!-- 新しいアプリはこの .app-cards の中に            -->
+  <!-- <div class="app-card">…</div> を追加するだけ    -->
+  <!-- ============================================ -->
+  <div class="section">
+    <div class="section-label">Apps</div>
+    <div class="section-title">星のアプリ</div>
+    <div class="section-desc">ホロスコープや星のデータを、見て・聴いて・体験できるアプリです。</div>
+    <div class="app-cards">
+
+      <!-- 星詠みの天幕 -->
+      <div class="app-card">
+        <div class="app-card-header">
+          <div class="app-title-wrap">
+            <span class="app-icon">⛺</span>
+            <h3>星詠みの天幕</h3>
+          </div>
+          <span class="app-badge">分身AI作成</span>
+        </div>
+        <p>あなたのホロスコープを読み込ませて、「星から生まれた分身AI」をつくれる体験アプリ。星空の天幕の下で、あなたの星図をもとにしたAIと対話できます。Claude アーティファクト版と、ブラウザで開く WEB 版があります。</p>
+        <div class="app-tags">
+          <span class="app-tag">分身AI</span>
+          <span class="app-tag">ホロスコープ</span>
+          <span class="app-tag">星読み対話</span>
+          <span class="app-tag">YAML対応</span>
+        </div>
+        <div class="app-datahint">
+          📋 鑑定データページで「選んだ版のYAMLをコピー」→ アプリに貼り付けると、あなたの星図をもとにした分身AIが生まれます。
+        </div>
+        <div class="app-links">
+          <a href="https://claude.ai/public/artifacts/cdb9a175-8477-4980-b26d-46c0911c9478" class="app-link primary" target="_blank" rel="noopener">▶ 星詠みの天幕を開く（Claude版）</a>
+          <a href="https://guide.nanami-astro.com/hoshiyomi-no-yoru.html" class="app-link secondary" target="_blank" rel="noopener">WEB版を開く</a>
+        </div>
+        <div class="app-note-row">
+          <a href="https://note.com/unique_r_haya_ma/n/nfabc640d3bf7" class="app-note-link" target="_blank" rel="noopener"><span class="note-mark">note</span>このアプリの紹介記事を読む</a>
+          <a href="https://note.com/unique_r_haya_ma/n/nca732e0dfabc" class="app-note-link" target="_blank" rel="noopener"><span class="note-mark">note</span>思考のクセを足すと答えはどう変わる？（実験）</a>
+        </div>
+      </div>
+
+      <!-- プラネタリウム -->
+      <div class="app-card">
+        <div class="app-card-header">
+          <div class="app-title-wrap">
+            <span class="app-icon">🌌</span>
+            <h3>プラネタリウム</h3>
+          </div>
+          <span class="app-badge web">WEB</span>
+        </div>
+        <p>あなたのホロスコープを、プラネタリウム風の星空として眺められるアプリ。出生図の惑星配置を、ドームに広がる星空のように視覚的に楽しめます。</p>
+        <div class="app-tags">
+          <span class="app-tag">ホロスコープ</span>
+          <span class="app-tag">プラネタリウム</span>
+          <span class="app-tag">ビジュアル</span>
+          <span class="app-tag">YAML対応</span>
+        </div>
+        <div class="app-datahint">
+          📋 鑑定データページで「選んだ版のYAMLをコピー」→ アプリに貼り付けると、あなたの星図で表示できます。
+        </div>
+        <div class="app-links">
+          <a href="https://guide.nanami-astro.com/planetarium.html" class="app-link primary" target="_blank" rel="noopener">プラネタリウムを開く</a>
+        </div>
+        <div class="app-note-row">
+          <a href="https://note.com/unique_r_haya_ma/n/n068942acc39a" class="app-note-link" target="_blank" rel="noopener"><span class="note-mark">note</span>このアプリの紹介記事を読む</a>
+        </div>
+      </div>
+
+      <!-- ▼▼▼ 今後アプリを追加する場合は、下に .app-card をコピーして追加 ▼▼▼ -->
+      <!-- 例）「聴くホロスコープ（星の和音）」「怪異探知機」など。            -->
+      <!--     note記事で発表後にここへカードを追加する運用。                -->
+      <!-- ▲▲▲ 追加位置ここまで ▲▲▲ -->
+
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ============================================ -->
+  <!-- SECTION 2: 関連読みもの（毛色の違うもの）       -->
+  <!-- ============================================ -->
+  <div class="section">
+    <div class="section-label">Read</div>
+    <div class="section-title">関連する読みもの</div>
+    <div class="section-desc">アプリの紹介記事は各カードから読めます。ここでは、データを使った実験の記事をまとめています。</div>
+    <div class="app-cards">
+
+      <a href="https://note.com/unique_r_haya_ma/n/nfcd15c93f1e8" class="read-card" target="_blank" rel="noopener">
+        <h3>ホロスコープをAIに渡したら、どこまで本人に寄るのか</h3>
+        <p>アセンダント星座の容姿データだけをAIに渡し、似顔絵を描かせてみた実験。アプリはありませんが、プロンプトとYAMLをそのまま置いてあるので試せます。</p>
+        <span class="read-link">記事を読む</span>
+      </a>
+
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <div class="note">
+    ・Claude 版アプリのご利用には Claude アカウントが必要です。<br>
+    ・「選んだ版のYAMLをコピー」で書き出したデータは、鑑定データページの有効期限（発行から90日）内でご利用ください。<br>
+    ・本データは個人利用向けです。再配布・転載・商用利用は禁止しています。
+  </div>
+
+</div>
+
+<footer>© nanami-astro</footer>
+</body>
+</html>
