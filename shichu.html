@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title data-ja="四柱推命版の使い方 | nanami-astro" data-en="Four Pillars Plan Guide | nanami-astro">四柱推命版の使い方 | nanami-astro</title>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=Noto+Serif+JP:wght@300;400&display=swap" rel="stylesheet">
+<title>四柱推命版の使い方 | nanami-astro</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=Noto+Serif+JP:wght@300;400&family=Noto+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   :root {
@@ -15,16 +15,16 @@
     --radius: 12px; --shadow: 0 2px 16px rgba(0,0,0,0.06);
   }
   body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: var(--text); line-height: 1.8; font-weight: 300; }
+  html[lang="en"] body { font-family: 'Noto Sans', sans-serif; }
+  .lang-bar { display: flex; justify-content: flex-end; gap: 6px; padding: 10px 24px; background: rgba(250,248,244,0.92); border-bottom: 1px solid var(--border); }
+  .lang-btn { font-size: 10px; letter-spacing: 2px; border: 1px solid var(--border); background: transparent; color: var(--text-sub); border-radius: 999px; padding: 4px 14px; cursor: pointer; transition: all 0.2s; }
+  .lang-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
   header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 16px 24px; display: flex; align-items: center; gap: 16px; }
   .back-link { font-size: 13px; color: var(--accent); text-decoration: none; }
   .back-link:hover { text-decoration: underline; }
   header .header-right { flex: 1; text-align: center; }
   header .logo { font-family: 'Noto Serif JP', serif; font-size: 12px; letter-spacing: 0.2em; color: var(--gold-dark); }
   header h1 { font-size: 17px; font-weight: 400; }
-  .lang-switcher { display: flex; gap: 4px; flex-shrink: 0; }
-  .lang-btn { font-size: 11px; padding: 4px 10px; border-radius: 20px; border: 1px solid var(--border); background: var(--bg); color: var(--text-sub); cursor: pointer; font-family: inherit; transition: all 0.15s; }
-  .lang-btn.active { background: var(--gold); color: white; border-color: var(--gold); font-weight: 500; }
-  .lang-btn:hover:not(.active) { border-color: var(--gold); color: var(--gold-dark); }
   .container { max-width: 720px; margin: 0 auto; padding: 40px 20px 80px; }
   .section { margin-bottom: 48px; }
   .section-label { font-size: 11px; letter-spacing: 0.2em; color: var(--accent-dark); text-transform: uppercase; margin-bottom: 8px; font-weight: 500; }
@@ -52,54 +52,58 @@
 </style>
 </head>
 <body>
+
+<div class="lang-bar">
+  <button class="lang-btn active" onclick="setLang('ja')" id="btn-ja">JA</button>
+  <button class="lang-btn" onclick="setLang('en')" id="btn-en">EN</button>
+</div>
+
 <header>
   <a href="index.html" class="back-link" data-ja="← 戻る" data-en="← Back">← 戻る</a>
   <div class="header-right">
     <div class="logo">nanami-astro</div>
-    <h1 data-ja="四柱推命版の使い方" data-en="Four Pillars Plan Guide">四柱推命版の使い方</h1>
+    <h1 data-ja="四柱推命版の使い方" data-en="Four Pillars of Destiny Guide">四柱推命版の使い方</h1>
   </div>
-  <div class="lang-switcher">
-    <button class="lang-btn active" onclick="setLang('ja')">日本語</button>
-    <button class="lang-btn" onclick="setLang('en')">English</button>
-  </div>
+  <div style="width:48px;"></div>
 </header>
 
 <div class="container">
+
   <div class="section">
-    <span class="hero-badge" data-ja="🀄 四柱推命版" data-en="🀄 Four Pillars Plan">🀄 四柱推命版</span>
-    <div class="onetime-note" data-ja="📌 四柱推命版は1回限りの商品です。オプション追加はありません。データは90日間有効です。" data-en="📌 The Four Pillars plan is a one-time purchase. No add-ons available. Data is valid for 90 days.">📌 四柱推命版は1回限りの商品です。オプション追加はありません。データは90日間有効です。</div>
+    <span class="hero-badge" data-ja="🀄 四柱推命版" data-en="🀄 Four Pillars">🀄 四柱推命版</span>
+    <div class="onetime-note" data-ja="📌 四柱推命版は1回限りの商品です。オプション追加はありません。データは90日間有効です。" data-en="📌 This is a one-time product with no add-ons. Data is valid for 90 days.">📌 四柱推命版は1回限りの商品です。オプション追加はありません。データは90日間有効です。</div>
     <div class="section-label">What you can read</div>
-    <div class="section-title" data-ja="四柱推命版でわかること" data-en="What You Can Discover">四柱推命版でわかること</div>
+    <div class="section-title" data-ja="四柱推命版でわかること" data-en="What's Included">四柱推命版でわかること</div>
     <div class="feature-grid">
       <div class="feature-card">
         <div class="feature-icon">🏛️</div>
         <h4 data-ja="四柱命式" data-en="Four Pillars Chart">四柱命式</h4>
-        <p data-ja="年・月・日・時の四柱から、あなたの根本的な性格と人生の構造を読みます。" data-en="The four pillars of year, month, day, and hour reveal your core personality and life structure.">年・月・日・時の四柱から、あなたの根本的な性格と人生の構造を読みます。</p>
+        <p data-ja="年・月・日・時の四柱から、あなたの根本的な性格と人生の構造を読みます。" data-en="Year, Month, Day, and Hour pillars reveal your core personality and life structure.">年・月・日・時の四柱から、あなたの根本的な性格と人生の構造を読みます。</p>
       </div>
       <div class="feature-card">
         <div class="feature-icon">⚖️</div>
         <h4 data-ja="五行バランス" data-en="Five Elements Balance">五行バランス</h4>
-        <p data-ja="木・火・土・金・水のバランスから、得意なこと・苦手なことの傾向がわかります。" data-en="The balance of Wood, Fire, Earth, Metal, and Water shows your natural strengths and challenges.">木・火・土・金・水のバランスから、得意なこと・苦手なことの傾向がわかります。</p>
+        <p data-ja="木・火・土・金・水のバランスから、得意なこと・苦手なことの傾向がわかります。" data-en="Wood, Fire, Earth, Metal, Water — see where your energy flows and where it needs support.">木・火・土・金・水のバランスから、得意なこと・苦手なことの傾向がわかります。</p>
       </div>
       <div class="feature-card">
         <div class="feature-icon">🎭</div>
         <h4 data-ja="十神・才能の構造" data-en="Ten Gods & Talent Structure">十神・才能の構造</h4>
-        <p data-ja="食神・財星・官星など、命式に現れた星から才能・強み・課題を読み解きます。" data-en="Stars like the Food God, Wealth Star, and Officer Star reveal talents, strengths, and challenges in your chart.">食神・財星・官星など、命式に現れた星から才能・強み・課題を読み解きます。</p>
+        <p data-ja="食神・財星・官星など、命式に現れた星から才能・強み・課題を読み解きます。" data-en="Stars like Eating God, Wealth Star, and Officer Star reveal talents, strengths, and challenges.">食神・財星・官星など、命式に現れた星から才能・強み・課題を読み解きます。</p>
       </div>
       <div class="feature-card">
         <div class="feature-icon">🌊</div>
-        <h4 data-ja="大運・流年（運気の波）" data-en="Major Cycles & Annual Luck">大運・流年（運気の波）</h4>
-        <p data-ja="10年ごとの大運と今年の流年から、今どんな時期にいるかの流れがわかります。" data-en="Your 10-year major cycle and this year's annual luck show where you are in life's larger flow.">10年ごとの大運と今年の流年から、今どんな時期にいるかの流れがわかります。</p>
+        <h4 data-ja="大運・流年（運気の波）" data-en="Luck Cycles (Major & Annual)">大運・流年（運気の波）</h4>
+        <p data-ja="10年ごとの大運と今年の流年から、今どんな時期にいるかの流れがわかります。" data-en="10-year major luck periods and this year's annual luck show where you are in life's rhythm.">10年ごとの大運と今年の流年から、今どんな時期にいるかの流れがわかります。</p>
       </div>
       <div class="feature-card">
         <div class="feature-icon">💼</div>
         <h4 data-ja="仕事・活動の向き" data-en="Career Direction">仕事・活動の向き</h4>
-        <p data-ja="命式から読める、自然に力を発揮できる仕事・活動の方向性がわかります。" data-en="Your chart reveals the types of work and activities where your energy flows most naturally.">命式から読める、自然に力を発揮できる仕事・活動の方向性がわかります。</p>
+        <p data-ja="命式から読める、自然に力を発揮できる仕事・活動の方向性がわかります。" data-en="Work styles and activities that align with your chart's natural energy.">命式から読める、自然に力を発揮できる仕事・活動の方向性がわかります。</p>
       </div>
       <div class="feature-card">
         <div class="feature-icon">🤝</div>
         <h4 data-ja="人間関係の傾向" data-en="Relationship Patterns">人間関係の傾向</h4>
-        <p data-ja="十神から読める人間関係のパターン、ぶつかりやすい相手の傾向がわかります。" data-en="The Ten Gods reveal your relationship patterns and the types of people you tend to clash with.">十神から読める人間関係のパターン、ぶつかりやすい相手の傾向がわかります。</p>
+        <p data-ja="十神から読める人間関係のパターン、ぶつかりやすい相手の傾向がわかります。" data-en="How you connect with others, and where friction tends to arise.">十神から読める人間関係のパターン、ぶつかりやすい相手の傾向がわかります。</p>
       </div>
     </div>
   </div>
@@ -108,98 +112,117 @@
 
   <div class="section">
     <div class="section-label">Prompts</div>
-    <div class="section-title" data-ja="鑑定のあとに聞けること" data-en="Questions to Ask After Your Reading">鑑定のあとに聞けること</div>
-    <p style="font-size:13px; color:var(--text-sub); margin-bottom:20px;" data-ja="AIに鑑定してもらったあと、そのまま続けて質問できます。例文をコピーしてそのまま使ってください。" data-en="After your AI reading, keep the conversation going. Copy these examples and use them as-is.">AIに鑑定してもらったあと、そのまま続けて質問できます。例文をコピーしてそのまま使ってください。</p>
+    <div class="section-title" data-ja="鑑定のあとに聞けること" data-en="Follow-up Questions">鑑定のあとに聞けること</div>
+    <p style="font-size:13px; color:var(--text-sub); margin-bottom:20px;" data-ja="AIに鑑定してもらったあと、そのまま続けて質問できます。例文をコピーしてそのまま使ってください。" data-en="After your initial reading, keep asking questions in the same chat. Copy and paste these prompts directly.">AIに鑑定してもらったあと、そのまま続けて質問できます。例文をコピーしてそのまま使ってください。</p>
     <div class="prompt-cards">
+
       <div class="prompt-card">
-        <div class="category" data-ja="🌊 今の運気・大運の流れ" data-en="🌊 Current Fortune & Major Cycle">🌊 今の運気・大運の流れ</div>
+        <div class="category" data-ja="🌊 今の運気・大運の流れ" data-en="🌊 Luck Cycles">🌊 今の運気・大運の流れ</div>
         <div class="prompt-examples">
-          <div class="prompt-example" data-ja="今の大運の時期はどんな流れですか？何を意識するといいですか？" data-en="What is the flow of my current major cycle? What should I be mindful of?">今の大運の時期はどんな流れですか？何を意識するといいですか？<button class="copy-btn" onclick="copyPrompt(this)" data-ja="コピー" data-en="Copy">コピー</button></div>
-          <div class="prompt-example" data-ja="今年の流年から見て、今年のテーマは何ですか？" data-en="Based on this year's annual luck, what is my main theme for the year?">今年の流年から見て、今年のテーマは何ですか？<button class="copy-btn" onclick="copyPrompt(this)" data-ja="コピー" data-en="Copy">コピー</button></div>
-          <div class="prompt-example" data-ja="次の大運に向けて、今から準備できることはありますか？" data-en="Is there anything I can start preparing now for my next major cycle?">次の大運に向けて、今から準備できることはありますか？<button class="copy-btn" onclick="copyPrompt(this)" data-ja="コピー" data-en="Copy">コピー</button></div>
+          <div class="prompt-example" data-ja="今の大運の時期はどんな流れですか？何を意識するといいですか？" data-en="What does my current major luck period mean? What should I focus on?">今の大運の時期はどんな流れですか？何を意識するといいですか？<button class="copy-btn" onclick="copyPrompt(this)" data-ja="コピー" data-en="Copy">コピー</button></div>
+          <div class="prompt-example" data-ja="今年の流年から見て、今年のテーマは何ですか？" data-en="Based on this year's annual luck, what's the main theme for this year?">今年の流年から見て、今年のテーマは何ですか？<button class="copy-btn" onclick="copyPrompt(this)" data-ja="コピー" data-en="Copy">コピー</button></div>
+          <div class="prompt-example" data-ja="次の大運に向けて、今から準備できることはありますか？" data-en="How can I prepare for my next major luck period?">次の大運に向けて、今から準備できることはありますか？<button class="copy-btn" onclick="copyPrompt(this)" data-ja="コピー" data-en="Copy">コピー</button></div>
         </div>
       </div>
+
       <div class="prompt-card">
-        <div class="category" data-ja="💼 仕事・活動" data-en="💼 Career & Activities">💼 仕事・活動</div>
+        <div class="category" data-ja="💼 仕事・活動" data-en="💼 Career & Work">💼 仕事・活動</div>
         <div class="prompt-examples">
-          <div class="prompt-example" data-ja="命式から読める、仕事での強みをもう少し詳しく教えてください。" data-en="Could you tell me more about the career strengths shown in my chart?">命式から読める、仕事での強みをもう少し詳しく教えてください。<button class="copy-btn" onclick="copyPrompt(this)" data-ja="コピー" data-en="Copy">コピー</button></div>
-          <div class="prompt-example" data-ja="独立・起業に向いている命式ですか？" data-en="Does my chart suggest I'm suited for self-employment or starting a business?">独立・起業に向いている命式ですか？<button class="copy-btn" onclick="copyPrompt(this)" data-ja="コピー" data-en="Copy">コピー</button></div>
-          <div class="prompt-example" data-ja="今の仕事の方向性は命式と合っていますか？" data-en="Does my current career direction align with what my chart suggests?">今の仕事の方向性は命式と合っていますか？<button class="copy-btn" onclick="copyPrompt(this)" data-ja="コピー" data-en="Copy">コピー</button></div>
+          <div class="prompt-example" data-ja="命式から読める、仕事での強みをもう少し詳しく教えてください。" data-en="Tell me more about my career strengths from the chart.">命式から読める、仕事での強みをもう少し詳しく教えてください。<button class="copy-btn" onclick="copyPrompt(this)" data-ja="コピー" data-en="Copy">コピー</button></div>
+          <div class="prompt-example" data-ja="独立・起業に向いている命式ですか？" data-en="Does my chart favor entrepreneurship or working within organizations?">独立・起業に向いている命式ですか？<button class="copy-btn" onclick="copyPrompt(this)" data-ja="コピー" data-en="Copy">コピー</button></div>
+          <div class="prompt-example" data-ja="今の仕事の方向性は命式と合っていますか？" data-en="Is my current career direction aligned with my chart?">今の仕事の方向性は命式と合っていますか？<button class="copy-btn" onclick="copyPrompt(this)" data-ja="コピー" data-en="Copy">コピー</button></div>
         </div>
       </div>
+
       <div class="prompt-card">
-        <div class="category" data-ja="💕 人間関係・恋愛" data-en="💕 Relationships & Romance">💕 人間関係・恋愛</div>
+        <div class="category" data-ja="💕 人間関係・恋愛" data-en="💕 Relationships & Love">💕 人間関係・恋愛</div>
         <div class="prompt-examples">
-          <div class="prompt-example" data-ja="人間関係でぶつかりやすいパターンを教えてください。" data-en="What kinds of relationship conflicts tend to come up for me?">人間関係でぶつかりやすいパターンを教えてください。<button class="copy-btn" onclick="copyPrompt(this)" data-ja="コピー" data-en="Copy">コピー</button></div>
-          <div class="prompt-example" data-ja="恋愛・パートナーシップについて詳しく読んでください。" data-en="Please give me a detailed reading on my romantic and partnership tendencies.">恋愛・パートナーシップについて詳しく読んでください。<button class="copy-btn" onclick="copyPrompt(this)" data-ja="コピー" data-en="Copy">コピー</button></div>
+          <div class="prompt-example" data-ja="人間関係でぶつかりやすいパターンを教えてください。" data-en="What relationship friction patterns does my chart show?">人間関係でぶつかりやすいパターンを教えてください。<button class="copy-btn" onclick="copyPrompt(this)" data-ja="コピー" data-en="Copy">コピー</button></div>
+          <div class="prompt-example" data-ja="恋愛・パートナーシップについて詳しく読んでください。" data-en="Can you read my love and partnership tendencies in detail?">恋愛・パートナーシップについて詳しく読んでください。<button class="copy-btn" onclick="copyPrompt(this)" data-ja="コピー" data-en="Copy">コピー</button></div>
         </div>
       </div>
+
       <div class="prompt-card">
         <div class="category" data-ja="🌱 自己理解・活かし方" data-en="🌱 Self-Understanding">🌱 自己理解・活かし方</div>
         <div class="prompt-examples">
-          <div class="prompt-example" data-ja="五行バランスから見て、補いたいものと活かせるものは何ですか？" data-en="Based on my Five Elements balance, what should I supplement and what should I lean into?">五行バランスから見て、補いたいものと活かせるものは何ですか？<button class="copy-btn" onclick="copyPrompt(this)" data-ja="コピー" data-en="Copy">コピー</button></div>
-          <div class="prompt-example" data-ja="つまずきやすいパターンをもう少し具体的に教えてください。" data-en="Can you describe my recurring challenges in more concrete terms?">つまずきやすいパターンをもう少し具体的に教えてください。<button class="copy-btn" onclick="copyPrompt(this)" data-ja="コピー" data-en="Copy">コピー</button></div>
-          <div class="prompt-example" data-ja="自分の強みを日常でどう活かせますか？" data-en="How can I apply my strengths in everyday life?">自分の強みを日常でどう活かせますか？<button class="copy-btn" onclick="copyPrompt(this)" data-ja="コピー" data-en="Copy">コピー</button></div>
+          <div class="prompt-example" data-ja="五行バランスから見て、補いたいものと活かせるものは何ですか？" data-en="What should I strengthen or balance based on my Five Elements?">五行バランスから見て、補いたいものと活かせるものは何ですか？<button class="copy-btn" onclick="copyPrompt(this)" data-ja="コピー" data-en="Copy">コピー</button></div>
+          <div class="prompt-example" data-ja="つまずきやすいパターンをもう少し具体的に教えてください。" data-en="Tell me more about my recurring patterns and blind spots.">つまずきやすいパターンをもう少し具体的に教えてください。<button class="copy-btn" onclick="copyPrompt(this)" data-ja="コピー" data-en="Copy">コピー</button></div>
+          <div class="prompt-example" data-ja="自分の強みを日常でどう活かせますか？" data-en="How can I apply my chart strengths in everyday life?">自分の強みを日常でどう活かせますか？<button class="copy-btn" onclick="copyPrompt(this)" data-ja="コピー" data-en="Copy">コピー</button></div>
         </div>
       </div>
+
       <div class="prompt-card">
         <div class="category" data-ja="👫 2人の相性を読む" data-en="👫 Compatibility Reading">👫 2人の相性を読む</div>
         <div class="prompt-examples">
-          <div class="prompt-example" data-ja="2人分の四柱推命データを渡しました。それぞれの特徴と、2人の関係性の構造を読んでください。相性の良い点と、ぶつかりやすいパターンも教えてください。" data-en="I've shared two Four Pillars datasets. Please read each person's traits and the structure of our relationship — including where we're compatible and where we tend to clash.">2人分の四柱推命データを渡しました。それぞれの特徴と、2人の関係性の構造を読んでください。相性の良い点と、ぶつかりやすいパターンも教えてください。<button class="copy-btn" onclick="copyPrompt(this)" data-ja="コピー" data-en="Copy">コピー</button></div>
+          <div class="prompt-example" data-ja="2人分の四柱推命データを渡しました。それぞれの特徴と、2人の関係性の構造を読んでください。相性の良い点と、ぶつかりやすいパターンも教えてください。" data-en="I've pasted two people's Four Pillars data. Please read each person's characteristics and analyze the relationship dynamics, including areas of harmony and potential friction.">2人分の四柱推命データを渡しました。それぞれの特徴と、2人の関係性の構造を読んでください。相性の良い点と、ぶつかりやすいパターンも教えてください。<button class="copy-btn" onclick="copyPrompt(this)" data-ja="コピー" data-en="Copy">コピー</button></div>
         </div>
       </div>
+
     </div>
   </div>
 
   <hr class="divider">
 
   <div class="section">
+    <div class="section-label">Compatibility</div>
+    <div class="section-title" data-ja="2人分のデータを使った相性の読み方" data-en="How to Read Compatibility">2人分のデータを使った相性の読み方</div>
+    <div style="background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:24px; box-shadow:var(--shadow);">
+      <div style="display:flex; align-items:center; justify-content:center; gap:16px; margin-bottom:20px; flex-wrap:wrap;">
+        <div style="text-align:center; background:#f7f4ee; border-radius:10px; padding:12px 20px; font-size:13px; color:var(--text-sub);"><strong style="display:block; color:var(--text); margin-bottom:4px;" data-ja="自分のデータ" data-en="Your data">自分のデータ</strong><span data-ja="AI貼り付け版" data-en="AI paste version">AI貼り付け版</span></div>
+        <div style="font-size:24px; color:var(--gold);">＋</div>
+        <div style="text-align:center; background:#f7f4ee; border-radius:10px; padding:12px 20px; font-size:13px; color:var(--text-sub);"><strong style="display:block; color:var(--text); margin-bottom:4px;" data-ja="相手のデータ" data-en="Partner's data">相手のデータ</strong><span data-ja="AI貼り付け版" data-en="AI paste version">AI貼り付け版</span></div>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:8px;">
+        <div style="display:flex; gap:12px; align-items:flex-start; font-size:13px;"><div style="width:20px;height:20px;border-radius:50%;background:var(--accent-light);color:var(--accent-dark);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;">1</div><div data-ja="自分のデータページで「AIに送る」を押す（または「コピーして使う」）" data-en='Copy your chart data using "Send to AI" or "Copy"'>自分のデータページで「AIに送る」を押す（または「コピーして使う」）</div></div>
+        <div style="display:flex; gap:12px; align-items:flex-start; font-size:13px;"><div style="width:20px;height:20px;border-radius:50%;background:var(--accent-light);color:var(--accent-dark);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;">2</div><div data-ja="AIのチャット欄に貼り付ける（まだ送信しない）" data-en="Paste into the AI chat (don't send yet)">AIのチャット欄に貼り付ける（まだ送信しない）</div></div>
+        <div style="display:flex; gap:12px; align-items:flex-start; font-size:13px;"><div style="width:20px;height:20px;border-radius:50%;background:var(--accent-light);color:var(--accent-dark);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;">3</div><div data-ja="相手のデータページで同じようにコピーして、続けて貼り付ける" data-en="Copy your partner's data the same way and paste it below yours">相手のデータページで同じようにコピーして、続けて貼り付ける</div></div>
+        <div style="display:flex; gap:12px; align-items:flex-start; font-size:13px;"><div style="width:20px;height:20px;border-radius:50%;background:var(--accent-light);color:var(--accent-dark);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;">4</div><div data-ja="上の「2人の相性を読む」プロンプトを貼り付けて送信する" data-en="Add the compatibility prompt above and send">上の「2人の相性を読む」プロンプトを貼り付けて送信する</div></div>
+      </div>
+      <p style="font-size:12px; color:var(--text-sub); margin-top:16px;" data-ja="※ 相手の方も四柱推命版の鑑定データが必要です。" data-en="※ Both people need their own Four Pillars chart data.">※ 相手の方も四柱推命版の鑑定データが必要です。</p>
+    </div>
+  </div>
+
+  <div class="section">
     <div class="section-label">Terms</div>
-    <div class="section-title" data-ja="用語がわからないときは" data-en="Not Sure About a Term?">用語がわからないときは</div>
+    <div class="section-title" data-ja="用語がわからないときは" data-en="Glossary">用語がわからないときは</div>
     <a href="terms-shichu.html" style="display:flex; align-items:center; justify-content:space-between; background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:20px; text-decoration:none; color:inherit; box-shadow:var(--shadow);">
       <div>
         <div style="font-size:13px; font-weight:500; margin-bottom:4px;" data-ja="四柱推命 用語ガイド" data-en="Four Pillars Glossary">四柱推命 用語ガイド</div>
-        <div style="font-size:12px; color:var(--text-sub);" data-ja="四柱・五行・十神・大運・流年の意味とAIへの聞き方" data-en="Four Pillars, Five Elements, Ten Gods, Major Cycles, Annual Luck — explained with tips for asking AI">四柱・五行・十神・大運・流年の意味とAIへの聞き方</div>
+        <div style="font-size:12px; color:var(--text-sub);" data-ja="四柱・五行・十神・大運・流年の意味とAIへの聞き方" data-en="Four Pillars, Five Elements, Ten Gods, Luck Cycles — meanings and how to ask the AI">四柱・五行・十神・大運・流年の意味とAIへの聞き方</div>
       </div>
       <div style="font-size:13px; color:var(--accent-dark);">→</div>
     </a>
   </div>
 
-  <div class="note">
-    <span data-ja="・四柱推命版はオプション追加なしの1回限りの商品です。<br>・データは発行から90日間有効です。<br>・AIの種類や設定によって、鑑定文の表現や深さは変わります。<br>・本データは個人利用向けです。再配布・転載・商用利用は禁止しています。"
-          data-en="· The Four Pillars plan is a one-time purchase with no add-ons.<br>· Data is valid for 90 days from issue.<br>· Reading style and depth may vary depending on the AI and its settings.<br>· For personal use only. Redistribution, resale, or commercial use is prohibited.">・四柱推命版はオプション追加なしの1回限りの商品です。<br>・データは発行から90日間有効です。<br>・AIの種類や設定によって、鑑定文の表現や深さは変わります。<br>・本データは個人利用向けです。再配布・転載・商用利用は禁止しています。</span>
-  </div>
+  <div class="note" data-ja="・四柱推命版はオプション追加なしの1回限りの商品です。<br>・データは発行から90日間有効です。<br>・AIの種類や設定によって、鑑定文の表現や深さは変わります。<br>・本データは個人利用向けです。再配布・転載・商用利用は禁止しています。" data-en="· This is a one-time product with no add-ons.<br>· Data is valid for 90 days from purchase.<br>· Reading quality may vary depending on the AI model and settings.<br>· This data is for personal use only. Redistribution and commercial use are prohibited.">・四柱推命版はオプション追加なしの1回限りの商品です。<br>・データは発行から90日間有効です。<br>・AIの種類や設定によって、鑑定文の表現や深さは変わります。<br>・本データは個人利用向けです。再配布・転載・商用利用は禁止しています。</div>
+
 </div>
 
 <footer>© nanami-astro</footer>
 
 <script>
 function setLang(lang) {
-  document.documentElement.lang = lang;
-  localStorage.setItem('nanami-lang', lang);
-  document.querySelectorAll('.lang-btn').forEach(btn => {
-    btn.classList.toggle('active', btn.textContent.trim() === (lang === 'ja' ? '日本語' : 'English'));
+  document.documentElement.lang = lang === 'en' ? 'en' : 'ja';
+  document.querySelectorAll('[data-ja]').forEach(el => {
+    el.innerHTML = lang === 'en' ? el.dataset.en : el.dataset.ja;
   });
-  document.querySelectorAll('[data-ja][data-en]').forEach(el => {
-    const val = el.getAttribute('data-' + lang);
-    if (val !== null) {
-      if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') el.value = val;
-      else el.innerHTML = val;
-    }
-  });
+  document.getElementById('btn-ja').classList.toggle('active', lang === 'ja');
+  document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+  localStorage.setItem('na-lang', lang);
 }
 function copyPrompt(btn) {
-  const lang = document.documentElement.lang || 'ja';
+  const lang = document.documentElement.lang;
   const el = btn.parentElement;
-  const text = (el.getAttribute('data-' + lang) || el.textContent.replace(/コピー|Copy/g, '')).trim();
+  const text = lang === 'en' ? el.dataset.en : el.dataset.ja;
   navigator.clipboard.writeText(text).then(() => {
-    btn.textContent = '✓'; btn.classList.add('copied');
+    btn.textContent = '✓';
+    btn.classList.add('copied');
     setTimeout(() => { btn.textContent = lang === 'en' ? 'Copy' : 'コピー'; btn.classList.remove('copied'); }, 1500);
   });
 }
 (function() {
-  const saved = localStorage.getItem('nanami-lang');
-  if (saved && saved !== 'ja') setLang(saved);
+  const saved = localStorage.getItem('na-lang');
+  if (saved === 'en') setLang('en');
 })();
 </script>
 </body>
