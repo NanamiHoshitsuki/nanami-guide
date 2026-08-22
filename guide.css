@@ -110,10 +110,10 @@ button { font: inherit; }
   text-transform: uppercase;
 }
 .hero h1 {
-  max-width: 800px;
+  max-width: 720px;
   margin: 0;
   font-family: "Cormorant Garamond", "Noto Serif JP", serif;
-  font-size: clamp(42px, 7vw, 76px);
+  font-size: clamp(38px, 6vw, 66px);
   font-weight: 600;
   line-height: 1.03;
   letter-spacing: -.02em;
@@ -211,7 +211,7 @@ button { font: inherit; }
 .feature span { color: var(--muted); font-size: 13px; }
 
 .back-link { display: inline-flex; margin-bottom: 28px; color: #8a681f; font-size: 13px; font-weight: 700; text-decoration: none; }
-.page-title { margin: 0; font-size: clamp(34px, 6vw, 58px); line-height: 1.08; letter-spacing: -.035em; }
+.page-title { max-width: 680px; margin: 0; font-size: clamp(32px, 5vw, 50px); line-height: 1.12; letter-spacing: -.025em; }
 .page-intro { max-width: 720px; margin: 18px 0 0; color: var(--muted); font-size: 16px; }
 .usage-note { margin: 48px 0 0; padding-top: 18px; color: var(--muted); border-top: 1px solid var(--line); font-size: 12px; }
 .support-link { color: #654a12; font-weight: 700; }
