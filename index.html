@@ -1,231 +1,110 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ja">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>使い方ガイド | nanami-astro</title>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=Noto+Serif+JP:wght@300;400&family=Noto+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
-<style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  :root {
-    --bg: #fafaf8; --surface: #ffffff; --border: #e8e4dc;
-    --text: #2c2a27; --text-sub: #7a7670;
-    --accent: #c9a84c; --accent-light: #f5edd6; --accent-dark: #9a7830;
-    --radius: 12px; --shadow: 0 2px 16px rgba(0,0,0,0.06);
-  }
-  body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: var(--text); line-height: 1.8; font-weight: 300; }
-  html[lang="en"] body { font-family: 'Noto Sans', sans-serif; }
-
-  .lang-bar {
-    display: flex; justify-content: flex-end; gap: 6px;
-    padding: 10px 24px;
-    background: rgba(250,248,244,0.92);
-    border-bottom: 1px solid var(--border);
-  }
-  .lang-btn {
-    font-size: 10px; letter-spacing: 2px;
-    border: 1px solid var(--border); background: transparent;
-    color: var(--text-sub); border-radius: 999px;
-    padding: 4px 14px; cursor: pointer; transition: all 0.2s;
-  }
-  .lang-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
-
-  header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 20px 24px; text-align: center; }
-  header .logo { font-family: 'Noto Serif JP', serif; font-size: 13px; letter-spacing: 0.2em; color: var(--accent-dark); }
-  header h1 { font-size: 20px; font-weight: 400; margin-top: 6px; }
-
-  .container { max-width: 720px; margin: 0 auto; padding: 40px 20px 80px; }
-  .section { margin-bottom: 48px; }
-  .section-label { font-size: 11px; letter-spacing: 0.2em; color: var(--accent-dark); text-transform: uppercase; margin-bottom: 8px; font-weight: 500; }
-  .section-title { font-size: 20px; font-weight: 500; margin-bottom: 20px; }
-
-  .steps { display: flex; flex-direction: column; gap: 12px; }
-  .step { display: flex; gap: 16px; align-items: flex-start; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow); }
-  .step-num { width: 32px; height: 32px; border-radius: 50%; background: var(--accent); color: white; font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
-  .step-body h3 { font-size: 15px; font-weight: 500; margin-bottom: 6px; }
-  .step-body p { font-size: 13px; color: var(--text-sub); line-height: 1.7; }
-  .tip { margin-top: 10px; background: var(--accent-light); border-left: 3px solid var(--accent); padding: 8px 12px; font-size: 12px; color: var(--accent-dark); border-radius: 0 6px 6px 0; }
-
-  .plan-cards { display: flex; flex-direction: column; gap: 14px; }
-  .plan-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; box-shadow: var(--shadow); display: flex; flex-direction: column; gap: 12px; text-decoration: none; color: inherit; transition: box-shadow 0.2s, border-color 0.2s; }
-  .plan-card:hover { box-shadow: 0 4px 24px rgba(0,0,0,0.1); border-color: var(--accent); }
-  .plan-card-header { display: flex; align-items: center; justify-content: space-between; }
-  .plan-badge { font-size: 11px; background: var(--accent-light); color: var(--accent-dark); padding: 3px 10px; border-radius: 20px; font-weight: 500; }
-  .plan-badge.full { background: #e8f0ff; color: #3a5ca8; }
-  .plan-badge.shichu { background: #f0ece8; color: #7a5c3a; }
-  .plan-icon { font-size: 28px; }
-  .plan-card h3 { font-size: 17px; font-weight: 500; }
-  .plan-card p { font-size: 13px; color: var(--text-sub); line-height: 1.7; }
-  .plan-tags { display: flex; flex-wrap: wrap; gap: 6px; }
-  .plan-tag { font-size: 11px; background: var(--bg); border: 1px solid var(--border); border-radius: 20px; padding: 2px 10px; color: var(--text-sub); }
-  .plan-link { font-size: 12px; color: var(--accent-dark); font-weight: 500; display: flex; align-items: center; gap: 4px; }
-  .plan-link::after { content: '→'; }
-
-  .divider { border: none; border-top: 1px solid var(--border); margin: 48px 0; }
-  .note { background: #f7f4ee; border-radius: var(--radius); padding: 16px 20px; font-size: 12px; color: var(--text-sub); line-height: 1.8; }
-  footer { text-align: center; padding: 32px; font-size: 12px; color: var(--text-sub); border-top: 1px solid var(--border); }
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Nanami Astroの商品別使い方ガイド。アストロカートグラフィー、占星術プランナー、出生図データ、トランジット追加データの利用方法を案内します。">
+  <title>使い方ガイド | Nanami Astro</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="guide.css">
 </head>
 <body>
-
-<div class="lang-bar">
-  <button class="lang-btn active" onclick="setLang('ja')" id="btn-ja">JA</button>
-  <button class="lang-btn" onclick="setLang('en')" id="btn-en">EN</button>
-</div>
-
-<header>
-  <div class="logo">nanami-astro</div>
-  <h1 data-ja="AI鑑定データの使い方ガイド" data-en="How to Use Your AI Chart Data">AI鑑定データの使い方ガイド</h1>
-</header>
-
-<div class="container">
-
-  <div class="section">
-    <div class="section-label">How to use</div>
-    <div class="section-title" data-ja="基本の使い方（全プラン共通）" data-en="Getting Started (All Plans)">基本の使い方（全プラン共通）</div>
-    <div class="steps">
-
-      <div class="step">
-        <div class="step-num">1</div>
-        <div class="step-body">
-          <h3 data-ja="鑑定データページを開く" data-en="Open your chart data page">鑑定データページを開く</h3>
-          <p data-ja="購入後に表示された鑑定データページがそのまま使えます。ページをブックマークしておくと便利です。" data-en="After purchase, you'll receive a link to your personal chart data page. Bookmark it for easy access.">購入後に表示された鑑定データページがそのまま使えます。ページをブックマークしておくと便利です。</p>
-        </div>
-      </div>
-
-      <div class="step">
-        <div class="step-num">2</div>
-        <div class="step-body">
-          <h3 data-ja="「AIに送る」を押す（または「コピーして使う」）" data-en='Tap "Send to AI" or "Copy"'>「AIに送る」を押す（または「コピーして使う」）</h3>
-          <p data-ja="ページ上部のボタンを押してデータをコピーします。迷ったら「AI貼り付け版」でOKです。" data-en='Use the button at the top of your data page to copy the chart data. If unsure, choose "AI paste version."'>ページ上部のボタンを押してデータをコピーします。迷ったら「AI貼り付け版」でOKです。</p>
-          <div class="tip" data-ja="📋 コピーできたら次のステップへ" data-en="📋 Once copied, move on to the next step">📋 コピーできたら次のステップへ</div>
-        </div>
-      </div>
-
-      <div class="step">
-        <div class="step-num">3</div>
-        <div class="step-body">
-          <h3 data-ja="AIに貼り付けて送信する" data-en="Paste into any AI and send">AIに貼り付けて送信する</h3>
-          <p data-ja="ChatGPT / Claude / Gemini など好きなAIのチャット欄にそのまま貼り付けて送信します。AIが鑑定文を返してくれます。" data-en="Paste the data into ChatGPT, Claude, Gemini, or any AI chat. The AI will generate your reading automatically.">ChatGPT / Claude / Gemini など好きなAIのチャット欄にそのまま貼り付けて送信します。AIが鑑定文を返してくれます。</p>
-          <div class="tip" data-ja="✨ そのまま続けて質問できます。会話を終了しなければ文脈が引き継がれます。" data-en="✨ You can keep asking follow-up questions in the same conversation.">✨ そのまま続けて質問できます。会話を終了しなければ文脈が引き継がれます。</div>
-        </div>
-      </div>
-
-      <div class="step">
-        <div class="step-num">4</div>
-        <div class="step-body">
-          <h3 data-ja="うまくいかない場合" data-en="Troubleshooting">うまくいかない場合</h3>
-          <p data-ja="アプリによってはファイル共有ができない場合があります。「コピー」または「TXT保存」を使い、ファイルを手動でアップロードしてください。" data-en='Some apps don&apos;t support file sharing. Use "Copy" or "Save as TXT" and upload the file manually instead.'>アプリによってはファイル共有ができない場合があります。「コピー」または「TXT保存」を使い、ファイルを手動でアップロードしてください。</p>
-        </div>
-      </div>
-
+  <a class="skip-link" href="#main-content" data-ja="本文へ移動" data-en="Skip to main content">本文へ移動</a>
+  <nav class="site-nav" aria-label="Main navigation">
+    <a class="brand" href="index.html">Nanami Astro</a>
+    <div class="nav-actions" aria-label="Language">
+      <button class="lang-btn active" data-lang="ja" type="button" aria-label="日本語に切り替え" aria-pressed="true" onclick="setLang('ja')">JA</button>
+      <button class="lang-btn" data-lang="en" type="button" aria-label="Switch to English" aria-pressed="false" onclick="setLang('en')">EN</button>
     </div>
-  </div>
+  </nav>
 
-  <hr class="divider">
-
-  <div class="section">
-    <div class="section-label">Plans</div>
-    <div class="section-title" data-ja="ご購入のプランを選んでください" data-en="Choose Your Plan">ご購入のプランを選んでください</div>
-    <div class="plan-cards">
-
-      <a href="basic.html" class="plan-card">
-        <div class="plan-card-header">
-          <span class="plan-badge" data-ja="基本版" data-en="Basic">基本版</span>
-          <span class="plan-icon">⭐</span>
-        </div>
-        <h3 data-ja="西洋占星術・基本版" data-en="Western Astrology — Basic">西洋占星術・基本版</h3>
-        <p data-ja="出生図をもとに、性格・才能・人生のテーマを読みます。はじめてAI鑑定を試す方におすすめです。小惑星・トランジットはあとから追加購入できます。" data-en="Natal chart reading covering personality, strengths, and life themes. Great for first-time users. Asteroid and transit add-ons available later.">出生図をもとに、性格・才能・人生のテーマを読みます。はじめてAI鑑定を試す方におすすめです。小惑星・トランジットはあとから追加購入できます。</p>
-        <div class="plan-tags">
-          <span class="plan-tag" data-ja="出生図" data-en="Natal chart">出生図</span>
-          <span class="plan-tag" data-ja="性格・才能" data-en="Personality">性格・才能</span>
-          <span class="plan-tag" data-ja="人生のテーマ" data-en="Life themes">人生のテーマ</span>
-          <span class="plan-tag" data-ja="オプション追加可" data-en="Add-ons available">オプション追加可</span>
-        </div>
-        <span class="plan-link" data-ja="詳しい使い方を見る" data-en="See detailed guide">詳しい使い方を見る</span>
-      </a>
-
-      <a href="full.html" class="plan-card">
-        <div class="plan-card-header">
-          <span class="plan-badge full">FULL</span>
-          <span class="plan-icon">🌍</span>
-        </div>
-        <h3 data-ja="西洋占星術・FULL版" data-en="Western Astrology — FULL">西洋占星術・FULL版</h3>
-        <p data-ja="出生図に加えて、小惑星・31日分のトランジット・月の日内の動きまで含んだ完全版です。今後1ヶ月の流れや注意日まで読めます。" data-en="Everything in Basic, plus asteroids, 31-day transits, and daily Moon movements. See your month ahead with timing guidance.">出生図に加えて、小惑星・31日分のトランジット・月の日内の動きまで含んだ完全版です。今後1ヶ月の流れや注意日まで読めます。</p>
-        <div class="plan-tags">
-          <span class="plan-tag" data-ja="出生図" data-en="Natal chart">出生図</span>
-          <span class="plan-tag" data-ja="小惑星" data-en="Asteroids">小惑星</span>
-          <span class="plan-tag" data-ja="トランジット31日" data-en="31-day transits">トランジット31日</span>
-          <span class="plan-tag" data-ja="月の動き" data-en="Moon phases">月の動き</span>
-        </div>
-        <span class="plan-link" data-ja="詳しい使い方を見る" data-en="See detailed guide">詳しい使い方を見る</span>
-      </a>
-
-      <a href="shichu.html" class="plan-card">
-        <div class="plan-card-header">
-          <span class="plan-badge shichu" data-ja="四柱推命版" data-en="Four Pillars">四柱推命版</span>
-          <span class="plan-icon">🀄</span>
-        </div>
-        <h3 data-ja="四柱推命版" data-en="Four Pillars of Destiny">四柱推命版</h3>
-        <p data-ja="四柱・五行・十神・大運・流年をもとに、性格の傾向・才能・人生の流れを読みます。東洋占術ならではの視点で、仕事・人間関係・今後の運気の波を把握できます。" data-en="Chinese astrology reading based on Four Pillars, Five Elements, Ten Gods, and Luck Cycles. Covers career, relationships, and life timing from an Eastern perspective.">四柱・五行・十神・大運・流年をもとに、性格の傾向・才能・人生の流れを読みます。東洋占術ならではの視点で、仕事・人間関係・今後の運気の波を把握できます。</p>
-        <div class="plan-tags">
-          <span class="plan-tag" data-ja="四柱命式" data-en="Four Pillars">四柱命式</span>
-          <span class="plan-tag" data-ja="五行バランス" data-en="Five Elements">五行バランス</span>
-          <span class="plan-tag" data-ja="大運・流年" data-en="Luck Cycles">大運・流年</span>
-          <span class="plan-tag" data-ja="1回限り" data-en="One-time">1回限り</span>
-        </div>
-        <span class="plan-link" data-ja="詳しい使い方を見る" data-en="See detailed guide">詳しい使い方を見る</span>
-      </a>
-
+  <header class="hero">
+    <div class="hero-inner">
+      <p class="eyebrow">Post-purchase guide</p>
+      <h1 data-ja="星のデータを、<br>迷わず使いこなす。" data-en="Make your astrology data<br>work for you.">星のデータを、<br>迷わず使いこなす。</h1>
+      <p class="hero-copy" data-ja="このサイトは、Nanami Astroの商品をすでにお持ちの方向けの総合マニュアルです。受け取った商品を選ぶと、保存方法から日々の使い方まで確認できます。" data-en="This is the post-purchase help center for Nanami Astro customers. Choose the product you received to learn how to save it, open it, and use it with confidence.">このサイトは、Nanami Astroの商品をすでにお持ちの方向けの総合マニュアルです。受け取った商品を選ぶと、保存方法から日々の使い方まで確認できます。</p>
+      <div class="hero-note" data-ja="購入先にかかわらず、同じ商品ガイドを利用できます" data-en="Use the same guide regardless of where you purchased">購入先にかかわらず、同じ商品ガイドを利用できます</div>
     </div>
-  </div>
+  </header>
 
-  <hr class="divider">
+  <main class="page" id="main-content">
+    <section class="section" aria-labelledby="products-title">
+      <p class="section-kicker">Choose your product</p>
+      <h2 id="products-title" data-ja="お持ちの商品を選んでください" data-en="Choose the product you already own">お持ちの商品を選んでください</h2>
+      <p class="section-lead" data-ja="ここにあるリンクはすべて使い方の説明です。販売ページや外部決済サイトへ移動することはありません。" data-en="Every link below opens a usage guide. None of them takes you to a store or external checkout.">ここにあるリンクはすべて使い方の説明です。販売ページや外部決済サイトへ移動することはありません。</p>
 
-  <div class="note" data-ja="・データは発行から90日間有効です。期限内に保存・活用してください。<br>・AIの種類や設定によって、鑑定文の表現や深さは変わります。<br>・本データは個人利用向けです。再配布・転載・商用利用は禁止しています。" data-en="· Chart data is valid for 90 days from purchase. Save or use it before expiration.<br>· Reading quality may vary depending on the AI model and settings you use.<br>· This data is for personal use only. Redistribution and commercial use are prohibited.">・データは発行から90日間有効です。期限内に保存・活用してください。<br>・AIの種類や設定によって、鑑定文の表現や深さは変わります。<br>・本データは個人利用向けです。再配布・転載・商用利用は禁止しています。</div>
+      <div class="product-grid">
+        <a class="product-card" href="acg.html" style="--card-glow:#e5e0ff">
+          <div class="card-top"><span class="product-code">INTERACTIVE MAP</span><span class="product-icon" aria-hidden="true">🌐</span></div>
+          <h3 data-ja="インタラクティブ・アストロカートグラフィー" data-en="Interactive Astrocartography Map">インタラクティブ・アストロカートグラフィー</h3>
+          <p data-ja="世界地図、惑星ライン、場所検索、3都市比較、PDF保存、Personal Edition ZIPの使い方。" data-en="Learn the world map, planetary lines, location search, three-city comparison, PDF export, and Personal Edition ZIP.">世界地図、惑星ライン、場所検索、3都市比較、PDF保存、Personal Edition ZIPの使い方。</p>
+          <span class="card-link" data-ja="地図の使い方を見る →" data-en="Open the map guide →">地図の使い方を見る →</span>
+        </a>
 
-  <hr class="divider">
+        <a class="product-card" href="planner.html" style="--card-glow:#dcecff">
+          <div class="card-top"><span class="product-code">1-YEAR PLANNER</span><span class="product-icon" aria-hidden="true">📅</span></div>
+          <h3 data-ja="1年デジタル占星術プランナー" data-en="1-Year Digital Astrology Planner">1年デジタル占星術プランナー</h3>
+          <p data-ja="400ページ以上のPDF、日付リンク、毎日のトランジット、振り返り欄、任意のAI機能の使い方。" data-en="Use the 400+ page PDF, date links, daily transits, reflection space, and optional AI feature.">400ページ以上のPDF、日付リンク、毎日のトランジット、振り返り欄、任意のAI機能の使い方。</p>
+          <span class="card-link" data-ja="プランナーの使い方を見る →" data-en="Open the planner guide →">プランナーの使い方を見る →</span>
+        </a>
 
-  <div class="section">
-    <div class="section-label">Get your chart</div>
-    <div class="section-title" data-ja="鑑定データを購入する" data-en="Purchase Chart Data">鑑定データを購入する</div>
-    <p style="font-size:13px; color:var(--text-sub); margin-bottom:20px;" data-ja="まだ鑑定データをお持ちでない方は、こちらからご購入いただけます。" data-en="Don't have chart data yet? Get yours from one of our shops below.">まだ鑑定データをお持ちでない方は、こちらからご購入いただけます。</p>
-    <div style="display:flex; flex-direction:column; gap:10px;">
-      <a href="https://nanami-astro.stores.jp/" target="_blank" rel="noopener" style="display:flex; align-items:center; justify-content:space-between; background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:20px; text-decoration:none; color:inherit; box-shadow:var(--shadow);">
-        <div>
-          <div style="font-size:13px; font-weight:500; margin-bottom:4px;" data-ja="STORES（日本語）" data-en="STORES (Japanese)">STORES（日本語）</div>
-          <div style="font-size:12px; color:var(--text-sub);" data-ja="クレジットカード・コンビニ払い・キャリア決済に対応" data-en="Credit card, convenience store payment, carrier billing">クレジットカード・コンビニ払い・キャリア決済に対応</div>
-        </div>
-        <div style="font-size:13px; color:var(--accent-dark);">→</div>
-      </a>
-      <a href="https://payhip.com/nanamiastro" target="_blank" rel="noopener" style="display:flex; align-items:center; justify-content:space-between; background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:20px; text-decoration:none; color:inherit; box-shadow:var(--shadow);">
-        <div>
-          <div style="font-size:13px; font-weight:500; margin-bottom:4px;">Payhip (English / International)</div>
-          <div style="font-size:12px; color:var(--text-sub);">PayPal & credit card accepted worldwide</div>
-        </div>
-        <div style="font-size:13px; color:var(--accent-dark);">→</div>
-      </a>
-    </div>
-  </div>
+        <a class="product-card" href="full.html" style="--card-glow:#fff0c8">
+          <div class="card-top"><span class="product-code">FULL DATA</span><span class="product-icon" aria-hidden="true">✨</span></div>
+          <h3 data-ja="西洋占星術・FULLデータ" data-en="Western Astrology — Full Data">西洋占星術・FULLデータ</h3>
+          <p data-ja="出生図、小惑星、38日分のトランジット、月の動きを含むデータの保存とAIでの読み方。" data-en="Save and use natal chart, asteroid, 38-day transit, and Moon movement data with an AI of your choice.">出生図、小惑星、38日分のトランジット、月の動きを含むデータの保存とAIでの読み方。</p>
+          <span class="card-link" data-ja="FULLデータの使い方を見る →" data-en="Open the Full Data guide →">FULLデータの使い方を見る →</span>
+        </a>
 
-</div>
+        <a class="product-card" href="transit-addon.html" style="--card-glow:#e8f2ff">
+          <div class="card-top"><span class="product-code">TRANSIT ADD-ON</span><span class="product-icon" aria-hidden="true">🪐</span></div>
+          <h3 data-ja="約38日分・トランジット追加データ" data-en="Approx. 38-Day Transit Data Add-on">約38日分・トランジット追加データ</h3>
+          <p data-ja="既存の出生図を引き継ぎ、指定した開始日から新しい38日間を作成して保存する手順。" data-en="Reuse a compatible birth chart to create and save a new 38-day period from the start date you choose.">既存の出生図を引き継ぎ、指定した開始日から新しい38日間を作成して保存する手順。</p>
+          <span class="card-link" data-ja="追加データの使い方を見る →" data-en="Open the add-on guide →">追加データの使い方を見る →</span>
+        </a>
 
-<footer>© nanami-astro</footer>
+        <a class="product-card" href="basic.html" style="--card-glow:#f4ead5">
+          <div class="card-top"><span class="product-code">BASIC</span><span class="product-icon" aria-hidden="true">⭐</span></div>
+          <h3 data-ja="西洋占星術・基本データ" data-en="Western Astrology — Basic Data">西洋占星術・基本データ</h3>
+          <p data-ja="出生図、天体、ハウス、アスペクトの基本データをコピー・保存して利用する方法。" data-en="Copy, save, and use your core natal chart, planet, house, and aspect data.">出生図、天体、ハウス、アスペクトの基本データをコピー・保存して利用する方法。</p>
+          <span class="card-link" data-ja="基本データの使い方を見る →" data-en="Open the Basic Data guide →">基本データの使い方を見る →</span>
+        </a>
 
-<script>
-function setLang(lang) {
-  document.documentElement.lang = lang === 'en' ? 'en' : 'ja';
-  document.querySelectorAll('[data-ja]').forEach(el => {
-    el.innerHTML = lang === 'en' ? el.dataset.en : el.dataset.ja;
-  });
-  document.getElementById('btn-ja').classList.toggle('active', lang === 'ja');
-  document.getElementById('btn-en').classList.toggle('active', lang === 'en');
-  localStorage.setItem('na-lang', lang);
-}
-(function() {
-  const saved = localStorage.getItem('na-lang');
-  if (saved === 'en') setLang('en');
-})();
-</script>
+        <a class="product-card" href="shichu.html" style="--card-glow:#eee7df">
+          <div class="card-top"><span class="product-code">FOUR PILLARS</span><span class="product-icon" aria-hidden="true">🀄</span></div>
+          <h3 data-ja="四柱推命データ" data-en="Four Pillars Data">四柱推命データ</h3>
+          <p data-ja="命式、五行、十神、大運、流年データを保存し、読み解きに利用する方法。" data-en="Save and use your Four Pillars, Five Elements, Ten Gods, major cycle, and annual cycle data.">命式、五行、十神、大運、流年データを保存し、読み解きに利用する方法。</p>
+          <span class="card-link" data-ja="四柱推命の使い方を見る →" data-en="Open the Four Pillars guide →">四柱推命の使い方を見る →</span>
+        </a>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="first-title">
+      <p class="section-kicker">First things first</p>
+      <h2 id="first-title" data-ja="最初に、これだけは保存してください" data-en="Save these before anything else">最初に、これだけは保存してください</h2>
+      <div class="check-grid">
+        <div class="check-card"><strong data-ja="注文番号" data-en="Order number">注文番号</strong><p data-ja="再生成やサポート時に必要です。Etsyや各購入先の注文履歴も残してください。" data-en="Keep it for fulfillment and support. Your marketplace order history is also useful.">再生成やサポート時に必要です。Etsyや各購入先の注文履歴も残してください。</p></div>
+        <div class="check-card"><strong data-ja="個人ページのURL" data-en="Private page URL">個人ページのURL</strong><p data-ja="ブックマークし、必要なPDF・YAML・ZIPを期限内にダウンロードしてください。" data-en="Bookmark it and download the PDFs, YAML files, and ZIP files you need before access expires.">ブックマークし、必要なPDF・YAML・ZIPを期限内にダウンロードしてください。</p></div>
+        <div class="check-card"><strong data-ja="ダウンロードしたファイル" data-en="Downloaded files">ダウンロードしたファイル</strong><p data-ja="端末だけでなく、信頼できるバックアップ先にも保存しておくと安心です。" data-en="Keep a backup in a trusted location in addition to your main device.">端末だけでなく、信頼できるバックアップ先にも保存しておくと安心です。</p></div>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="ai-title">
+      <p class="section-kicker">Optional AI use</p>
+      <h2 id="ai-title" data-ja="AI機能は任意です" data-en="AI use is optional">AI機能は任意です</h2>
+      <p class="section-lead" data-ja="Nanami AstroからAIサービスへ出生情報やデータを自動送信することはありません。AIで読みたい場合だけ、自分でコピーして、選んだサービスへ貼り付けます。有料AI契約はNanami Astroの必須条件ではありません。" data-en="Nanami Astro never sends your birth details or chart data to an AI service automatically. If you choose to use AI, you copy the prepared data yourself and paste it into your preferred service. Nanami Astro does not require a paid AI subscription.">Nanami AstroからAIサービスへ出生情報やデータを自動送信することはありません。AIで読みたい場合だけ、自分でコピーして、選んだサービスへ貼り付けます。有料AI契約はNanami Astroの必須条件ではありません。</p>
+    </section>
+
+    <section class="section" aria-labelledby="support-title">
+      <p class="section-kicker">Support</p>
+      <h2 id="support-title" data-ja="お困りのとき" data-en="Need help?">お困りのとき</h2>
+      <p class="section-lead" data-ja="購入先のメッセージまたはお問い合わせ機能から、注文番号・困っている画面・表示されたエラーをお知らせください。" data-en="Contact us through the messaging or support feature of the marketplace where you purchased. Include your order number, the screen involved, and any error shown.">購入先のメッセージまたはお問い合わせ機能から、注文番号・困っている画面・表示されたエラーをお知らせください。</p>
+      <p><a class="support-link" href="https://www.etsy.com/messages" data-ja="Etsyで購入した方：Etsyメッセージを開く →" data-en="Etsy customers: Open Etsy Messages →">Etsyで購入した方：Etsyメッセージを開く →</a></p>
+    </section>
+  </main>
+
+  <footer>© Nanami Astro · Post-purchase product guides</footer>
+  <script src="guide.js"></script>
 </body>
 </html>

@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Nanami Astroの約38日分トランジット追加データの生成方法と保存方法。">
+  <title>トランジット追加データの使い方 | Nanami Astro</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="guide.css">
+</head>
+<body>
+  <a class="skip-link" href="#main-content" data-ja="本文へ移動" data-en="Skip to main content">本文へ移動</a>
+  <nav class="site-nav" aria-label="Main navigation"><a class="brand" href="index.html">Nanami Astro</a><div class="nav-actions" aria-label="Language"><button class="lang-btn active" data-lang="ja" type="button" aria-label="日本語に切り替え" aria-pressed="true" onclick="setLang('ja')">JA</button><button class="lang-btn" data-lang="en" type="button" aria-label="Switch to English" aria-pressed="false" onclick="setLang('en')">EN</button></div></nav>
+  <main class="page" id="main-content">
+    <a class="back-link" href="index.html" data-ja="← 商品ガイド一覧へ" data-en="← Back to all guides">← 商品ガイド一覧へ</a>
+    <div class="guide-shell">
+      <article class="guide-main">
+        <p class="section-kicker">Transit add-on guide</p>
+        <h1 class="page-title" data-ja="約38日分の<br>トランジット追加データ" data-en="Approx. 38-Day<br>Transit Data Add-on">約38日分の<br>トランジット追加データ</h1>
+        <p class="page-intro" data-ja="すでにお持ちの対応出生図データを引き継ぎ、指定した開始日から新しい38日間のトランジットを作るためのガイドです。" data-en="Reuse compatible Nanami Astro birth-chart data to create a new 38-day transit period from the start date you choose.">すでにお持ちの対応出生図データを引き継ぎ、指定した開始日から新しい38日間のトランジットを作るためのガイドです。</p>
+        <div class="callout"><strong data-ja="単体では利用できません" data-en="This is not standalone">単体では利用できません</strong><p data-ja="対応するNanami Astroの出生図URLまたはYAMLデータが必要です。出生図、小惑星データ、四柱推命データ、鑑定文はこの追加データには含まれません。" data-en="You need a compatible Nanami Astro birth-chart URL or YAML file. This add-on does not include a natal chart, asteroid data, Four Pillars data, or a written reading.">対応するNanami Astroの出生図URLまたはYAMLデータが必要です。出生図、小惑星データ、四柱推命データ、鑑定文はこの追加データには含まれません。</p></div>
+        <div class="callout cool"><strong data-ja="FULLデータとの違い" data-en="How this differs from Full Data">FULLデータとの違い</strong><p data-ja="FULLデータには発行時点で38日分が含まれます。この追加データは、同じ出生データを使い、作成画面で選んだ開始日から別の38日間を生成します。開始日の選び方によって、既存期間と重なる場合があります。生成前に表示日付を確認してください。" data-en="Full Data includes one 38-day period when issued. This add-on uses the same birth data to create another 38-day period from the start date selected in the form. The periods may overlap depending on your chosen date, so confirm the displayed dates before generating.">FULLデータには発行時点で38日分が含まれます。この追加データは、同じ出生データを使い、作成画面で選んだ開始日から別の38日間を生成します。開始日の選び方によって、既存期間と重なる場合があります。生成前に表示日付を確認してください。</p></div>
+
+        <section class="section" id="create">
+          <p class="section-kicker">Create</p><h2 data-ja="次の期間を作成する" data-en="Create the next period">次の期間を作成する</h2>
+          <div class="steps">
+            <div class="step"><div class="step-num">1</div><div><h3 data-ja="アクセスガイドを開く" data-en="Open your access guide">アクセスガイドを開く</h3><p data-ja="購入先からダウンロードしたアクセスガイドPDFのリンクまたはQRコードを開きます。" data-en="Open the link or QR code in the access guide PDF downloaded from your marketplace.">購入先からダウンロードしたアクセスガイドPDFのリンクまたはQRコードを開きます。</p></div></div>
+            <div class="step"><div class="step-num">2</div><div><h3 data-ja="トランジット追加データを選ぶ" data-en="Choose Transit Data Add-on">トランジット追加データを選ぶ</h3><p data-ja="既存チャートページでは「Create the next transit（次のトランジットを作成）」から同じ作成画面へ進めます。" data-en="From an existing chart page, Create the next transit opens the same fulfillment flow.">既存チャートページでは「Create the next transit（次のトランジットを作成）」から同じ作成画面へ進めます。</p></div></div>
+            <div class="step"><div class="step-num">3</div><div><h3 data-ja="注文番号・元データ・開始日を入力" data-en="Enter your order, base data, and start date">注文番号・元データ・開始日を入力</h3><p data-ja="購入先の注文番号、対応する出生図ページのURLまたはYAMLデータ、作成したい期間の開始日を入力します。" data-en="Enter the marketplace order number, a compatible birth-chart URL or YAML file, and the start date for the period you want to create.">購入先の注文番号、対応する出生図ページのURLまたはYAMLデータ、作成したい期間の開始日を入力します。</p></div></div>
+            <div class="step"><div class="step-num">4</div><div><h3 data-ja="約38日分を生成" data-en="Generate approximately 38 days">約38日分を生成</h3><p data-ja="表示される対象期間を確認し、毎日の天体位置、出生図とのアスペクト、利用可能なハウス情報を生成します。" data-en="Confirm the displayed period and generate daily positions, natal-chart aspects, and house data where available.">表示される対象期間を確認し、毎日の天体位置、出生図とのアスペクト、利用可能なハウス情報を生成します。</p></div></div>
+          </div>
+        </section>
+
+        <section class="section" id="save">
+          <p class="section-kicker">Save</p><h2 data-ja="生成後に保存するもの" data-en="What to save">生成後に保存するもの</h2>
+          <div class="feature-list">
+            <div class="feature"><strong>YAML</strong><span data-ja="計算済みトランジットデータの正本です。" data-en="Your complete calculated transit dataset.">計算済みトランジットデータの正本です。</span></div>
+            <div class="feature"><strong data-ja="生成ページURL" data-en="Generated page URL">生成ページURL</strong><span data-ja="期間中に再確認するためブックマークします。" data-en="Bookmark it for reviewing the period.">期間中に再確認するためブックマークします。</span></div>
+            <div class="feature"><strong data-ja="利用用テキスト" data-en="Optional usage text">利用用テキスト</strong><span data-ja="必要な場合だけ、自分で選んだAIへ貼り付けます。" data-en="Paste into your chosen AI only if you want to.">必要な場合だけ、自分で選んだAIへ貼り付けます。</span></div>
+            <div class="feature"><strong data-ja="注文番号" data-en="Order number">注文番号</strong><span data-ja="サポート完了まで保管してください。" data-en="Keep it until fulfillment and support are complete.">サポート完了まで保管してください。</span></div>
+          </div>
+          <div class="callout cool"><strong data-ja="90日以内にダウンロード" data-en="Download within 90 days">90日以内にダウンロード</strong><p data-ja="生成ページは90日後に利用できなくなります。期限内にYAMLと必要なファイルを端末へ保存してください。" data-en="The generated page expires after 90 days. Save the YAML and any needed files to your device before then.">生成ページは90日後に利用できなくなります。期限内にYAMLと必要なファイルを端末へ保存してください。</p></div>
+        </section>
+
+        <section class="section" id="ai">
+          <p class="section-kicker">Optional AI</p><h2 data-ja="データをAIで読む場合" data-en="Optional AI interpretation">データをAIで読む場合</h2>
+          <p class="section-lead" data-ja="利用用テキストをコピーし、自分のChatGPT、Claude、Geminiなどへ貼り付けます。AIアカウントや有料契約は商品に含まれず、Nanami Astroから自動送信もされません。" data-en="Copy the optional usage text and paste it into your own ChatGPT, Claude, Gemini, or another compatible service. AI accounts and subscriptions are not included, and Nanami Astro never sends the data automatically.">利用用テキストをコピーし、自分のChatGPT、Claude、Geminiなどへ貼り付けます。AIアカウントや有料契約は商品に含まれず、Nanami Astroから自動送信もされません。</p>
+        </section>
+        <p class="usage-note" data-ja="本商品と生成データは個人利用向けです。再配布・転載・商用利用はできません。" data-en="This product and its generated data are for personal use only. Redistribution, republication, and commercial use are prohibited.">本商品と生成データは個人利用向けです。再配布・転載・商用利用はできません。</p>
+      </article>
+      <aside class="side-card"><h3 data-ja="このページの内容" data-en="On this page">このページの内容</h3><a href="#create" data-ja="次の期間を作成" data-en="Create the next period">次の期間を作成</a><a href="#save" data-ja="保存するもの" data-en="What to save">保存するもの</a><a href="#ai" data-ja="任意のAI機能" data-en="Optional AI">任意のAI機能</a><a href="index.html" data-ja="すべての商品ガイド" data-en="All product guides">すべての商品ガイド</a></aside>
+    </div>
+  </main>
+  <footer>© Nanami Astro · Transit add-on guide</footer>
+  <script src="guide.js"></script>
+</body>
+</html>
