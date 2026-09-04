@@ -1,0 +1,537 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>伊達政宗のホロスコープ | nanami-astro</title><meta name="description" content="伊達政宗の出生図サンプル。暦の換算、出生時刻不明の扱い、主要天体とYAMLデータを公開。"><style>
+ :root{--bg:#faf8f4;--ink:#2a1f10;--gold:#a07840;--line:#e8d5b0;--muted:#756550}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.9 Georgia,'Yu Mincho',serif}a{color:#775222}header,main,footer{max-width:1120px;margin:auto;padding:24px}header{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line)}button{background:white;color:var(--ink);border:1px solid var(--line);padding:9px 16px;cursor:pointer}button.active{background:var(--ink);color:white}h1{font-size:clamp(42px,6vw,76px);font-weight:400;line-height:1.35;margin:16px 0}h2{font-weight:400;font-size:28px;margin:0 0 20px}h3{font-size:18px}.eyebrow{color:var(--gold);letter-spacing:.18em;font-size:13px}.intro{padding:48px 0 30px}.lead{font-size:19px;max-width:800px}.pills{display:flex;flex-wrap:wrap;gap:10px}.pills span{padding:5px 14px;border:1px solid var(--line);border-radius:30px;font-size:14px}.grid{display:grid;grid-template-columns:1.1fr 1fr;gap:26px;align-items:start}.panel{background:white;border:1px solid var(--line);padding:28px;margin:26px 0}.chart{padding:12px}.chart svg{width:100%;height:auto;display:block}.note{background:#f3ede4;padding:18px 22px;border-left:3px solid var(--gold);font-size:14px}.muted,small{color:var(--muted)}.table-wrap{overflow:auto}table{border-collapse:collapse;width:100%;font-family:'Yu Gothic',sans-serif;font-size:14px}th,td{padding:12px 9px;border-bottom:1px solid #eee2d1;text-align:left;white-space:nowrap}th{color:var(--muted);font-weight:500}.actions{display:flex;flex-wrap:wrap;gap:12px;margin:20px 0}.actions a,.actions button{padding:10px 18px;border:1px solid var(--gold);background:white;color:#775222;text-decoration:none;font:inherit}.facts{padding-left:24px}.facts li{margin:16px 0}footer{margin-top:40px;border-top:1px solid var(--line);font-size:13px}@media(max-width:760px){.grid{grid-template-columns:1fr}.panel{padding:18px}header,main,footer{padding:18px}.intro{padding-top:30px}h2{font-size:25px}.chart{padding:6px}}
+ </style></head><body><header><a href="samples.html">nanami-astro / SAMPLE ARCHIVE</a><nav aria-label="Language"><button id="btn-ja" class="active" onclick="setLang('ja')">JA</button><button id="btn-en" onclick="setLang('en')">EN</button></nav></header><main><section class="intro"><div class="eyebrow">HISTORICAL FIGURES / 06</div><h1 data-ja="伊達政宗" data-en="Date Masamune">伊達政宗</h1><p class="lead" data-ja="独眼竜の星図。誕生日を確かめ、歴史と星の象徴を読み分ける。" data-en="The star chart of the One-Eyed Dragon. Begin with the calendar; distinguish history from astrological symbolism.">独眼竜の星図。誕生日を確かめ、歴史と星の象徴を読み分ける。</p><div class="pills"><span data-ja="太陽：乙女座" data-en="Sun: Virgo">太陽：乙女座</span><span data-ja="月：天秤座" data-en="Moon: Libra">月：天秤座</span><span data-ja="出生時刻不明" data-en="Birth time unknown">出生時刻不明</span></div></section><div class="note"><span data-ja="永禄10年8月3日／計算用：1567年9月15日（グレゴリオ暦）。通例の「1567年9月5日」はユリウス暦の同じ日です。" data-en="Eiroku 10, month 8, day 3 / calculation date: 15 September 1567 (proleptic Gregorian). The commonly cited 5 September 1567 is the same day in the Julian calendar.">永禄10年8月3日／計算用：1567年9月15日（グレゴリオ暦）。通例の「1567年9月5日」はユリウス暦の同じ日です。</span></div><div class="grid"><section class="panel chart"><svg class="horoscope-svg hide-houses" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1280" width="1080" height="1280" role="img" aria-label="Date Masamune natal chart; birth time unknown; noon assumed">
+<defs>
+<radialGradient id="bg" cx="50%" cy="42%" r="70%"><stop offset="0%" stop-color="#fffaf2"/><stop offset="65%" stop-color="#f3eadc"/><stop offset="100%" stop-color="#e7d5bd"/></radialGradient>
+<style>.horoscope-svg text{font-family:"Segoe UI Symbol","Noto Sans Symbols 2","Noto Sans Symbols",Arial,"Noto Sans JP",sans-serif}.small{font-size:22px;letter-spacing:.08em}.tiny{font-size:16px;letter-spacing:.06em}.planet{font-size:34px;font-weight:400}.angle{font-size:18px;font-weight:700;letter-spacing:.04em}.sign{font-size:34px;paint-order:stroke fill;stroke:#fffaf2;stroke-width:10px;stroke-linejoin:round}.house-number{font-size:24px;font-weight:700}.asteroid-body{display:none}.show-asteroids .asteroid-body{display:inline}.hide-houses .house-line,.hide-houses .house-label,.hide-houses .angle-body{display:none}</style>
+</defs>
+<rect width="1080" height="1280" fill="url(#bg)"/>
+<rect x="52" y="52" width="976" height="1176" rx="36" fill="none" stroke="#b79b74" stroke-width="2"/>
+<text x="540.00" y="104.00" fill="#3b2b1d" text-anchor="middle" font-size="42" font-weight="700">Date Masamune</text>
+<text x="540" y="146" fill="#80684a" text-anchor="middle" font-size="20">1567-09-15 Gregorian / Yonezawa / birth time unknown</text><text x="540" y="180" fill="#80684a" text-anchor="middle" font-size="20">Noon assumed / ASC, MC and houses hidden</text>
+<circle cx="540.00" cy="640.00" r="365.00" fill="rgba(255,255,255,.28)" stroke="#9d7c54" stroke-width="3"/>
+<circle cx="540.00" cy="640.00" r="322.00" fill="none" stroke="#c8aa82" stroke-width="1.5"/>
+<circle cx="540.00" cy="640.00" r="182.00" fill="rgba(255,255,255,.22)" stroke="#d0b792" stroke-width="1.2"/>
+<circle cx="540.00" cy="640.00" r="140.00" fill="rgba(255,255,255,.12)" stroke="#e0ccb0" stroke-width="1"/>
+<line x1="358.00" y1="640.00" x2="175.00" y2="640.00" stroke="#b89a72" stroke-width="1.4"/>
+<line x1="382.38" y1="549.00" x2="223.90" y2="457.50" stroke="#b89a72" stroke-width="1.4"/>
+<line x1="449.00" y1="482.38" x2="357.50" y2="323.90" stroke="#b89a72" stroke-width="1.4"/>
+<line x1="540.00" y1="458.00" x2="540.00" y2="275.00" stroke="#b89a72" stroke-width="1.4"/>
+<line x1="631.00" y1="482.38" x2="722.50" y2="323.90" stroke="#b89a72" stroke-width="1.4"/>
+<line x1="697.62" y1="549.00" x2="856.10" y2="457.50" stroke="#b89a72" stroke-width="1.4"/>
+<line x1="722.00" y1="640.00" x2="905.00" y2="640.00" stroke="#b89a72" stroke-width="1.4"/>
+<line x1="697.62" y1="731.00" x2="856.10" y2="822.50" stroke="#b89a72" stroke-width="1.4"/>
+<line x1="631.00" y1="797.62" x2="722.50" y2="956.10" stroke="#b89a72" stroke-width="1.4"/>
+<line x1="540.00" y1="822.00" x2="540.00" y2="1005.00" stroke="#b89a72" stroke-width="1.4"/>
+<line x1="449.00" y1="797.62" x2="357.50" y2="956.10" stroke="#b89a72" stroke-width="1.4"/>
+<line x1="382.38" y1="731.00" x2="223.90" y2="822.50" stroke="#b89a72" stroke-width="1.4"/>
+<line x1="199.00" y1="640.00" x2="175.00" y2="640.00" stroke="#d8c4a7" stroke-width="1.4" opacity=".82"/>
+<line x1="183.05" y1="633.77" x2="175.06" y2="633.63" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="183.22" y1="627.54" x2="175.22" y2="627.26" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="183.49" y1="621.32" x2="175.50" y2="620.90" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="183.87" y1="615.10" x2="175.89" y2="614.54" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="192.33" y1="609.58" x2="176.39" y2="608.19" stroke="#d8c4a7" stroke-width="1" opacity=".58"/>
+<line x1="184.96" y1="602.68" x2="177.00" y2="601.85" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="185.66" y1="596.49" x2="177.72" y2="595.52" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="186.47" y1="590.32" x2="178.55" y2="589.20" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="187.40" y1="584.15" x2="179.49" y2="582.90" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="204.18" y1="580.79" x2="180.55" y2="576.62" stroke="#d8c4a7" stroke-width="1.4" opacity=".82"/>
+<line x1="189.56" y1="571.88" x2="181.71" y2="570.35" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="190.80" y1="565.78" x2="182.98" y2="564.11" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="192.15" y1="559.69" x2="184.35" y2="557.89" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="193.60" y1="553.63" x2="185.84" y2="551.70" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="202.89" y1="549.67" x2="187.44" y2="545.53" stroke="#d8c4a7" stroke-width="1" opacity=".58"/>
+<line x1="196.83" y1="541.60" x2="189.14" y2="539.39" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="198.60" y1="535.62" x2="190.95" y2="533.28" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="200.47" y1="529.68" x2="192.86" y2="527.21" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="202.45" y1="523.77" x2="194.89" y2="521.17" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="219.56" y1="523.37" x2="197.01" y2="515.16" stroke="#d8c4a7" stroke-width="1.4" opacity=".82"/>
+<line x1="206.71" y1="512.06" x2="199.24" y2="509.20" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="209.00" y1="506.27" x2="201.58" y2="503.27" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="211.38" y1="500.51" x2="204.02" y2="497.38" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="213.86" y1="494.80" x2="206.56" y2="491.54" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="223.70" y1="492.51" x2="209.20" y2="485.74" stroke="#d8c4a7" stroke-width="1" opacity=".58"/>
+<line x1="219.13" y1="483.50" x2="211.94" y2="479.99" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="221.91" y1="477.93" x2="214.78" y2="474.29" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="224.79" y1="472.40" x2="217.72" y2="468.64" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="227.76" y1="466.92" x2="220.76" y2="463.04" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="244.69" y1="469.50" x2="223.90" y2="457.50" stroke="#d8c4a7" stroke-width="1.4" opacity=".82"/>
+<line x1="233.99" y1="456.13" x2="227.13" y2="452.01" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="237.25" y1="450.82" x2="230.46" y2="446.58" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="240.59" y1="445.56" x2="233.89" y2="441.21" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="244.03" y1="440.37" x2="237.40" y2="435.89" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="254.12" y1="439.82" x2="241.01" y2="430.64" stroke="#d8c4a7" stroke-width="1" opacity=".58"/>
+<line x1="251.18" y1="430.16" x2="244.71" y2="425.46" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="254.89" y1="425.15" x2="248.50" y2="420.34" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="258.68" y1="420.21" x2="252.38" y2="415.28" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="262.56" y1="415.33" x2="256.34" y2="410.30" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="278.78" y1="420.81" x2="260.39" y2="405.38" stroke="#d8c4a7" stroke-width="1.4" opacity=".82"/>
+<line x1="270.57" y1="405.79" x2="264.53" y2="400.54" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="274.70" y1="401.12" x2="268.75" y2="395.77" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="278.91" y1="396.53" x2="273.06" y2="391.07" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="283.20" y1="392.01" x2="277.44" y2="386.45" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="293.22" y1="393.22" x2="281.91" y2="381.91" stroke="#d8c4a7" stroke-width="1" opacity=".58"/>
+<line x1="292.01" y1="383.20" x2="286.45" y2="377.44" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="296.53" y1="378.91" x2="291.07" y2="373.06" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="301.12" y1="374.70" x2="295.77" y2="368.75" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="305.79" y1="370.57" x2="300.54" y2="364.53" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="320.81" y1="378.78" x2="305.38" y2="360.39" stroke="#d8c4a7" stroke-width="1.4" opacity=".82"/>
+<line x1="315.33" y1="362.56" x2="310.30" y2="356.34" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="320.21" y1="358.68" x2="315.28" y2="352.38" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="325.15" y1="354.89" x2="320.34" y2="348.50" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="330.16" y1="351.18" x2="325.46" y2="344.71" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="339.82" y1="354.12" x2="330.64" y2="341.01" stroke="#d8c4a7" stroke-width="1" opacity=".58"/>
+<line x1="340.37" y1="344.03" x2="335.89" y2="337.40" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="345.56" y1="340.59" x2="341.21" y2="333.89" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="350.82" y1="337.25" x2="346.58" y2="330.46" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="356.13" y1="333.99" x2="352.01" y2="327.13" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="369.50" y1="344.69" x2="357.50" y2="323.90" stroke="#d8c4a7" stroke-width="1.4" opacity=".82"/>
+<line x1="366.92" y1="327.76" x2="363.04" y2="320.76" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="372.40" y1="324.79" x2="368.64" y2="317.72" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="377.93" y1="321.91" x2="374.29" y2="314.78" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="383.50" y1="319.13" x2="379.99" y2="311.94" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="392.51" y1="323.70" x2="385.74" y2="309.20" stroke="#d8c4a7" stroke-width="1" opacity=".58"/>
+<line x1="394.80" y1="313.86" x2="391.54" y2="306.56" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="400.51" y1="311.38" x2="397.38" y2="304.02" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="406.27" y1="309.00" x2="403.27" y2="301.58" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="412.06" y1="306.71" x2="409.20" y2="299.24" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="423.37" y1="319.56" x2="415.16" y2="297.01" stroke="#d8c4a7" stroke-width="1.4" opacity=".82"/>
+<line x1="423.77" y1="302.45" x2="421.17" y2="294.89" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="429.68" y1="300.47" x2="427.21" y2="292.86" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="435.62" y1="298.60" x2="433.28" y2="290.95" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="441.60" y1="296.83" x2="439.39" y2="289.14" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="449.67" y1="302.89" x2="445.53" y2="287.44" stroke="#d8c4a7" stroke-width="1" opacity=".58"/>
+<line x1="453.63" y1="293.60" x2="451.70" y2="285.84" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="459.69" y1="292.15" x2="457.89" y2="284.35" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="465.78" y1="290.80" x2="464.11" y2="282.98" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="471.88" y1="289.56" x2="470.35" y2="281.71" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="480.79" y1="304.18" x2="476.62" y2="280.55" stroke="#d8c4a7" stroke-width="1.4" opacity=".82"/>
+<line x1="484.15" y1="287.40" x2="482.90" y2="279.49" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="490.32" y1="286.47" x2="489.20" y2="278.55" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="496.49" y1="285.66" x2="495.52" y2="277.72" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="502.68" y1="284.96" x2="501.85" y2="277.00" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="509.58" y1="292.33" x2="508.19" y2="276.39" stroke="#d8c4a7" stroke-width="1" opacity=".58"/>
+<line x1="515.10" y1="283.87" x2="514.54" y2="275.89" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="521.32" y1="283.49" x2="520.90" y2="275.50" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="527.54" y1="283.22" x2="527.26" y2="275.22" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="533.77" y1="283.05" x2="533.63" y2="275.06" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="540.00" y1="299.00" x2="540.00" y2="275.00" stroke="#d8c4a7" stroke-width="1.4" opacity=".82"/>
+<line x1="546.23" y1="283.05" x2="546.37" y2="275.06" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="552.46" y1="283.22" x2="552.74" y2="275.22" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="558.68" y1="283.49" x2="559.10" y2="275.50" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="564.90" y1="283.87" x2="565.46" y2="275.89" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="570.42" y1="292.33" x2="571.81" y2="276.39" stroke="#d8c4a7" stroke-width="1" opacity=".58"/>
+<line x1="577.32" y1="284.96" x2="578.15" y2="277.00" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="583.51" y1="285.66" x2="584.48" y2="277.72" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="589.68" y1="286.47" x2="590.80" y2="278.55" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="595.85" y1="287.40" x2="597.10" y2="279.49" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="599.21" y1="304.18" x2="603.38" y2="280.55" stroke="#d8c4a7" stroke-width="1.4" opacity=".82"/>
+<line x1="608.12" y1="289.56" x2="609.65" y2="281.71" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="614.22" y1="290.80" x2="615.89" y2="282.98" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="620.31" y1="292.15" x2="622.11" y2="284.35" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="626.37" y1="293.60" x2="628.30" y2="285.84" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="630.33" y1="302.89" x2="634.47" y2="287.44" stroke="#d8c4a7" stroke-width="1" opacity=".58"/>
+<line x1="638.40" y1="296.83" x2="640.61" y2="289.14" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="644.38" y1="298.60" x2="646.72" y2="290.95" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="650.32" y1="300.47" x2="652.79" y2="292.86" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="656.23" y1="302.45" x2="658.83" y2="294.89" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="656.63" y1="319.56" x2="664.84" y2="297.01" stroke="#d8c4a7" stroke-width="1.4" opacity=".82"/>
+<line x1="667.94" y1="306.71" x2="670.80" y2="299.24" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="673.73" y1="309.00" x2="676.73" y2="301.58" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="679.49" y1="311.38" x2="682.62" y2="304.02" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="685.20" y1="313.86" x2="688.46" y2="306.56" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="687.49" y1="323.70" x2="694.26" y2="309.20" stroke="#d8c4a7" stroke-width="1" opacity=".58"/>
+<line x1="696.50" y1="319.13" x2="700.01" y2="311.94" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="702.07" y1="321.91" x2="705.71" y2="314.78" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="707.60" y1="324.79" x2="711.36" y2="317.72" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="713.08" y1="327.76" x2="716.96" y2="320.76" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="710.50" y1="344.69" x2="722.50" y2="323.90" stroke="#d8c4a7" stroke-width="1.4" opacity=".82"/>
+<line x1="723.87" y1="333.99" x2="727.99" y2="327.13" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="729.18" y1="337.25" x2="733.42" y2="330.46" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="734.44" y1="340.59" x2="738.79" y2="333.89" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="739.63" y1="344.03" x2="744.11" y2="337.40" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="740.18" y1="354.12" x2="749.36" y2="341.01" stroke="#d8c4a7" stroke-width="1" opacity=".58"/>
+<line x1="749.84" y1="351.18" x2="754.54" y2="344.71" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="754.85" y1="354.89" x2="759.66" y2="348.50" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="759.79" y1="358.68" x2="764.72" y2="352.38" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="764.67" y1="362.56" x2="769.70" y2="356.34" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="759.19" y1="378.78" x2="774.62" y2="360.39" stroke="#d8c4a7" stroke-width="1.4" opacity=".82"/>
+<line x1="774.21" y1="370.57" x2="779.46" y2="364.53" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="778.88" y1="374.70" x2="784.23" y2="368.75" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="783.47" y1="378.91" x2="788.93" y2="373.06" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="787.99" y1="383.20" x2="793.55" y2="377.44" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="786.78" y1="393.22" x2="798.09" y2="381.91" stroke="#d8c4a7" stroke-width="1" opacity=".58"/>
+<line x1="796.80" y1="392.01" x2="802.56" y2="386.45" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="801.09" y1="396.53" x2="806.94" y2="391.07" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="805.30" y1="401.12" x2="811.25" y2="395.77" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="809.43" y1="405.79" x2="815.47" y2="400.54" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="801.22" y1="420.81" x2="819.61" y2="405.38" stroke="#d8c4a7" stroke-width="1.4" opacity=".82"/>
+<line x1="817.44" y1="415.33" x2="823.66" y2="410.30" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="821.32" y1="420.21" x2="827.62" y2="415.28" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="825.11" y1="425.15" x2="831.50" y2="420.34" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="828.82" y1="430.16" x2="835.29" y2="425.46" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="825.88" y1="439.82" x2="838.99" y2="430.64" stroke="#d8c4a7" stroke-width="1" opacity=".58"/>
+<line x1="835.97" y1="440.37" x2="842.60" y2="435.89" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="839.41" y1="445.56" x2="846.11" y2="441.21" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="842.75" y1="450.82" x2="849.54" y2="446.58" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="846.01" y1="456.13" x2="852.87" y2="452.01" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="835.31" y1="469.50" x2="856.10" y2="457.50" stroke="#d8c4a7" stroke-width="1.4" opacity=".82"/>
+<line x1="852.24" y1="466.92" x2="859.24" y2="463.04" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="855.21" y1="472.40" x2="862.28" y2="468.64" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="858.09" y1="477.93" x2="865.22" y2="474.29" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="860.87" y1="483.50" x2="868.06" y2="479.99" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="856.30" y1="492.51" x2="870.80" y2="485.74" stroke="#d8c4a7" stroke-width="1" opacity=".58"/>
+<line x1="866.14" y1="494.80" x2="873.44" y2="491.54" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="868.62" y1="500.51" x2="875.98" y2="497.38" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="871.00" y1="506.27" x2="878.42" y2="503.27" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="873.29" y1="512.06" x2="880.76" y2="509.20" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="860.44" y1="523.37" x2="882.99" y2="515.16" stroke="#d8c4a7" stroke-width="1.4" opacity=".82"/>
+<line x1="877.55" y1="523.77" x2="885.11" y2="521.17" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="879.53" y1="529.68" x2="887.14" y2="527.21" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="881.40" y1="535.62" x2="889.05" y2="533.28" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="883.17" y1="541.60" x2="890.86" y2="539.39" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="877.11" y1="549.67" x2="892.56" y2="545.53" stroke="#d8c4a7" stroke-width="1" opacity=".58"/>
+<line x1="886.40" y1="553.63" x2="894.16" y2="551.70" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="887.85" y1="559.69" x2="895.65" y2="557.89" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="889.20" y1="565.78" x2="897.02" y2="564.11" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="890.44" y1="571.88" x2="898.29" y2="570.35" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="875.82" y1="580.79" x2="899.45" y2="576.62" stroke="#d8c4a7" stroke-width="1.4" opacity=".82"/>
+<line x1="892.60" y1="584.15" x2="900.51" y2="582.90" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="893.53" y1="590.32" x2="901.45" y2="589.20" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="894.34" y1="596.49" x2="902.28" y2="595.52" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="895.04" y1="602.68" x2="903.00" y2="601.85" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="887.67" y1="609.58" x2="903.61" y2="608.19" stroke="#d8c4a7" stroke-width="1" opacity=".58"/>
+<line x1="896.13" y1="615.10" x2="904.11" y2="614.54" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="896.51" y1="621.32" x2="904.50" y2="620.90" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="896.78" y1="627.54" x2="904.78" y2="627.26" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="896.95" y1="633.77" x2="904.94" y2="633.63" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="881.00" y1="640.00" x2="905.00" y2="640.00" stroke="#d8c4a7" stroke-width="1.4" opacity=".82"/>
+<line x1="896.95" y1="646.23" x2="904.94" y2="646.37" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="896.78" y1="652.46" x2="904.78" y2="652.74" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="896.51" y1="658.68" x2="904.50" y2="659.10" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="896.13" y1="664.90" x2="904.11" y2="665.46" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="887.67" y1="670.42" x2="903.61" y2="671.81" stroke="#d8c4a7" stroke-width="1" opacity=".58"/>
+<line x1="895.04" y1="677.32" x2="903.00" y2="678.15" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="894.34" y1="683.51" x2="902.28" y2="684.48" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="893.53" y1="689.68" x2="901.45" y2="690.80" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="892.60" y1="695.85" x2="900.51" y2="697.10" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="875.82" y1="699.21" x2="899.45" y2="703.38" stroke="#d8c4a7" stroke-width="1.4" opacity=".82"/>
+<line x1="890.44" y1="708.12" x2="898.29" y2="709.65" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="889.20" y1="714.22" x2="897.02" y2="715.89" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="887.85" y1="720.31" x2="895.65" y2="722.11" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="886.40" y1="726.37" x2="894.16" y2="728.30" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="877.11" y1="730.33" x2="892.56" y2="734.47" stroke="#d8c4a7" stroke-width="1" opacity=".58"/>
+<line x1="883.17" y1="738.40" x2="890.86" y2="740.61" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="881.40" y1="744.38" x2="889.05" y2="746.72" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="879.53" y1="750.32" x2="887.14" y2="752.79" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="877.55" y1="756.23" x2="885.11" y2="758.83" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="860.44" y1="756.63" x2="882.99" y2="764.84" stroke="#d8c4a7" stroke-width="1.4" opacity=".82"/>
+<line x1="873.29" y1="767.94" x2="880.76" y2="770.80" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="871.00" y1="773.73" x2="878.42" y2="776.73" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="868.62" y1="779.49" x2="875.98" y2="782.62" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="866.14" y1="785.20" x2="873.44" y2="788.46" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="856.30" y1="787.49" x2="870.80" y2="794.26" stroke="#d8c4a7" stroke-width="1" opacity=".58"/>
+<line x1="860.87" y1="796.50" x2="868.06" y2="800.01" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="858.09" y1="802.07" x2="865.22" y2="805.71" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="855.21" y1="807.60" x2="862.28" y2="811.36" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="852.24" y1="813.08" x2="859.24" y2="816.96" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="835.31" y1="810.50" x2="856.10" y2="822.50" stroke="#d8c4a7" stroke-width="1.4" opacity=".82"/>
+<line x1="846.01" y1="823.87" x2="852.87" y2="827.99" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="842.75" y1="829.18" x2="849.54" y2="833.42" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="839.41" y1="834.44" x2="846.11" y2="838.79" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="835.97" y1="839.63" x2="842.60" y2="844.11" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="825.88" y1="840.18" x2="838.99" y2="849.36" stroke="#d8c4a7" stroke-width="1" opacity=".58"/>
+<line x1="828.82" y1="849.84" x2="835.29" y2="854.54" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="825.11" y1="854.85" x2="831.50" y2="859.66" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="821.32" y1="859.79" x2="827.62" y2="864.72" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="817.44" y1="864.67" x2="823.66" y2="869.70" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="801.22" y1="859.19" x2="819.61" y2="874.62" stroke="#d8c4a7" stroke-width="1.4" opacity=".82"/>
+<line x1="809.43" y1="874.21" x2="815.47" y2="879.46" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="805.30" y1="878.88" x2="811.25" y2="884.23" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="801.09" y1="883.47" x2="806.94" y2="888.93" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="796.80" y1="887.99" x2="802.56" y2="893.55" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="786.78" y1="886.78" x2="798.09" y2="898.09" stroke="#d8c4a7" stroke-width="1" opacity=".58"/>
+<line x1="787.99" y1="896.80" x2="793.55" y2="902.56" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="783.47" y1="901.09" x2="788.93" y2="906.94" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="778.88" y1="905.30" x2="784.23" y2="911.25" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="774.21" y1="909.43" x2="779.46" y2="915.47" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="759.19" y1="901.22" x2="774.62" y2="919.61" stroke="#d8c4a7" stroke-width="1.4" opacity=".82"/>
+<line x1="764.67" y1="917.44" x2="769.70" y2="923.66" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="759.79" y1="921.32" x2="764.72" y2="927.62" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="754.85" y1="925.11" x2="759.66" y2="931.50" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="749.84" y1="928.82" x2="754.54" y2="935.29" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="740.18" y1="925.88" x2="749.36" y2="938.99" stroke="#d8c4a7" stroke-width="1" opacity=".58"/>
+<line x1="739.63" y1="935.97" x2="744.11" y2="942.60" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="734.44" y1="939.41" x2="738.79" y2="946.11" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="729.18" y1="942.75" x2="733.42" y2="949.54" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="723.87" y1="946.01" x2="727.99" y2="952.87" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="710.50" y1="935.31" x2="722.50" y2="956.10" stroke="#d8c4a7" stroke-width="1.4" opacity=".82"/>
+<line x1="713.08" y1="952.24" x2="716.96" y2="959.24" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="707.60" y1="955.21" x2="711.36" y2="962.28" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="702.07" y1="958.09" x2="705.71" y2="965.22" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="696.50" y1="960.87" x2="700.01" y2="968.06" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="687.49" y1="956.30" x2="694.26" y2="970.80" stroke="#d8c4a7" stroke-width="1" opacity=".58"/>
+<line x1="685.20" y1="966.14" x2="688.46" y2="973.44" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="679.49" y1="968.62" x2="682.62" y2="975.98" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="673.73" y1="971.00" x2="676.73" y2="978.42" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="667.94" y1="973.29" x2="670.80" y2="980.76" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="656.63" y1="960.44" x2="664.84" y2="982.99" stroke="#d8c4a7" stroke-width="1.4" opacity=".82"/>
+<line x1="656.23" y1="977.55" x2="658.83" y2="985.11" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="650.32" y1="979.53" x2="652.79" y2="987.14" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="644.38" y1="981.40" x2="646.72" y2="989.05" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="638.40" y1="983.17" x2="640.61" y2="990.86" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="630.33" y1="977.11" x2="634.47" y2="992.56" stroke="#d8c4a7" stroke-width="1" opacity=".58"/>
+<line x1="626.37" y1="986.40" x2="628.30" y2="994.16" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="620.31" y1="987.85" x2="622.11" y2="995.65" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="614.22" y1="989.20" x2="615.89" y2="997.02" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="608.12" y1="990.44" x2="609.65" y2="998.29" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="599.21" y1="975.82" x2="603.38" y2="999.45" stroke="#d8c4a7" stroke-width="1.4" opacity=".82"/>
+<line x1="595.85" y1="992.60" x2="597.10" y2="1000.51" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="589.68" y1="993.53" x2="590.80" y2="1001.45" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="583.51" y1="994.34" x2="584.48" y2="1002.28" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="577.32" y1="995.04" x2="578.15" y2="1003.00" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="570.42" y1="987.67" x2="571.81" y2="1003.61" stroke="#d8c4a7" stroke-width="1" opacity=".58"/>
+<line x1="564.90" y1="996.13" x2="565.46" y2="1004.11" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="558.68" y1="996.51" x2="559.10" y2="1004.50" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="552.46" y1="996.78" x2="552.74" y2="1004.78" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="546.23" y1="996.95" x2="546.37" y2="1004.94" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="540.00" y1="981.00" x2="540.00" y2="1005.00" stroke="#d8c4a7" stroke-width="1.4" opacity=".82"/>
+<line x1="533.77" y1="996.95" x2="533.63" y2="1004.94" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="527.54" y1="996.78" x2="527.26" y2="1004.78" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="521.32" y1="996.51" x2="520.90" y2="1004.50" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="515.10" y1="996.13" x2="514.54" y2="1004.11" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="509.58" y1="987.67" x2="508.19" y2="1003.61" stroke="#d8c4a7" stroke-width="1" opacity=".58"/>
+<line x1="502.68" y1="995.04" x2="501.85" y2="1003.00" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="496.49" y1="994.34" x2="495.52" y2="1002.28" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="490.32" y1="993.53" x2="489.20" y2="1001.45" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="484.15" y1="992.60" x2="482.90" y2="1000.51" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="480.79" y1="975.82" x2="476.62" y2="999.45" stroke="#d8c4a7" stroke-width="1.4" opacity=".82"/>
+<line x1="471.88" y1="990.44" x2="470.35" y2="998.29" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="465.78" y1="989.20" x2="464.11" y2="997.02" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="459.69" y1="987.85" x2="457.89" y2="995.65" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="453.63" y1="986.40" x2="451.70" y2="994.16" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="449.67" y1="977.11" x2="445.53" y2="992.56" stroke="#d8c4a7" stroke-width="1" opacity=".58"/>
+<line x1="441.60" y1="983.17" x2="439.39" y2="990.86" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="435.62" y1="981.40" x2="433.28" y2="989.05" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="429.68" y1="979.53" x2="427.21" y2="987.14" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="423.77" y1="977.55" x2="421.17" y2="985.11" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="423.37" y1="960.44" x2="415.16" y2="982.99" stroke="#d8c4a7" stroke-width="1.4" opacity=".82"/>
+<line x1="412.06" y1="973.29" x2="409.20" y2="980.76" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="406.27" y1="971.00" x2="403.27" y2="978.42" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="400.51" y1="968.62" x2="397.38" y2="975.98" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="394.80" y1="966.14" x2="391.54" y2="973.44" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="392.51" y1="956.30" x2="385.74" y2="970.80" stroke="#d8c4a7" stroke-width="1" opacity=".58"/>
+<line x1="383.50" y1="960.87" x2="379.99" y2="968.06" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="377.93" y1="958.09" x2="374.29" y2="965.22" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="372.40" y1="955.21" x2="368.64" y2="962.28" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="366.92" y1="952.24" x2="363.04" y2="959.24" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="369.50" y1="935.31" x2="357.50" y2="956.10" stroke="#d8c4a7" stroke-width="1.4" opacity=".82"/>
+<line x1="356.13" y1="946.01" x2="352.01" y2="952.87" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="350.82" y1="942.75" x2="346.58" y2="949.54" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="345.56" y1="939.41" x2="341.21" y2="946.11" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="340.37" y1="935.97" x2="335.89" y2="942.60" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="339.82" y1="925.88" x2="330.64" y2="938.99" stroke="#d8c4a7" stroke-width="1" opacity=".58"/>
+<line x1="330.16" y1="928.82" x2="325.46" y2="935.29" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="325.15" y1="925.11" x2="320.34" y2="931.50" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="320.21" y1="921.32" x2="315.28" y2="927.62" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="315.33" y1="917.44" x2="310.30" y2="923.66" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="320.81" y1="901.22" x2="305.38" y2="919.61" stroke="#d8c4a7" stroke-width="1.4" opacity=".82"/>
+<line x1="305.79" y1="909.43" x2="300.54" y2="915.47" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="301.12" y1="905.30" x2="295.77" y2="911.25" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="296.53" y1="901.09" x2="291.07" y2="906.94" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="292.01" y1="896.80" x2="286.45" y2="902.56" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="293.22" y1="886.78" x2="281.91" y2="898.09" stroke="#d8c4a7" stroke-width="1" opacity=".58"/>
+<line x1="283.20" y1="887.99" x2="277.44" y2="893.55" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="278.91" y1="883.47" x2="273.06" y2="888.93" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="274.70" y1="878.88" x2="268.75" y2="884.23" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="270.57" y1="874.21" x2="264.53" y2="879.46" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="278.78" y1="859.19" x2="260.39" y2="874.62" stroke="#d8c4a7" stroke-width="1.4" opacity=".82"/>
+<line x1="262.56" y1="864.67" x2="256.34" y2="869.70" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="258.68" y1="859.79" x2="252.38" y2="864.72" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="254.89" y1="854.85" x2="248.50" y2="859.66" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="251.18" y1="849.84" x2="244.71" y2="854.54" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="254.12" y1="840.18" x2="241.01" y2="849.36" stroke="#d8c4a7" stroke-width="1" opacity=".58"/>
+<line x1="244.03" y1="839.63" x2="237.40" y2="844.11" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="240.59" y1="834.44" x2="233.89" y2="838.79" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="237.25" y1="829.18" x2="230.46" y2="833.42" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="233.99" y1="823.87" x2="227.13" y2="827.99" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="244.69" y1="810.50" x2="223.90" y2="822.50" stroke="#d8c4a7" stroke-width="1.4" opacity=".82"/>
+<line x1="227.76" y1="813.08" x2="220.76" y2="816.96" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="224.79" y1="807.60" x2="217.72" y2="811.36" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="221.91" y1="802.07" x2="214.78" y2="805.71" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="219.13" y1="796.50" x2="211.94" y2="800.01" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="223.70" y1="787.49" x2="209.20" y2="794.26" stroke="#d8c4a7" stroke-width="1" opacity=".58"/>
+<line x1="213.86" y1="785.20" x2="206.56" y2="788.46" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="211.38" y1="779.49" x2="204.02" y2="782.62" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="209.00" y1="773.73" x2="201.58" y2="776.73" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="206.71" y1="767.94" x2="199.24" y2="770.80" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="219.56" y1="756.63" x2="197.01" y2="764.84" stroke="#d8c4a7" stroke-width="1.4" opacity=".82"/>
+<line x1="202.45" y1="756.23" x2="194.89" y2="758.83" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="200.47" y1="750.32" x2="192.86" y2="752.79" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="198.60" y1="744.38" x2="190.95" y2="746.72" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="196.83" y1="738.40" x2="189.14" y2="740.61" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="202.89" y1="730.33" x2="187.44" y2="734.47" stroke="#d8c4a7" stroke-width="1" opacity=".58"/>
+<line x1="193.60" y1="726.37" x2="185.84" y2="728.30" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="192.15" y1="720.31" x2="184.35" y2="722.11" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="190.80" y1="714.22" x2="182.98" y2="715.89" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="189.56" y1="708.12" x2="181.71" y2="709.65" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="204.18" y1="699.21" x2="180.55" y2="703.38" stroke="#d8c4a7" stroke-width="1.4" opacity=".82"/>
+<line x1="187.40" y1="695.85" x2="179.49" y2="697.10" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="186.47" y1="689.68" x2="178.55" y2="690.80" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="185.66" y1="683.51" x2="177.72" y2="684.48" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="184.96" y1="677.32" x2="177.00" y2="678.15" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="192.33" y1="670.42" x2="176.39" y2="671.81" stroke="#d8c4a7" stroke-width="1" opacity=".58"/>
+<line x1="183.87" y1="664.90" x2="175.89" y2="665.46" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="183.49" y1="658.68" x2="175.50" y2="659.10" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="183.22" y1="652.46" x2="175.22" y2="652.74" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<line x1="183.05" y1="646.23" x2="175.06" y2="646.37" stroke="#d8c4a7" stroke-width=".7" opacity=".34"/>
+<text x="208.20" y="551.10" fill="#73593b" text-anchor="middle" dominant-baseline="central" class="sign">♈</text>
+<text x="297.11" y="397.11" fill="#73593b" text-anchor="middle" dominant-baseline="central" class="sign">♉</text>
+<text x="451.10" y="308.20" fill="#73593b" text-anchor="middle" dominant-baseline="central" class="sign">♊</text>
+<text x="628.90" y="308.20" fill="#73593b" text-anchor="middle" dominant-baseline="central" class="sign">♋</text>
+<text x="782.89" y="397.11" fill="#73593b" text-anchor="middle" dominant-baseline="central" class="sign">♌</text>
+<text x="871.80" y="551.10" fill="#73593b" text-anchor="middle" dominant-baseline="central" class="sign">♍</text>
+<text x="871.80" y="728.90" fill="#73593b" text-anchor="middle" dominant-baseline="central" class="sign">♎</text>
+<text x="782.89" y="882.89" fill="#73593b" text-anchor="middle" dominant-baseline="central" class="sign">♏</text>
+<text x="628.90" y="971.80" fill="#73593b" text-anchor="middle" dominant-baseline="central" class="sign">♐</text>
+<text x="451.10" y="971.80" fill="#73593b" text-anchor="middle" dominant-baseline="central" class="sign">♑</text>
+<text x="297.11" y="882.89" fill="#73593b" text-anchor="middle" dominant-baseline="central" class="sign">♒</text>
+<text x="208.20" y="728.90" fill="#73593b" text-anchor="middle" dominant-baseline="central" class="sign">♓</text>
+<line x1="575.25" y1="724.98" x2="609.73" y2="808.11" stroke="#c0a17a" stroke-width="2.4" class="house-line"/>
+<line x1="524.33" y1="730.66" x2="508.99" y2="819.34" stroke="#c0a17a" stroke-width="1" class="house-line"/>
+<line x1="472.80" y1="702.84" x2="407.06" y2="764.30" stroke="#c0a17a" stroke-width="1" class="house-line"/>
+<line x1="448.67" y1="651.12" x2="359.33" y2="662.00" stroke="#c0a17a" stroke-width="2.4" class="house-line"/>
+<line x1="455.32" y1="604.04" x2="372.48" y2="568.87" stroke="#c0a17a" stroke-width="1" class="house-line"/>
+<line x1="477.21" y1="572.76" x2="415.78" y2="506.98" stroke="#c0a17a" stroke-width="1" class="house-line"/>
+<line x1="504.75" y1="555.02" x2="470.27" y2="471.89" stroke="#c0a17a" stroke-width="2.4" class="house-line"/>
+<line x1="555.67" y1="549.34" x2="571.01" y2="460.66" stroke="#c0a17a" stroke-width="1" class="house-line"/>
+<line x1="607.20" y1="577.16" x2="672.94" y2="515.70" stroke="#c0a17a" stroke-width="1" class="house-line"/>
+<line x1="631.33" y1="628.88" x2="720.67" y2="618.00" stroke="#c0a17a" stroke-width="2.4" class="house-line"/>
+<line x1="624.68" y1="675.96" x2="707.52" y2="711.13" stroke="#c0a17a" stroke-width="1" class="house-line"/>
+<line x1="602.79" y1="707.24" x2="664.22" y2="773.02" stroke="#c0a17a" stroke-width="1" class="house-line"/>
+<text x="558.39" y="812.98" fill="#7d603b" text-anchor="middle" class="house-number house-label">1</text>
+<text x="461.13" y="794.07" fill="#7d603b" text-anchor="middle" class="house-number house-label">2</text>
+<text x="389.56" y="718.18" fill="#7d603b" text-anchor="middle" class="house-number house-label">3</text>
+<text x="375.63" y="624.80" fill="#7d603b" text-anchor="middle" class="house-number house-label">4</text>
+<text x="403.99" y="552.83" fill="#7d603b" text-anchor="middle" class="house-number house-label">5</text>
+<text x="450.11" y="508.44" fill="#7d603b" text-anchor="middle" class="house-number house-label">6</text>
+<text x="521.61" y="483.02" fill="#7d603b" text-anchor="middle" class="house-number house-label">7</text>
+<text x="618.87" y="501.93" fill="#7d603b" text-anchor="middle" class="house-number house-label">8</text>
+<text x="690.44" y="577.82" fill="#7d603b" text-anchor="middle" class="house-number house-label">9</text>
+<text x="704.37" y="671.20" fill="#7d603b" text-anchor="middle" class="house-number house-label">10</text>
+<text x="676.01" y="743.17" fill="#7d603b" text-anchor="middle" class="house-number house-label">11</text>
+<text x="629.89" y="787.56" fill="#7d603b" text-anchor="middle" class="house-number house-label">12</text>
+<line x1="667.15" y1="698.59" x2="412.85" y2="581.41" stroke="#9b5f9f" stroke-width="2.6" opacity=".82"/>
+<line x1="676.90" y1="610.70" x2="402.98" y2="668.75" stroke="#9b5f9f" stroke-width="2.6" opacity=".82"/>
+<line x1="571.02" y1="776.52" x2="508.20" y2="503.66" stroke="#9b5f9f" stroke-width="2.6" opacity=".82"/>
+<line x1="673.37" y1="682.58" x2="571.02" y2="776.52" stroke="#4f8f7b" stroke-width="2" opacity=".72"/>
+<line x1="672.90" y1="684.02" x2="673.37" y2="682.58" stroke="#8a6d3b" stroke-width="2.2" opacity=".72"/>
+<line x1="559.93" y1="501.43" x2="651.00" y2="725.31" stroke="#4b7da8" stroke-width="2.4" opacity=".78"/>
+<line x1="676.90" y1="610.70" x2="571.02" y2="776.52" stroke="#b45b50" stroke-width="2.6" opacity=".82"/>
+<line x1="673.37" y1="682.58" x2="508.20" y2="503.66" stroke="#4b7da8" stroke-width="2.4" opacity=".78"/>
+<line x1="571.02" y1="776.52" x2="402.98" y2="668.75" stroke="#b45b50" stroke-width="2.6" opacity=".82"/>
+<line x1="676.90" y1="610.70" x2="508.20" y2="503.66" stroke="#b45b50" stroke-width="2.6" opacity=".82"/>
+<line x1="672.90" y1="684.02" x2="571.02" y2="776.52" stroke="#4f8f7b" stroke-width="2" opacity=".72"/>
+<line x1="508.20" y1="503.66" x2="402.98" y2="668.75" stroke="#b45b50" stroke-width="2.6" opacity=".82"/>
+<line x1="672.90" y1="684.02" x2="508.20" y2="503.66" stroke="#4b7da8" stroke-width="2.4" opacity=".78"/>
+<line x1="653.66" y1="721.74" x2="651.00" y2="725.31" stroke="#8a6d3b" stroke-width="2.2" opacity=".72"/>
+<line x1="653.66" y1="721.74" x2="559.93" y2="501.43" stroke="#4b7da8" stroke-width="2.4" opacity=".78"/>
+<line x1="678.42" y1="619.03" x2="402.98" y2="668.75" stroke="#9b5f9f" stroke-width="2.6" opacity=".82"/>
+<line x1="678.42" y1="619.03" x2="676.90" y2="610.70" stroke="#8a6d3b" stroke-width="2.2" opacity=".72"/>
+<line x1="678.42" y1="619.03" x2="571.02" y2="776.52" stroke="#b45b50" stroke-width="2.6" opacity=".82"/>
+<line x1="678.42" y1="619.03" x2="508.20" y2="503.66" stroke="#b45b50" stroke-width="2.6" opacity=".82"/>
+<line x1="672.90" y1="684.02" x2="667.15" y2="698.59" stroke="#8a6d3b" stroke-width="2.2" opacity=".72"/>
+<line x1="672.90" y1="684.02" x2="412.85" y2="581.41" stroke="#9b5f9f" stroke-width="2.6" opacity=".82"/>
+<line x1="673.37" y1="682.58" x2="667.15" y2="698.59" stroke="#8a6d3b" stroke-width="2.2" opacity=".72"/>
+<line x1="673.37" y1="682.58" x2="412.85" y2="581.41" stroke="#9b5f9f" stroke-width="2.6" opacity=".82"/>
+<line x1="678.42" y1="619.03" x2="678.97" y2="623.08" stroke="#8a6d3b" stroke-width="2.2" opacity=".72"/>
+<line x1="402.98" y1="668.75" x2="678.97" y2="623.08" stroke="#9b5f9f" stroke-width="2.6" opacity=".82"/>
+<line x1="676.90" y1="610.70" x2="678.97" y2="623.08" stroke="#8a6d3b" stroke-width="2.2" opacity=".72"/>
+<line x1="571.02" y1="776.52" x2="678.97" y2="623.08" stroke="#b45b50" stroke-width="2.6" opacity=".82"/>
+<g class="core-body" data-body="South Node">
+<circle cx="280.25" cy="520.32" r="28.00" fill="#fffaf2" stroke="#8e6d44" stroke-width="1.8"/>
+<text x="280.25" y="531.32" fill="#3c2a1a" text-anchor="middle" class="planet">☋</text>
+<line x1="374.70" y1="563.84" x2="309.31" y2="533.71" stroke="#d3b991" stroke-width="1" stroke-dasharray="3 8"/>
+<title>South Node 24.7385°</title>
+</g>
+<g class="core-body" data-body="Neptune">
+<circle cx="481.40" cy="388.74" r="28.00" fill="#fffaf2" stroke="#8e6d44" stroke-width="1.8"/>
+<text x="481.40" y="399.74" fill="#3c2a1a" text-anchor="middle" class="planet">♆</text>
+<line x1="498.66" y1="462.76" x2="488.67" y2="419.91" stroke="#d3b991" stroke-width="1" stroke-dasharray="3 8"/>
+<title>Neptune 76.8723°</title>
+</g>
+<g class="core-body" data-body="Mars">
+<circle cx="572.74" cy="412.34" r="28.00" fill="#fffaf2" stroke="#8e6d44" stroke-width="1.8"/>
+<text x="572.74" y="423.34" fill="#3c2a1a" text-anchor="middle" class="planet">♂</text>
+<line x1="565.90" y1="459.85" x2="568.18" y2="444.02" stroke="#d3b991" stroke-width="1" stroke-dasharray="3 8"/>
+<title>Mars 98.1826°</title>
+</g>
+<g class="core-body" data-body="Saturn">
+<circle cx="819.67" cy="580.15" r="28.00" fill="#fffaf2" stroke="#8e6d44" stroke-width="1.8"/>
+<text x="819.67" y="591.15" fill="#3c2a1a" text-anchor="middle" class="planet">♄</text>
+<line x1="717.97" y1="601.91" x2="788.38" y2="586.84" stroke="#d3b991" stroke-width="1" stroke-dasharray="3 8"/>
+<title>Saturn 167.9199°</title>
+</g>
+<g class="core-body" data-body="Sun">
+<circle cx="795.09" cy="601.35" r="28.00" fill="#fffaf2" stroke="#8e6d44" stroke-width="1.8"/>
+<text x="795.09" y="612.35" fill="#3c2a1a" text-anchor="middle" class="planet">☉</text>
+<line x1="719.95" y1="612.74" x2="763.45" y2="606.15" stroke="#d3b991" stroke-width="1" stroke-dasharray="3 8"/>
+<title>Sun 171.3850°</title>
+</g>
+<g class="core-body angle-body" data-body="MC">
+<circle cx="768.31" cy="612.20" r="28.00" fill="#fffaf2" stroke="#8e6d44" stroke-width="1.8"/>
+<text x="768.31" y="618.20" fill="#3c2a1a" text-anchor="middle" class="angle">MC</text>
+<line x1="720.67" y1="618.00" x2="736.55" y2="616.07" stroke="#d3b991" stroke-width="1" stroke-dasharray="3 8"/>
+<title>MC 173.0583°</title>
+</g>
+<g class="core-body" data-body="Mercury">
+<circle cx="812.45" cy="726.98" r="28.00" fill="#fffaf2" stroke="#8e6d44" stroke-width="1.8"/>
+<text x="812.45" y="737.98" fill="#3c2a1a" text-anchor="middle" class="planet">☿</text>
+<line x1="713.38" y1="695.35" x2="781.97" y2="717.25" stroke="#d3b991" stroke-width="1" stroke-dasharray="3 8"/>
+<title>Mercury 197.7062°</title>
+</g>
+<g class="core-body" data-body="Moon">
+<circle cx="784.92" cy="721.11" r="28.00" fill="#fffaf2" stroke="#8e6d44" stroke-width="1.8"/>
+<text x="784.92" y="732.11" fill="#3c2a1a" text-anchor="middle" class="planet">☽</text>
+<line x1="712.77" y1="697.22" x2="754.54" y2="711.05" stroke="#d3b991" stroke-width="1" stroke-dasharray="3 8"/>
+<title>Moon 198.3244°</title>
+</g>
+<g class="core-body" data-body="North Node">
+<circle cx="748.89" cy="736.25" r="28.00" fill="#fffaf2" stroke="#8e6d44" stroke-width="1.8"/>
+<text x="748.89" y="747.25" fill="#3c2a1a" text-anchor="middle" class="planet">☊</text>
+<line x1="705.30" y1="716.16" x2="719.83" y2="722.86" stroke="#d3b991" stroke-width="1" stroke-dasharray="3 8"/>
+<title>North Node 204.7385°</title>
+</g>
+<g class="core-body" data-body="Venus">
+<circle cx="772.20" cy="806.97" r="28.00" fill="#fffaf2" stroke="#8e6d44" stroke-width="1.8"/>
+<text x="772.20" y="817.97" fill="#3c2a1a" text-anchor="middle" class="planet">♀</text>
+<line x1="687.76" y1="746.26" x2="746.22" y2="788.29" stroke="#d3b991" stroke-width="1" stroke-dasharray="3 8"/>
+<title>Venus 215.7200°</title>
+</g>
+<g class="core-body" data-body="Jupiter">
+<circle cx="744.56" cy="797.22" r="28.00" fill="#fffaf2" stroke="#8e6d44" stroke-width="1.8"/>
+<text x="744.56" y="808.22" fill="#3c2a1a" text-anchor="middle" class="planet">♃</text>
+<line x1="684.30" y1="750.91" x2="719.19" y2="777.72" stroke="#d3b991" stroke-width="1" stroke-dasharray="3 8"/>
+<title>Jupiter 217.5441°</title>
+</g>
+<g class="core-body angle-body" data-body="ASC">
+<circle cx="628.12" cy="852.45" r="28.00" fill="#fffaf2" stroke="#8e6d44" stroke-width="1.8"/>
+<text x="628.12" y="858.45" fill="#3c2a1a" text-anchor="middle" class="angle">ASC</text>
+<line x1="609.73" y1="808.11" x2="615.86" y2="822.89" stroke="#d3b991" stroke-width="1" stroke-dasharray="3 8"/>
+<title>ASC 247.4723°</title>
+</g>
+<g class="core-body" data-body="Uranus">
+<circle cx="603.38" cy="918.89" r="28.00" fill="#fffaf2" stroke="#8e6d44" stroke-width="1.8"/>
+<text x="603.38" y="929.89" fill="#3c2a1a" text-anchor="middle" class="planet">♅</text>
+<line x1="580.33" y1="817.47" x2="596.29" y2="887.68" stroke="#d3b991" stroke-width="1" stroke-dasharray="3 8"/>
+<title>Uranus 257.1968°</title>
+</g>
+<g class="core-body" data-body="Pluto">
+<circle cx="287.50" cy="692.98" r="28.00" fill="#fffaf2" stroke="#8e6d44" stroke-width="1.8"/>
+<text x="287.50" y="703.98" fill="#3c2a1a" text-anchor="middle" class="planet">♇</text>
+<line x1="361.88" y1="677.37" x2="318.82" y2="686.41" stroke="#d3b991" stroke-width="1" stroke-dasharray="3 8"/>
+<title>Pluto 348.1500°</title>
+</g>
+<text x="540.00" y="1158.00" fill="#8a6c45" text-anchor="middle" class="small">nanami astro</text>
+<text x="540.00" y="1188.00" fill="#a88d6b" text-anchor="middle" class="tiny">Western natal chart / major planets and lunar nodes</text>
+</svg><div class="note"><span data-ja="正午の仮計算／出生時刻不明。ASC・MC・ハウスは非表示です。天体はトロピカル黄道の位置を示します。" data-en="Noon is a calculation assumption, not a recorded birth time. ASC, MC and houses are hidden. Positions use the tropical zodiac.">正午の仮計算／出生時刻不明。ASC・MC・ハウスは非表示です。天体はトロピカル黄道の位置を示します。</span></div></section><section class="panel"><h2 data-ja="計算条件" data-en="Calculation details">計算条件</h2><p data-ja="出生地：米沢城（代表座標 37.91°N, 140.11°E）" data-en="Birthplace: Yonezawa Castle (representative coordinates 37.91°N, 140.11°E).">出生地：米沢城（代表座標 37.91°N, 140.11°E）</p><p data-ja="出生時刻：不明。12:00を仮定" data-en="Birth time: unknown; 12:00 assumed.">出生時刻：不明。12:00を仮定</p><p data-ja="計算：nanami-astro / Swiss Ephemeris" data-en="Calculation: nanami-astro / Swiss Ephemeris.">計算：nanami-astro / Swiss Ephemeris</p><p data-ja="タイムゾーン：Asia/Tokyo（歴史的オフセット +09:18:59）" data-en="Timezone: Asia/Tokyo (historical offset +09:18:59).">タイムゾーン：Asia/Tokyo（歴史的オフセット +09:18:59）</p><p data-ja="このオフセットはデータベース上の東京の地方平均時です。米沢固有の地方平均時や実際の出生時刻を示すものではありません。" data-en="This is the database’s historical local mean time for Tokyo; it is not Yonezawa-specific local mean time or a verified birth time.">このオフセットはデータベース上の東京の地方平均時です。米沢固有の地方平均時や実際の出生時刻を示すものではありません。</p><p data-ja="主要10天体と月のノード。小惑星・経過図・四柱推命は今回含みません。" data-en="Ten major bodies and lunar nodes. No asteroids, transits or Four Pillars in this sample.">主要10天体と月のノード。小惑星・経過図・四柱推命は今回含みません。</p><div class="actions"><a href="masamune.yaml" download="masamune.yaml"><span data-ja="YAMLをダウンロード" data-en="Download YAML">YAMLをダウンロード</span></a><button onclick="downloadSvg()"><span data-ja="出生図SVGを保存" data-en="Save chart SVG">出生図SVGを保存</span></button></div><p class="muted" data-ja="YAMLは製品出力の公開用派生版です。天体表に存在しない対象を参照するアスペクトのみ除外し、変更記録を添えています。数値は変更していません。" data-en="The YAML is a public derivative of the product export. Only aspects referring to bodies absent from the body table were removed; an editorial record is included. Calculation values are unchanged.">YAMLは製品出力の公開用派生版です。天体表に存在しない対象を参照するアスペクトのみ除外し、変更記録を添えています。数値は変更していません。</p></section></div><section class="panel"><h2 data-ja="主要天体の位置" data-en="Body positions">主要天体の位置</h2><p data-ja="各度数は正午の仮計算値です。月は当日00:00〜23:59の確認で天秤座11.16°〜25.37°を移動します。月の正確な度数、月を含むアスペクトは断定しません。" data-en="All degrees are provisional noon values. Between 00:00 and 23:59, the Moon spans Libra 11.16°–25.37°. Its exact degree and Moon-related aspects are not treated as certain.">各度数は正午の仮計算値です。月は当日00:00〜23:59の確認で天秤座11.16°〜25.37°を移動します。月の正確な度数、月を含むアスペクトは断定しません。</p><div class="table-wrap"><table><thead><tr><th data-ja="天体" data-en="Body">天体</th><th data-ja="星座" data-en="Sign">星座</th><th data-ja="度数" data-en="Degree">度数</th><th data-ja="運行" data-en="Motion">運行</th></tr></thead><tbody><tr><td><span data-ja="太陽" data-en="Sun">太陽</span></td><td><span data-ja="乙女座" data-en="Virgo">乙女座</span></td><td>21.39°</td><td><span data-ja="順行" data-en="Direct">順行</span></td></tr><tr><td><span data-ja="月" data-en="Moon">月</span></td><td><span data-ja="天秤座" data-en="Libra">天秤座</span></td><td>18.32°</td><td><span data-ja="順行" data-en="Direct">順行</span></td></tr><tr><td><span data-ja="水星" data-en="Mercury">水星</span></td><td><span data-ja="天秤座" data-en="Libra">天秤座</span></td><td>17.71°</td><td><span data-ja="順行" data-en="Direct">順行</span></td></tr><tr><td><span data-ja="金星" data-en="Venus">金星</span></td><td><span data-ja="蠍座" data-en="Scorpio">蠍座</span></td><td>5.72°</td><td><span data-ja="順行" data-en="Direct">順行</span></td></tr><tr><td><span data-ja="火星" data-en="Mars">火星</span></td><td><span data-ja="蟹座" data-en="Cancer">蟹座</span></td><td>8.18°</td><td><span data-ja="順行" data-en="Direct">順行</span></td></tr><tr><td><span data-ja="木星" data-en="Jupiter">木星</span></td><td><span data-ja="蠍座" data-en="Scorpio">蠍座</span></td><td>7.54°</td><td><span data-ja="順行" data-en="Direct">順行</span></td></tr><tr><td><span data-ja="土星" data-en="Saturn">土星</span></td><td><span data-ja="乙女座" data-en="Virgo">乙女座</span></td><td>17.92°</td><td><span data-ja="順行" data-en="Direct">順行</span></td></tr><tr><td><span data-ja="天王星" data-en="Uranus">天王星</span></td><td><span data-ja="射手座" data-en="Sagittarius">射手座</span></td><td>17.20°</td><td><span data-ja="順行" data-en="Direct">順行</span></td></tr><tr><td><span data-ja="海王星" data-en="Neptune">海王星</span></td><td><span data-ja="双子座" data-en="Gemini">双子座</span></td><td>16.87°</td><td><span data-ja="順行" data-en="Direct">順行</span></td></tr><tr><td><span data-ja="冥王星" data-en="Pluto">冥王星</span></td><td><span data-ja="魚座" data-en="Pisces">魚座</span></td><td>18.15°</td><td><span data-ja="逆行" data-en="Retrograde">逆行</span></td></tr><tr><td><span data-ja="ドラゴンヘッド" data-en="North Node">ドラゴンヘッド</span></td><td><span data-ja="天秤座" data-en="Libra">天秤座</span></td><td>24.74°</td><td><span data-ja="逆行" data-en="Retrograde">逆行</span></td></tr><tr><td><span data-ja="ドラゴンテイル" data-en="South Node">ドラゴンテイル</span></td><td><span data-ja="牡羊座" data-en="Aries">牡羊座</span></td><td>24.74°</td><td><span data-ja="逆行" data-en="Retrograde">逆行</span></td></tr></tbody></table></div></section><section class="panel"><h2 data-ja="アスペクト" data-en="Aspects">アスペクト</h2><p data-ja="オーブは基準角度からの差です。時刻不明のため、この一覧全体を確定的な人物像の根拠にしないでください。" data-en="Orb is the deviation from the exact aspect angle. Birth time is unknown; this table does not establish a definitive personality portrait.">オーブは基準角度からの差です。時刻不明のため、この一覧全体を確定的な人物像の根拠にしないでください。</p><div class="table-wrap"><table><thead><tr><th data-ja="組み合わせ" data-en="Pair">組み合わせ</th><th data-ja="種類" data-en="Type">種類</th><th data-ja="オーブ" data-en="Orb">オーブ</th><th data-ja="扱い" data-en="Reliability">扱い</th></tr></thead><tbody><tr><td><span data-ja="ドラゴンヘッド" data-en="North Node">ドラゴンヘッド</span> × <span data-ja="ドラゴンテイル" data-en="South Node">ドラゴンテイル</span></td><td><span data-ja="衝" data-en="Opposition">衝</span></td><td>0.00°</td><td><span data-ja="正午の値" data-en="Noon value">正午の値</span></td></tr><tr><td><span data-ja="土星" data-en="Saturn">土星</span> × <span data-ja="冥王星" data-en="Pluto">冥王星</span></td><td><span data-ja="衝" data-en="Opposition">衝</span></td><td>0.23°</td><td><span data-ja="正午の値" data-en="Noon value">正午の値</span></td></tr><tr><td><span data-ja="天王星" data-en="Uranus">天王星</span> × <span data-ja="海王星" data-en="Neptune">海王星</span></td><td><span data-ja="衝" data-en="Opposition">衝</span></td><td>0.32°</td><td><span data-ja="正午の値" data-en="Noon value">正午の値</span></td></tr><tr><td><span data-ja="水星" data-en="Mercury">水星</span> × <span data-ja="天王星" data-en="Uranus">天王星</span></td><td><span data-ja="セクスタイル" data-en="Sextile">セクスタイル</span></td><td>0.51°</td><td><span data-ja="正午の値" data-en="Noon value">正午の値</span></td></tr><tr><td><span data-ja="月" data-en="Moon">月</span> × <span data-ja="水星" data-en="Mercury">水星</span></td><td><span data-ja="合" data-en="Conjunction">合</span></td><td>0.62°</td><td><span data-ja="時刻に依存" data-en="Time-sensitive">時刻に依存</span></td></tr><tr><td><span data-ja="火星" data-en="Mars">火星</span> × <span data-ja="木星" data-en="Jupiter">木星</span></td><td><span data-ja="トライン" data-en="Trine">トライン</span></td><td>0.64°</td><td><span data-ja="正午の値" data-en="Noon value">正午の値</span></td></tr><tr><td><span data-ja="土星" data-en="Saturn">土星</span> × <span data-ja="天王星" data-en="Uranus">天王星</span></td><td><span data-ja="スクエア" data-en="Square">スクエア</span></td><td>0.72°</td><td><span data-ja="正午の値" data-en="Noon value">正午の値</span></td></tr><tr><td><span data-ja="水星" data-en="Mercury">水星</span> × <span data-ja="海王星" data-en="Neptune">海王星</span></td><td><span data-ja="トライン" data-en="Trine">トライン</span></td><td>0.83°</td><td><span data-ja="正午の値" data-en="Noon value">正午の値</span></td></tr><tr><td><span data-ja="天王星" data-en="Uranus">天王星</span> × <span data-ja="冥王星" data-en="Pluto">冥王星</span></td><td><span data-ja="スクエア" data-en="Square">スクエア</span></td><td>0.95°</td><td><span data-ja="正午の値" data-en="Noon value">正午の値</span></td></tr><tr><td><span data-ja="土星" data-en="Saturn">土星</span> × <span data-ja="海王星" data-en="Neptune">海王星</span></td><td><span data-ja="スクエア" data-en="Square">スクエア</span></td><td>1.05°</td><td><span data-ja="正午の値" data-en="Noon value">正午の値</span></td></tr><tr><td><span data-ja="月" data-en="Moon">月</span> × <span data-ja="天王星" data-en="Uranus">天王星</span></td><td><span data-ja="セクスタイル" data-en="Sextile">セクスタイル</span></td><td>1.13°</td><td><span data-ja="時刻に依存" data-en="Time-sensitive">時刻に依存</span></td></tr><tr><td><span data-ja="海王星" data-en="Neptune">海王星</span> × <span data-ja="冥王星" data-en="Pluto">冥王星</span></td><td><span data-ja="スクエア" data-en="Square">スクエア</span></td><td>1.28°</td><td><span data-ja="正午の値" data-en="Noon value">正午の値</span></td></tr><tr><td><span data-ja="月" data-en="Moon">月</span> × <span data-ja="海王星" data-en="Neptune">海王星</span></td><td><span data-ja="トライン" data-en="Trine">トライン</span></td><td>1.45°</td><td><span data-ja="時刻に依存" data-en="Time-sensitive">時刻に依存</span></td></tr><tr><td><span data-ja="金星" data-en="Venus">金星</span> × <span data-ja="木星" data-en="Jupiter">木星</span></td><td><span data-ja="合" data-en="Conjunction">合</span></td><td>1.82°</td><td><span data-ja="正午の値" data-en="Noon value">正午の値</span></td></tr><tr><td><span data-ja="金星" data-en="Venus">金星</span> × <span data-ja="火星" data-en="Mars">火星</span></td><td><span data-ja="トライン" data-en="Trine">トライン</span></td><td>2.46°</td><td><span data-ja="正午の値" data-en="Noon value">正午の値</span></td></tr><tr><td><span data-ja="太陽" data-en="Sun">太陽</span> × <span data-ja="冥王星" data-en="Pluto">冥王星</span></td><td><span data-ja="衝" data-en="Opposition">衝</span></td><td>3.23°</td><td><span data-ja="正午の値" data-en="Noon value">正午の値</span></td></tr><tr><td><span data-ja="太陽" data-en="Sun">太陽</span> × <span data-ja="土星" data-en="Saturn">土星</span></td><td><span data-ja="合" data-en="Conjunction">合</span></td><td>3.47°</td><td><span data-ja="正午の値" data-en="Noon value">正午の値</span></td></tr><tr><td><span data-ja="太陽" data-en="Sun">太陽</span> × <span data-ja="天王星" data-en="Uranus">天王星</span></td><td><span data-ja="スクエア" data-en="Square">スクエア</span></td><td>4.19°</td><td><span data-ja="正午の値" data-en="Noon value">正午の値</span></td></tr><tr><td><span data-ja="太陽" data-en="Sun">太陽</span> × <span data-ja="海王星" data-en="Neptune">海王星</span></td><td><span data-ja="スクエア" data-en="Square">スクエア</span></td><td>4.51°</td><td><span data-ja="正午の値" data-en="Noon value">正午の値</span></td></tr><tr><td><span data-ja="月" data-en="Moon">月</span> × <span data-ja="ドラゴンヘッド" data-en="North Node">ドラゴンヘッド</span></td><td><span data-ja="合" data-en="Conjunction">合</span></td><td>6.41°</td><td><span data-ja="時刻に依存" data-en="Time-sensitive">時刻に依存</span></td></tr><tr><td><span data-ja="月" data-en="Moon">月</span> × <span data-ja="ドラゴンテイル" data-en="South Node">ドラゴンテイル</span></td><td><span data-ja="衝" data-en="Opposition">衝</span></td><td>6.41°</td><td><span data-ja="時刻に依存" data-en="Time-sensitive">時刻に依存</span></td></tr><tr><td><span data-ja="水星" data-en="Mercury">水星</span> × <span data-ja="ドラゴンヘッド" data-en="North Node">ドラゴンヘッド</span></td><td><span data-ja="合" data-en="Conjunction">合</span></td><td>7.03°</td><td><span data-ja="正午の値" data-en="Noon value">正午の値</span></td></tr><tr><td><span data-ja="水星" data-en="Mercury">水星</span> × <span data-ja="ドラゴンテイル" data-en="South Node">ドラゴンテイル</span></td><td><span data-ja="衝" data-en="Opposition">衝</span></td><td>7.03°</td><td><span data-ja="正午の値" data-en="Noon value">正午の値</span></td></tr></tbody></table></div></section><section class="panel"><h2 data-ja="史実と星の象徴を分けて読む" data-en="Separate history from symbolism">史実と星の象徴を分けて読む</h2><p data-ja="太陽と土星は乙女座で合（オーブ約3.47°）。占星術の読みとして「整える・積み重ねる」というテーマを考えることができます。これは政宗の性格や行動を証明するものではありません。" data-en="The Sun and Saturn form a conjunction in Virgo (orb about 3.47°). In symbolic astrology, this can suggest themes of refinement and sustained effort. It does not prove Masamune’s character or explain his actions.">太陽と土星は乙女座で合（オーブ約3.47°）。占星術の読みとして「整える・積み重ねる」というテーマを考えることができます。これは政宗の性格や行動を証明するものではありません。</p><ol class="facts"><li><strong>1584</strong> <span data-ja="父・輝宗から家督を継ぐ。" data-en="Succeeded his father Terumune as head of the clan.">父・輝宗から家督を継ぐ。</span> <a href="https://www.city.sendai.jp/museum/shuzohin/shuzohin/shuzohin-18.html"><span data-ja="仙台市博物館" data-en="Sendai City Museum">仙台市博物館</span></a></li><li><strong>1601</strong> <span data-ja="建設中の仙台城へ移る。城の主要部分が整うのは1610年。" data-en="Moved to Sendai Castle while construction was ongoing; major portions were completed in 1610.">建設中の仙台城へ移る。城の主要部分が整うのは1610年。</span> <a href="https://www.city.sendai.jp/museum/shuzohin/shuzohin/shuzohin-20.html"><span data-ja="仙台市博物館" data-en="Sendai City Museum">仙台市博物館</span></a></li><li><strong>1613</strong> <span data-ja="支倉常長らをメキシコ経由でスペイン・ローマへ派遣。" data-en="Sent Hasekura Tsunenaga and others via Mexico to Spain and Rome.">支倉常長らをメキシコ経由でスペイン・ローマへ派遣。</span> <a href="https://www.city.sendai.jp/museum/shuzohin/shuzohin/shuzohin-23.html"><span data-ja="仙台市博物館" data-en="Sendai City Museum">仙台市博物館</span></a></li></ol><p class="muted" data-ja="占星術は象徴的な解釈であり、歴史研究の代わりや科学的な人物診断ではありません。" data-en="Astrology is symbolic interpretation, not a substitute for historical research or a scientific personality assessment.">占星術は象徴的な解釈であり、歴史研究の代わりや科学的な人物診断ではありません。</p></section><section class="panel"><h2 data-ja="出典" data-en="Sources">出典</h2><p><a href="https://www.city.sendai.jp/museum/shuzohin/shuzohin/shuzohin-18.html"><span data-ja="仙台市博物館：政宗の誕生・家督相続" data-en="Sendai City Museum: birth and succession">仙台市博物館：政宗の誕生・家督相続</span></a></p><p><a href="https://eco.mtk.nao.ac.jp/cgi-bin/koyomi/caldb.cgi?type=1&amp;gengo=b228&amp;year=10&amp;month=8&amp;day=3&amp;jg=1&amp;div=1&amp;divu=3&amp;len=1&amp;lenu=3&amp;gen=1"><span data-ja="国立天文台：和暦・西暦の換算結果" data-en="National Astronomical Observatory of Japan: calendar conversion">国立天文台：和暦・西暦の換算結果</span></a></p></section><p><a href="rekishi.html"><span data-ja="← 歴史人物一覧" data-en="← Historical figures">← 歴史人物一覧</span></a> · <a href="samples.html"><span data-ja="サンプル一覧" data-en="Sample archive">サンプル一覧</span></a></p></main><footer>© nanami-astro</footer><script>function setLang(lang){document.documentElement.lang=lang==='en'?'en':'ja';document.querySelectorAll('[data-ja]').forEach(el=>{el.innerHTML=lang==='en'?el.dataset.en:el.dataset.ja;});document.getElementById('btn-ja').classList.toggle('active',lang==='ja');document.getElementById('btn-en').classList.toggle('active',lang==='en');document.title=lang==='en'?'Date Masamune natal chart | nanami-astro':'伊達政宗のホロスコープ | nanami-astro';try{localStorage.setItem('na-lang',lang)}catch(e){}}function downloadSvg(){const svg=document.querySelector('.horoscope-svg');const url=URL.createObjectURL(new Blob([new XMLSerializer().serializeToString(svg)],{type:'image/svg+xml;charset=utf-8'}));const a=document.createElement('a');a.href=url;a.download='horoscope.svg';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}try{if(localStorage.getItem('na-lang')==='en')setLang('en')}catch(e){}</script></body></html>

@@ -1,0 +1,400 @@
+version: nanami-products-yaml-v1
+meta:
+  schema_version: '2.0'
+  product_type: personal_ai_astrology_yaml
+  profile_id: profile_772a1ad7c90563ee
+  chart_id: chart_d7f9306b3869ac92
+  generated_at: '2026-09-05T08:36:16.152785+09:00'
+  data_role: base_chart
+  yaml_variant: full
+base: null
+product:
+  type: personal_ai_astrology_yaml
+  options:
+    western_natal: true
+    asteroids: false
+    transit: false
+    shichusuimei: false
+generated_at: '2026-09-05T08:36:16.152785+09:00'
+calculation:
+  engine: Swiss Ephemeris
+  zodiac: tropical
+  house_system: P
+  timezone: Asia/Tokyo
+  location_source: input
+  ephemeris_version: null
+birth_time:
+  input_value: null
+  calculation_time: '12:00'
+  accuracy: unknown
+  note: 出生時刻不明のため12:00の仮計算。永禄10年8月3日を先発グレゴリオ暦1567-09-15に換算。ユリウス暦では1567-09-05。Asia/Tokyoの歴史的LMTを便宜上使用。ASC・MC・ハウス、月の度数は解釈に使用しない。
+interpretation_flags:
+  allow_house_interpretation: false
+  allow_asc_mc_interpretation: false
+  house_reliability: low
+  moon_reliability: medium
+  use_houses_as_reference_only: true
+assets:
+  horoscope_svg:
+    available: true
+    file_name: horoscope.svg
+    generated_from_chart_id: chart_d7f9306b3869ac92
+  shichusuimei_svg:
+    available: false
+    file_name: shichusuimei-chart.svg
+    generated_from_chart_id: chart_d7f9306b3869ac92
+  yaml_lite:
+    available: false
+  yaml_detail:
+    available: false
+  yaml_full:
+    available: true
+input:
+  title: 伊達政宗
+  birth_date: '1567-09-15'
+  birth_time: unknown
+  calculation_time: '12:00'
+  birth_time_accuracy: unknown
+  birth_time_note: 出生時刻不明のため12:00の仮計算。永禄10年8月3日を先発グレゴリオ暦1567-09-15に換算。ユリウス暦では1567-09-05。Asia/Tokyoの歴史的LMTを便宜上使用。ASC・MC・ハウス、月の度数は解釈に使用しない。
+  prefecture: 山形県
+  birth_place_kind: domestic
+  birth_place: 出羽国・米沢（現在の山形県米沢市、代表座標）
+  birth_lat: 37.91
+  birth_lng: 140.11
+  timezone: Asia/Tokyo
+  timezone_offset_hours: 9.31638888888889
+  gender: male
+usage_note:
+  for_ai: このYAMLは計算済みデータです。AIに解釈させる場合、生年月日から再計算させず、この値を根拠にしてください。
+  not_included: 鑑定本文は含みません。AI解釈用の構造化データです。
+  continuous_use: このYAMLはAIに一度読み込ませて継続的に使える基礎データです。今後、月ごとのトランジット追加データと組み合わせて使うこともできます。
+systems:
+  western:
+    natal:
+      engine: Swiss Ephemeris
+      house_system: P
+      subject:
+        datetime: 1567-09-15T12:00:00+09:18:59
+        location:
+          lat: 37.91
+          lng: 140.11
+          city: 出羽国・米沢（現在の山形県米沢市、代表座標）
+      bodies:
+        Sun:
+          sign: Vir
+          sign_ja: 乙女座
+          degree: 21.385
+          absolute_longitude: 171.385
+          retrograde: false
+        Moon:
+          sign: Lib
+          sign_ja: 天秤座
+          degree: 18.3244
+          absolute_longitude: 198.3244
+          retrograde: false
+        Mercury:
+          sign: Lib
+          sign_ja: 天秤座
+          degree: 17.7062
+          absolute_longitude: 197.7062
+          retrograde: false
+        Venus:
+          sign: Sco
+          sign_ja: 蠍座
+          degree: 5.72
+          absolute_longitude: 215.72
+          retrograde: false
+        Mars:
+          sign: Can
+          sign_ja: 蟹座
+          degree: 8.1826
+          absolute_longitude: 98.1826
+          retrograde: false
+        Jupiter:
+          sign: Sco
+          sign_ja: 蠍座
+          degree: 7.5441
+          absolute_longitude: 217.5441
+          retrograde: false
+        Saturn:
+          sign: Vir
+          sign_ja: 乙女座
+          degree: 17.9199
+          absolute_longitude: 167.9199
+          retrograde: false
+        Uranus:
+          sign: Sag
+          sign_ja: 射手座
+          degree: 17.1968
+          absolute_longitude: 257.1968
+          retrograde: false
+        Neptune:
+          sign: Gem
+          sign_ja: 双子座
+          degree: 16.8723
+          absolute_longitude: 76.8723
+          retrograde: false
+        Pluto:
+          sign: Pis
+          sign_ja: 魚座
+          degree: 18.15
+          absolute_longitude: 348.15
+          retrograde: true
+        North Node:
+          sign: Lib
+          sign_ja: 天秤座
+          degree: 24.7385
+          absolute_longitude: 204.7385
+          retrograde: true
+        South Node:
+          sign: Ari
+          sign_ja: 牡羊座
+          degree: 24.7385
+          absolute_longitude: 24.7385
+          retrograde: true
+      aspects:
+      - body1: North Node
+        body2: South Node
+        aspect: opposition
+        orb: 0.0
+      - body1: Saturn
+        body2: Pluto
+        aspect: opposition
+        orb: 0.23
+      - body1: Uranus
+        body2: Neptune
+        aspect: opposition
+        orb: 0.32
+      - body1: Mercury
+        body2: Uranus
+        aspect: sextile
+        orb: 0.51
+      - body1: Moon
+        body2: Mercury
+        aspect: conjunction
+        orb: 0.62
+      - body1: Mars
+        body2: Jupiter
+        aspect: trine
+        orb: 0.64
+      - body1: Saturn
+        body2: Uranus
+        aspect: square
+        orb: 0.72
+      - body1: Mercury
+        body2: Neptune
+        aspect: trine
+        orb: 0.83
+      - body1: Uranus
+        body2: Pluto
+        aspect: square
+        orb: 0.95
+      - body1: Saturn
+        body2: Neptune
+        aspect: square
+        orb: 1.05
+      - body1: Moon
+        body2: Uranus
+        aspect: sextile
+        orb: 1.13
+      - body1: Neptune
+        body2: Pluto
+        aspect: square
+        orb: 1.28
+      - body1: Moon
+        body2: Neptune
+        aspect: trine
+        orb: 1.45
+      - body1: Venus
+        body2: Jupiter
+        aspect: conjunction
+        orb: 1.82
+      - body1: Venus
+        body2: Mars
+        aspect: trine
+        orb: 2.46
+      - body1: Sun
+        body2: Pluto
+        aspect: opposition
+        orb: 3.23
+      - body1: Sun
+        body2: Saturn
+        aspect: conjunction
+        orb: 3.47
+      - body1: Sun
+        body2: Uranus
+        aspect: square
+        orb: 4.19
+      - body1: Sun
+        body2: Neptune
+        aspect: square
+        orb: 4.51
+      - body1: Moon
+        body2: North Node
+        aspect: conjunction
+        orb: 6.41
+      - body1: Moon
+        body2: South Node
+        aspect: opposition
+        orb: 6.41
+      - body1: Mercury
+        body2: North Node
+        aspect: conjunction
+        orb: 7.03
+      - body1: Mercury
+        body2: South Node
+        aspect: opposition
+        orb: 7.03
+      summary:
+        elements:
+          fire: 1
+          earth: 2
+          air: 3
+          water: 4
+        modes:
+          cardinal: 3
+          fixed: 2
+          mutable: 5
+        dominant_signs:
+        - sign: Lib
+          sign_ja: 天秤座
+          count: 2
+        - sign: Sco
+          sign_ja: 蠍座
+          count: 2
+        - sign: Vir
+          sign_ja: 乙女座
+          count: 2
+      skipped_bodies:
+      - name: Chiron
+        reason: Swiss Ephemeris (*.se1) が無いため、この天体は計算できません
+      time_sensitive_provisional:
+        status: assumed_birth_time
+        assumed_time: '12:00'
+        valid_for_assertive_interpretation: false
+        recalculation_required_when_time_known: true
+        reason: birth_time_unknown
+        angles:
+          asc:
+            sign: Sag
+            sign_ja: 射手座
+            degree: 7.4723
+            absolute_longitude: 247.4723
+            house: 1
+            retrograde: false
+          mc:
+            sign: Vir
+            sign_ja: 乙女座
+            degree: 23.0583
+            absolute_longitude: 173.0583
+            house: 10
+            retrograde: false
+        houses:
+          '1':
+            sign: Sag
+            sign_ja: 射手座
+            degree: 7.4723
+            absolute_longitude: 247.4723
+          '2':
+            sign: Cap
+            sign_ja: 山羊座
+            degree: 9.8087
+            absolute_longitude: 279.8087
+          '3':
+            sign: Aqu
+            sign_ja: 水瓶座
+            degree: 16.9223
+            absolute_longitude: 316.9223
+          '4':
+            sign: Pis
+            sign_ja: 魚座
+            degree: 23.0583
+            absolute_longitude: 353.0583
+          '5':
+            sign: Ari
+            sign_ja: 牡羊座
+            degree: 23.0069
+            absolute_longitude: 23.0069
+          '6':
+            sign: Tau
+            sign_ja: 牡牛座
+            degree: 16.9592
+            absolute_longitude: 46.9592
+          '7':
+            sign: Gem
+            sign_ja: 双子座
+            degree: 7.4723
+            absolute_longitude: 67.4723
+          '8':
+            sign: Can
+            sign_ja: 蟹座
+            degree: 9.8087
+            absolute_longitude: 99.8087
+          '9':
+            sign: Leo
+            sign_ja: 獅子座
+            degree: 16.9223
+            absolute_longitude: 136.9223
+          '10':
+            sign: Vir
+            sign_ja: 乙女座
+            degree: 23.0583
+            absolute_longitude: 173.0583
+          '11':
+            sign: Lib
+            sign_ja: 天秤座
+            degree: 23.0069
+            absolute_longitude: 203.0069
+          '12':
+            sign: Sco
+            sign_ja: 蠍座
+            degree: 16.9592
+            absolute_longitude: 226.9592
+        body_house_placements:
+          Sun: 9
+          Moon: 10
+          Mercury: 10
+          Venus: 11
+          Mars: 7
+          Jupiter: 11
+          Saturn: 9
+          Uranus: 1
+          Neptune: 7
+          Pluto: 3
+          North Node: 11
+          South Node: 5
+          Lilith: 3
+          ASC: 1
+          MC: 10
+        angle_aspects:
+        - body1: Sun
+          body2: MC
+          aspect: conjunction
+          orb: 1.67
+        - body1: Pluto
+          body2: MC
+          aspect: opposition
+          orb: 4.91
+        - body1: Saturn
+          body2: MC
+          aspect: conjunction
+          orb: 5.14
+        - body1: Uranus
+          body2: MC
+          aspect: square
+          orb: 5.86
+    asteroids: null
+    transit: null
+  shichusuimei: null
+public_delivery:
+  source_file: HOROSCOPE_DATA_ORIGINAL.yaml
+  source_sha256: da9ca8be21cf681ba66cff0d141362ab598189d7a2cfa7a5dae05db2ccffaf80
+  editorial_changes:
+  - Filter natal.aspects to pairs where both body names exist in natal.bodies. Positions
+    and calculation values are unchanged.
+  - Display derivative SVG hides houses and angles and labels the noon assumption.
+  removed_aspect_count: 5
+  historical_date: Eiroku 10, month 8, day 3
+  gregorian_date: '1567-09-15'
+  julian_date: '1567-09-05'
+  calendar_source: https://eco.mtk.nao.ac.jp/cgi-bin/koyomi/caldb.cgi?type=1&gengo=b228&year=10&month=8&day=3&jg=1&div=1&divu=3&len=1&lenu=3&gen=1
